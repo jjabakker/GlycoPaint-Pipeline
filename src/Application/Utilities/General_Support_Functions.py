@@ -1,4 +1,5 @@
 import os
+import csv
 from pathlib import Path
 import re
 import shutil
@@ -44,14 +45,13 @@ def read_experiment_tm_file(experiment_file_path, only_records_to_process=True):
     return df_experiment
 
 
-def correct_all_images_column_types(df_experiment):
+def correct_all_recordings_column_types(file_path):
     """
     Set the column types for the experiment file
-    :param df_experiment:
-    :return:
     """
 
     try:
+        df_experiment = pd.read_csv(file_path, header=0, skiprows=[])
         df_experiment['Recording Sequence Nr'] = df_experiment['Recording Sequence Nr'].astype(int)
         df_experiment['Condition Nr'] = df_experiment['Condition Nr'].astype(int)
         df_experiment['Replicate Nr'] = df_experiment['Replicate Nr'].astype(int)
@@ -60,7 +60,7 @@ def correct_all_images_column_types(df_experiment):
         df_experiment['Min Tracks for Tau'] = df_experiment['Min Tracks for Tau'].astype(int)
         df_experiment['Min Allowable R Squared'] = df_experiment['Min Allowable R Squared'].astype(float)
         df_experiment['Nr of Squares in Row'] = df_experiment['Nr of Squares in Row'].astype(int)
-
+        df_experiment.to_csv(file_path, index=False)
     except (ValueError, TypeError):
         return False
     return True
@@ -351,3 +351,26 @@ def set_application_icon(root):
     root.iconbitmap(icon_file)
 
     return root
+
+
+def concat_csv_files(output_file, csv_files):
+    """
+    Concatenate a list of CSV files into a single output file.
+    """
+    # Open the output file in write mode
+    with open(output_file, 'w') as outfile:
+        writer = None  # Initialize writer as None
+
+        for i, file in enumerate(csv_files):
+            with open(file, 'r') as infile:
+                reader = csv.reader(infile)
+                # Write the header only for the first file
+                if i == 0:
+                    writer = csv.writer(outfile)
+                    writer.writerow(next(reader))  # Write the header
+                else:
+                    next(reader)  # Skip the header in subsequent files
+
+                # Write the rows
+                for row in reader:
+                    writer.writerow(row)

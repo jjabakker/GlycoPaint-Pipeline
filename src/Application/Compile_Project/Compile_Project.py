@@ -3,20 +3,15 @@ This function takes as input the directory under which the various experiments a
 It will create an Output directory with three files: All Squares, All Images, and Images Summary.
 """
 import os
-import sys
 import time
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 
-import pandas as pd
-
-from src.Application.Utilities.Compille_All_tracks import compile_all_tracks
 from src.Application.Utilities.General_Support_Functions import (
-    read_experiment_file,
-    read_squares_from_file,
     format_time_nicely,
-    correct_all_images_column_types,
-    classify_directory)
+    correct_all_recordings_column_types,
+    classify_directory,
+    concat_csv_files)
 from src.Application.Utilities.ToolTips import ToolTip
 from src.Fiji.LoggerConfig import (
     paint_logger,
@@ -38,19 +33,28 @@ if not paint_logger_file_name_assigned:
 
 def compile_project_output(
         project_dir: str,
-        verbose: bool = False):
+        verbose: bool = True):
     paint_logger.info("")
     paint_logger.info(f"Compiling 'All Recordings' and 'All Squares' for {project_dir}")
     time_stamp = time.time()
 
-    # Create the dataframes to be filled
-    df_all_recordings = pd.DataFrame()
-    df_all_squares = pd.DataFrame()
-
     experiment_dirs = os.listdir(project_dir)
     experiment_dirs.sort()
 
+    all_recordings = []
+    all_tracks = []
+    all_squares = []
+    experiments = []
+
+    nr_processed = 0
+    nr_skipped = 0
+
+    # Collect the files to be appended
     for experiment_name in experiment_dirs:
+        # Ignore files that are marked with a '-' in the beginning
+        if experiment_name.startswith('-'):
+            nr_skipped += 1
+            continue
 
         experiment_dir_path = os.path.join(project_dir, experiment_name)
         if not os.path.isdir(experiment_dir_path) or 'Output' in experiment_name or experiment_name.startswith('-'):
@@ -58,54 +62,42 @@ def compile_project_output(
         if False:
             paint_logger.debug(f'Processing experiment: {experiment_dir_path}')
 
-        # Read the experiment file
-        df_experiment = read_experiment_file(os.path.join(experiment_dir_path, 'All Recordings.csv'))
-        if df_experiment is None:
-            paint_logger.error(f"Error reading {os.path.join(experiment_dir_path, 'All Recordings.csv')}")
-            sys.exit()
-        df_all_recordings = pd.concat([df_all_recordings, df_experiment])
+        nr_processed += 1
+        experiments.append(experiment_name)
 
-        # Read the Squares file
-        df_squares = read_squares_from_file(os.path.join(experiment_dir_path, 'All Squares.csv'))
+        tracks_file = os.path.join(experiment_dir_path, 'All Tracks.csv')
+        if os.path.exists(tracks_file):
+            all_tracks.append(tracks_file)
+        else:
+            paint_logger.error(f"Error reading {tracks_file}")
 
-        if df_squares is None:
-            paint_logger.error(f"Error reading {os.path.join(experiment_dir_path, 'All Squares.csv')}")
-            sys.exit()
-        df_all_squares = pd.concat([df_all_squares, df_squares])
+        squares_file = os.path.join(experiment_dir_path, 'All Squares.csv')
+        if os.path.exists(squares_file):
+            all_squares.append(squares_file)
+        else:
+            paint_logger.error(f"Error reading {squares_file}")
 
-    # -----------------------------------------------------------------------------
-    # At this point we have the df_all_recordings and  df_all_squares complete.
-    # Some small tidying up
-    # -----------------------------------------------------------------------------
+        recordings_file = os.path.join(experiment_dir_path, 'All Recordings.csv')
+        if os.path.exists(recordings_file):
+            all_recordings.append(recordings_file)
+        else:
+            paint_logger.error(f"Error reading {recordings_file}")
 
-    if len(df_all_squares) == 0:
-        paint_logger.error(f"No 'All Squares' generated.")
-        sys.exit()
-    if len(df_all_recordings) == 0:
-        paint_logger.error(f"No 'All Recordings' generated.")
-        sys.exit()
+    paint_logger.info(f"Processing {nr_processed} experiments, skipping {nr_skipped} experiments.")
 
-    # Ensure column types are correct
-    correct_all_images_column_types(df_all_recordings)
+    # Report on experiments processed
+    if verbose:
+        for experiment in experiments:
+            paint_logger.info(f"Processed experiment: {experiment}")
 
-    # ------------------------------------
-    # Save the files
-    # -------------------------------------
+    # Concatenate all the files
+    concat_csv_files(os.path.join(project_dir, 'All Recordings.csv'), all_recordings)
+    concat_csv_files(os.path.join(project_dir, 'All Squares.csv'), all_squares)
+    concat_csv_files(os.path.join(project_dir, 'All Tracks.csv'), all_tracks)
 
-    # Save the files,
-    df_all_squares.to_csv(os.path.join(project_dir, 'All Squares.csv'), index=False)
-    df_all_recordings.to_csv(os.path.join(project_dir, 'All Recordings.csv'), index=False)
+    correct_all_recordings_column_types(os.path.join(project_dir, 'All Recordings.csv'))
+    paint_logger.info(f"Processed {nr_processed} experiments, skipped {nr_skipped} experiments.")
 
-    run_time = time.time() - time_stamp
-    paint_logger.info(
-        f"Compiled  'All Recordings' and 'All Squares' for {project_dir} in {format_time_nicely(run_time)}")
-    paint_logger.info("")
-
-    # ------------------------------------
-    # Then do the Tracks File
-    # -------------------------------------
-
-    compile_all_tracks(project_dir)
 
 
 class CompileDialog:
