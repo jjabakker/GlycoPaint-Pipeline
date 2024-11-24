@@ -7,7 +7,8 @@ import pandas as pd
 
 from src.Application.Utilities.General_Support_Functions import (
     read_experiment_file,
-    classify_directory
+    classify_directory,
+    set_application_icon
 )
 from src.Fiji.PaintConfig import (
     get_paint_attribute,
@@ -147,6 +148,7 @@ class InspectDialog:
 
 if __name__ == '__main__':
     root = Tk()
+    root = set_application_icon(root)
     root.eval('tk::PlaceWindow . center')
     InspectDialog(root)
     root.mainloop()
