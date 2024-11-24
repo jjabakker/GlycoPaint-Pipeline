@@ -1,0 +1,55 @@
+{
+    "Paint": {
+        "Version": "1.0",
+        "Image File Extension": ".nd2",
+        "Fiji Path": "/Applications/Fiji.app"
+    },
+    "User Directories": {
+        "Project Directory": "~",
+        "Experiment Directory": "/Users/hans/Paint Demo Set/Paint Demo/240104",
+        "Images Directory": "~",
+        "Level": "Experiment"
+    },
+    "Generate Squares": {
+        "Plot to File": false,
+        "Plot Max": 5,
+        "Fraction of Squares to Determine Background": 0.1,
+        "Exclude zero DC tracks from Tau Calculation": false,
+        "Neighbour Mode": "Free",
+        "Min Track Duration": 0,
+        "Max Track Duration": 1000000,
+        "Nr of Squares in Row": 20,
+        "Min Tracks to Calculate Tau": 20,
+        "Min Allowable R Squared": 0.9,
+        "Min Required Density Ratio": 2.0,
+        "Max Allowable Variability": 10.0,
+        "Process Recording Tau": true,
+        "Process Square Tau": true,
+        "logging": {
+            "level": "INFO",
+            "file": "Generate Squares.log"
+        }
+    },
+    "TrackMate": {
+        "logging": {
+            "level": "INFO",
+            "file": "Run Trackmate Batch.log"
+        },
+        "MAX_FRAME_GAP": 3,
+        "LINKING_MAX_DISTANCE": 0.6,
+        "GAP_CLOSING_MAX_DISTANCE": 1.2,
+        "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,
+        "SPLITTING_MAX_DISTANCE": 15.0,
+        "ALLOW_GAP_CLOSING": true,
+        "ALLOW_TRACK_SPLITTING": false,
+        "ALLOW_TRACK_MERGING": false,
+        "MERGING_MAX_DISTANCE": 15.0,
+        "CUTOFF_PERCENTILE": 0.9,
+        "MIN_NR_SPOTS_IN_TRACK": 3,
+        "DO_SUBPIXEL_LOCALIZATION": false,
+        "RADIUS": 0.5,
+        "TARGET_CHANNEL": 1,
+        "DO_MEDIAN_FILTERING": false,
+        "TRACK_COLOURING": "TRACK_DURATION"
+    }
+}
