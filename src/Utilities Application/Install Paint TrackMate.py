@@ -12,7 +12,6 @@ if platform.system() == "Windows":
 else:
     winreg = None  # Mock the winreg module on non-Windows systems
 
-
 def setup_logging():
     """Sets up the logging configuration."""
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -158,6 +157,8 @@ def install():
         for file in files:
             copy_file(src_dir, dest_dir, file)
 
+    # And finally the jar file
+    copy_file(source_root, dest_root, 'GlycoPaint.jar')
 
 if __name__ == '__main__':
     setup_logging()
