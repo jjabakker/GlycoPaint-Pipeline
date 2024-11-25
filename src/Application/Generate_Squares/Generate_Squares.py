@@ -167,6 +167,9 @@ def process_experiment(
 
     for index, recording_data in df_recordings_of_experiment.iterrows():
 
+        if recording_data['Process'].isin(['Yes', 'y', 'Y']):
+            continue
+
         recording_name = recording_data['Ext Recording Name']
 
         # Process the Recording
