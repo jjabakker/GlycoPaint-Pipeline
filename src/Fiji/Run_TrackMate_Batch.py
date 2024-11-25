@@ -51,7 +51,7 @@ if __name__ == "__main__":
                 csv_reader = csv.DictReader(file)
 
                 # Check if the required columns are present
-                required_columns = ['Source', 'Destination', 'Process']
+                required_columns = ['Project', 'Image Source', 'Experiment', 'Process']
                 if not all(col in csv_reader.fieldnames for col in required_columns):
                     paint_logger.error("Error: Missing one or more required columns: {}".format(required_columns))
                     sys.exit()
@@ -62,25 +62,29 @@ if __name__ == "__main__":
                 for row in csv_reader:
                     if 'y' in row['Process'].lower():
 
-                        source = os.path.join(row['Source'], row['Image'])
+                        if not os.path.exists(row['Project']):
+                            paint_logger.error("Error: The Project source '{}' does not exist.".format(row['Project']))
+                            error = True
+                            continue
+
+                        if not os.path.exists(row['Image Source']):
+                            paint_logger.error("Error: The Image source '{}' does not exist.".format(row['Image Source']))
+                            error = True
+                            continue
+
+                        source = os.path.join(row['Project'], row['Experiment'])
                         if not os.path.exists(source):
-                            paint_logger.error("Error: The source '{}' does not exist.".format(source))
+                            paint_logger.error("Error: The Experiment '{}' does not exist.".format(source))
                             error = True
                             continue
 
-                        destination = os.path.join(row['Destination'], row['Image'])
-                        if not os.path.exists(destination):
-                            paint_logger.error("Error: The destination '{}' does not exist.".format(destination))
-                            error = True
-                            continue
-
-                        message = "Processing image '{}'".format(row['Image'])
+                        message = "Processing image '{}'".format(row['Experiment'])
                         paint_logger.info("")
                         paint_logger.info("-" * len(message))
                         paint_logger.info(message)
                         paint_logger.info("-" * len(message))
-                        run_trackmate(experiment_directory=os.path.join(row['Source'], row['Image']),
-                                      recording_source_directory=os.path.join(row['Destination'], row['Image']))
+                        run_trackmate(experiment_directory=os.path.join(row['Project'], row['Experiment']),
+                                      recording_source_directory=os.path.join(row['Image Source'], row['Experiment']))
                         paint_logger.info("")
                         paint_logger.info("")
                 run_time = round(time.time() - time_stamp, 1)
