@@ -80,8 +80,11 @@ def run_trackmate(experiment_directory, recording_source_directory):
             paint_logger.info(message)
 
             # Initialise the All Recordings file with the column headers
-            col_names = csv_reader.fieldnames + ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name',
-                                                 'Recording Size', 'Time Stamp']
+            col_names = csv_reader.fieldnames
+            new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp']
+            col_names += [col for col in new_columns if col not in col_names]
+
+            # And create the header row
             experiment_tm_file_path = initialise_experiment_tm_file(experiment_directory, col_names)
 
             # And now cycle through the experiment file
