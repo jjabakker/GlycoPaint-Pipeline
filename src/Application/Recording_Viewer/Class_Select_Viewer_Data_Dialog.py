@@ -8,8 +8,8 @@ from src.Application.Recording_Viewer.Recording_Viewer_Support_Functions import 
     nr_recordings)
 from src.Application.Utilities.General_Support_Functions import (
     classify_directory,
+    ToolTip
 )
-from src.Application.Utilities.ToolTips import ToolTip
 from src.Fiji.LoggerConfig import paint_logger
 from src.Fiji.PaintConfig import (
     get_paint_attribute,

@@ -10,9 +10,9 @@ from src.Application.Generate_Squares.Generate_Squares_Support_Functions import 
     pack_select_parameters)
 from src.Application.Utilities.General_Support_Functions import (
     format_time_nicely,
-    classify_directory
+    classify_directory,
+    ToolTip
 )
-from src.Application.Utilities.ToolTips import ToolTip
 from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name,

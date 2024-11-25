@@ -8,11 +8,10 @@ from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 
 from src.Application.Utilities.General_Support_Functions import (
-    format_time_nicely,
     correct_all_recordings_column_types,
     classify_directory,
-    concat_csv_files)
-from src.Application.Utilities.ToolTips import ToolTip
+    concat_csv_files,
+    ToolTip)
 from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name,
