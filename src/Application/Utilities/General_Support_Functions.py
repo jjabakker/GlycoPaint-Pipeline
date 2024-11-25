@@ -1,10 +1,12 @@
 import os
 import csv
+import time
 from pathlib import Path
 import re
 import shutil
 import pandas as pd
 from PIL import Image, ImageTk
+import tkinter as tk
 
 from src.Fiji.LoggerConfig import paint_logger
 
