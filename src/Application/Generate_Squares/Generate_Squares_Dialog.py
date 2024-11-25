@@ -119,12 +119,6 @@ class GenerateSquaresDialog:
         if tooltip:
             ToolTip(label, tooltip, wraplength=400)
 
-    def create_processing_controls(self, frame):
-        """Create the processing checkboxes."""
-
-        msg_square_tau = "If checked, the program will calculate a Tau for each square individually."
-        msg_recording_tau = "If checked, the program will calculate one Tau for all visible squares combined."
-
     def create_directory_controls(self, frame):
         """Create controls for directory management."""
         btn_change_dir = ttk.Button(frame, text='Change Directory', width=15, command=self.on_change_dir)
