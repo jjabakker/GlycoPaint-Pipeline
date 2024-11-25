@@ -30,8 +30,6 @@ class CheckIntegrityDialog:
 
     def load_saved_parameters(self):
         """Load parameters from disk or use default values if unavailable."""
-
-
         self.project_directory = get_paint_attribute('User Directories', 'Project Directory')
         self.experiment_directory = get_paint_attribute('User Directories', 'Experiment Directory')
         self.images_directory = get_paint_attribute('User Directories', 'Images Directory')
@@ -95,7 +93,7 @@ class CheckIntegrityDialog:
 
     def create_button_controls(self, frame):
         """Create buttons for the UI."""
-        btn_generate = ttk.Button(frame, text='Check', command=self.on_generate_squares_pressed)
+        btn_generate = ttk.Button(frame, text='Check', command=self.on_check_integrity_pressed)
         btn_exit = ttk.Button(frame, text='Exit', command=self.on_exit_pressed)
 
         # Create two empty columns to balance the buttons in the center
@@ -122,7 +120,7 @@ class CheckIntegrityDialog:
         """Handle the exit button click."""
         self.root.destroy()
 
-    def on_generate_squares_pressed(self):
+    def on_check_integrity_pressed(self):
         """Generate the squares and save the parameters."""
         if not os.path.isdir(self.paint_directory):
             paint_logger.error("The selected directory does not exist")
@@ -131,7 +129,7 @@ class CheckIntegrityDialog:
 
         self.level, _ = classify_directory(self.paint_directory)
         if self.level == 'Project':
-            check_integrity_experiment(self.paint_directory)
+            check_integrity_project(self.paint_directory)
         elif self.level == 'Experiment':
             check_integrity_experiment(self.paint_directory)
         else:
@@ -141,15 +139,4 @@ class CheckIntegrityDialog:
             return
         self.on_exit_pressed()
 
-    def save_parameters(self):
-        update_paint_attribute('Generate Squares', 'Nr of Squares in Row', self.nr_of_squares_in_row.get())
-        update_paint_attribute('Generate Squares', 'Min Tracks to Calculate Tau', self.min_tracks_for_tau.get())
-        update_paint_attribute('Generate Squares', 'Min Allowable R Squared', self.min_allowable_r_squared.get())
-        update_paint_attribute('Generate Squares', 'Min Required Density Ratio', self.min_required_density_ratio.get())
-        update_paint_attribute('Generate Squares', 'Max Allowable Variability', self.max_allowable_variability.get())
-
-        update_paint_attribute('User Directories', 'Project Directory', self.project_directory)
-        update_paint_attribute('User Directories', 'Experiment Directory', self.experiment_directory)
-        update_paint_attribute('User Directories', 'Images Directory', self.images_directory)
-        update_paint_attribute('User Directories', 'Level', self.level)
 
