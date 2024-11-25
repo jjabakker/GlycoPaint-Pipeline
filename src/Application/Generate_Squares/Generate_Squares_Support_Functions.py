@@ -14,12 +14,11 @@ from src.Fiji.PaintConfig import get_paint_attribute
 pd.options.mode.copy_on_write = True
 
 
-def calculate_density(nr_tracks: int, area: float, time: float, concentration: float, magnification: float) -> float:
+def calculate_density(nr_tracks: int, area: float, time: float, concentration: float) -> float:
     """
     The function implements a simple algorithm to calculate the density of tracks in a square.
     To calculate the density use the actual surface coordinates.
     Assume 2000 frames (100 sec) -  need to check - this is not always the case
-    Multiply by 1000 to get an easier number
     Area is calculated with Fiji info:
         Width: 82.0864 microns(512)
         Height: 82.0864 microns(512)
@@ -31,14 +30,12 @@ def calculate_density(nr_tracks: int, area: float, time: float, concentration: f
     :param area:
     :param time: Normally 100 sec (2000 frames)
     :param concentration:
-    :param magnification: use 1000 to getr easier numbers
     :return: the density
     """
 
     density = nr_tracks / area
     density /= time
     density /= concentration
-    density *= magnification
     density = round(density, 1)
     return density
 

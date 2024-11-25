@@ -385,8 +385,7 @@ def process_square(
 
         # Calculate the density for the square-
         density = calculate_density(
-            nr_tracks=nr_of_tracks_in_square, area=square_area, time=100, concentration=concentration,
-            magnification=1000)
+            nr_tracks=nr_of_tracks_in_square, area=square_area, time=100, concentration=concentration)
 
         # Calculate the variability for the square
         variability = calc_variability(df_tracks_of_square, square_seq_nr, nr_of_squares_in_row, 10)
@@ -479,6 +478,6 @@ def calculate_tau_and_density_for_recording(
     # Calculate the Density
     area = calc_area_of_square(nr_of_squares_in_row)
     density = calculate_density(
-        nr_tracks=nr_of_tracks_for_single_tau, area=area, time=100, concentration=concentration, magnification=1000)
+        nr_tracks=nr_of_tracks_for_single_tau, area=area, time=100, concentration=concentration)
 
     return tau, r_squared, density

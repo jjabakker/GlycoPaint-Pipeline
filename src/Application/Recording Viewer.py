@@ -1264,8 +1264,7 @@ def recalc_recording_tau_and_density(self):
         area=area,
         time=100,
         # concentration=self.concentration,   # ToDO
-        concentration=10,
-        magnification=1000)
+        concentration=10)
 
     # Update the Tau and Density values in the Viewer
     self.list_images[self.img_no]['Tau'] = tau
