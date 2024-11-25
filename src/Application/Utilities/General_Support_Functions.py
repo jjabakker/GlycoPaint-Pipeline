@@ -153,98 +153,6 @@ def copy_directory(src, dest):
         paint_logger.error(f"An unexpected error occurred: {e}")
 
 
-# ToDo there may be an Output dirctory but that should be ignored
-# def classify_directory(directory_path):
-#     # Define required files and subdirectories for an experiment directory
-#     experiment_files = {'All Recordings.csv', 'All Tracks.csv'}
-#     experiment_subdirs = {'Brightfield Images', 'TrackMate Images'}
-#     mature_experiment_file = 'All Squares.csv'
-#
-#     # Define required files for a project directory
-#     project_files = {'All Recordings.csv', 'All Tracks.csv'}
-#     mature_project_file = 'All Squares.csv'
-#
-#     observations = []
-#
-#     # Initialize classification variables
-#     directory_type = None
-#     maturity = 'Immature'
-#
-#     try:
-#         # Check if the directory exists
-#         if not os.path.exists(directory_path):
-#             paint_logger.error(f"Directory '{directory_path}' does not exist.")
-#             return directory_type, maturity
-#
-#         # Check if the path is a directory
-#         if not os.path.isdir(directory_path):
-#             paint_logger.error(f"Path '{directory_path}' is not a directory.")
-#             return directory_type, maturity
-#
-#         # Get directory contents
-#         contents = set(os.listdir(directory_path))
-#
-#         # Check if it is an experiment directory
-#         if experiment_files.issubset(contents):
-#             missing_subdirs = experiment_subdirs - contents
-#             if missing_subdirs:
-#                 observations.append(
-#                     f"Experiment directory '{directory_path}' is missing required subdirectories: {', '.join(missing_subdirs)}")
-#             else:
-#                 directory_type = 'Experiment'
-#                 # Check for maturity
-#                 if mature_experiment_file in contents:
-#                     maturity = 'Mature'
-#                 else:
-#                     observations.append(
-#                         f"Nor a mature Project: directory '{directory_path}' is missing the file '{mature_experiment_file}' required for maturity.")
-#         else:
-#             missing_files = experiment_files - contents
-#             observations.append(
-#                 f"Not an Experiment: directory '{directory_path}' is missing required files: {', '.join(missing_files)}")
-#
-#         # Check if it is a project directory
-#         if directory_type is None:
-#             experiment_dirs = [
-#                 d for d in os.listdir(directory_path)
-#                 if os.path.isdir(os.path.join(directory_path, d))
-#             ]
-#             experiment_dir_count = 0
-#             for sub_dir in experiment_dirs:
-#                 sub_dir_path = os.path.join(directory_path, sub_dir)
-#                 sub_contents = set(os.listdir(sub_dir_path))
-#                 if experiment_files.issubset(sub_contents) and experiment_subdirs.issubset(sub_contents):
-#                     experiment_dir_count += 1
-#                 else:
-#                     observations.append(
-#                         f"Not an Experiment: Subdirectory '{sub_dir}' is missing required files or subdirectories")
-#
-#             if experiment_dir_count > 0:
-#                 directory_type = 'Project'
-#                 if project_files.issubset(contents) and mature_project_file in contents:
-#                     maturity = 'Mature'
-#                 else:
-#                     observations.append(
-#                         f"Not a Project: directory '{directory_path}' is missing files required for project maturity: {', '.join(project_files - contents) or mature_project_file}")
-#             else:
-#                 observations.append(
-#                     f"Not a Project: directory '{directory_path}' does not contain any valid experiment subdirectories.")
-#
-#     except Exception as e:
-#         paint_logger.error(f"An error occurred while classifying the directory: {e}")
-#         return directory_type, maturity
-#
-#     # Return type and maturity
-#     if observations:
-#         for observation in observations:
-#             paint_logger.error(observation)
-#
-#     return directory_type, maturity
-
-
-
-
-
 def classify_directory_work(directory_path):
     """
     Classifies a directory as either an experiment or project directory,
@@ -347,7 +255,6 @@ def set_application_icon(root):
         root.iconphoto(True, icon)
     except Exception as e:
         print(f"Error loading image: {e}")
-        photo = None
 
     # For Windows
     root.iconbitmap(icon_file)
@@ -358,10 +265,11 @@ def set_application_icon(root):
 def concat_csv_files(output_file, csv_files):
     """
     Concatenate a list of CSV files into a single output file.
+    For the first file the header is read, for subsequent files not
     """
-    # Open the output file in write mode
+    # Open the output file in 'write' mode
     with open(output_file, 'w') as outfile:
-        writer = None  # Initialize writer as None
+        writer = None  # Initialize the writer as None
 
         for i, file in enumerate(csv_files):
             with open(file, 'r') as infile:
@@ -471,7 +379,3 @@ class ToolTip:
             self.tooltip_window.destroy()
             self.tooltip_window = None
 
-    def hide_tooltip(self, event=None):
-        if self.tooltip_window:
-            self.tooltip_window.destroy()
-            self.tooltip_window = None
