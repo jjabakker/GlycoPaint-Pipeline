@@ -295,10 +295,11 @@ def create_gui():
 
     # Panel for directory 1
     panel1 = JPanel(FlowLayout(FlowLayout.LEFT))
-    browseButton1 = JButton("Images  Directory")
+    browseButton1 = JButton("Images Directory")
     browseButton1.setPreferredSize(Dimension(180, 20))
     textField1 = JTextField(40)
     textField1.setEditable(False)
+    textField1.setText(images_dir)  # Set the default directory text immediately
 
     # Action to open JFileChooser for directory 1
     def browse_action1(event):
@@ -306,7 +307,6 @@ def create_gui():
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
         chooser.setCurrentDirectory(File(images_dir))
         chooser.rescanCurrentDirectory()  # Ensures the directory tree is refreshed
-        textField1.setText(images_dir)
         result = chooser.showOpenDialog(frame)
         if result == JFileChooser.APPROVE_OPTION:
             selected_dir = chooser.getSelectedFile().getAbsolutePath()
@@ -322,6 +322,7 @@ def create_gui():
     browseButton2.setPreferredSize(Dimension(180, 20))
     textField2 = JTextField(40)
     textField2.setEditable(False)
+    textField2.setText(experiment_dir)  # Set the default directory text immediately
 
     # Action to open JFileChooser for directory 2
     def browse_action2(event):
@@ -329,7 +330,6 @@ def create_gui():
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
         chooser.setCurrentDirectory(File(experiment_dir))
         chooser.rescanCurrentDirectory()  # Ensures the directory tree is refreshed
-        textField2.setText(experiment_dir)
         result = chooser.showOpenDialog(frame)
         if result == JFileChooser.APPROVE_OPTION:
             selected_dir = chooser.getSelectedFile().getAbsolutePath()
