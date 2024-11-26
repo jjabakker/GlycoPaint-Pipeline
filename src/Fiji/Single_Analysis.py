@@ -9,8 +9,7 @@ from ij import IJ
 from ij.plugin.frame import RoiManager
 
 
-# from Trackmate import paint_trackmate
-from Trackmate import execute_trackmate_in_Fiji
+from TrackMate import execute_trackmate_in_Fiji
 from DirectoriesAndLocations import (
     create_directories,
     get_default_image_directory)
@@ -116,14 +115,14 @@ def get_user_input(interactive):
 def square_analysis():
     """
     This routine needs to be run on every single image for which the square analysis needs to be performed.
-    It simply runs Trackmate on the full image and stores the tracks and image file
+    It simply runs TrackMate on the full image and stores the tracks and image file
 
     Later this information is used to determine which squares are the critical ones and for them the
     Taus are calculated.
     :return:
     """
 
-    # Determine where the Trackmate Data root is
+    # Determine where the TrackMate Data root is
     image_directory = get_default_image_directory()
 
     # There should already be an image selected.....

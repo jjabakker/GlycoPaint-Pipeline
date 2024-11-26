@@ -127,11 +127,11 @@ An example of a fully specified Experiment Info file, with values for Probe, Pro
 
 ## Run TrackMate
 
-The Trackmate plugin in the Fiji environment is used to analyse the recordings, detect spots and connect spots to tracks where possible.
+The TrackMate plugin in the Fiji environment is used to analyse the recordings, detect spots and connect spots to tracks where possible.
 
 The Experiment Info 'Threshold' parameter determines the spot detection sensitivity. With a low threshold value, even not very well-defined spots are detected. With a high threshold value, poorly defined spots are ignored. Experience indicates that with 1,000,000 plus spots, processing takes very long and does not lead to usable results. The user chooses for each recording a threshold value in an iterative process. The threshold should be set so that the number of spots preferably is in the 300,000 to 800,000 range. A good starting value for the Threshold is 20.
 
-The 'Run Trackmate' procedure is started from Fiji by selecting from the 'Plugins' menu the Paint group and in there 'Run Trackmate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
+The 'Run TrackMate' procedure is started from Fiji by selecting from the 'Plugins' menu the Paint group and in there 'Run TrackMate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
 
 <figure style="text-align: center;">
   <img src="Images/run_trackmate_dialog.png"  width="500">
@@ -258,7 +258,7 @@ Whilst the Heatmap dialogue is displayed, the user can scroll through images.
 
 ## All Recordings Format
 
-Holding information on an experiment. Two versions of All Recordings are shown. Version 1 shows the contents of All Recordings directly after Trackmate had been run and has some extra fields in additiion to the original Experiment Info file. Version 2 shows the contents after Generate Squares has been run. The Tau, Density and R Squared values relate to those calculated for the Recording. The Tau, Density and R Squared values for individual squares are in the All Squares file.
+Holding information on an experiment. Two versions of All Recordings are shown. Version 1 shows the contents of All Recordings directly after TrackMate had been run and has some extra fields in additiion to the original Experiment Info file. Version 2 shows the contents after Generate Squares has been run. The Tau, Density and R Squared values relate to those calculated for the Recording. The Tau, Density and R Squared values for individual squares are in the All Squares file.
 
 <figure style="text-align: center;">
   <img src="Images/all_recordings_format.png" >

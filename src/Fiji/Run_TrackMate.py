@@ -17,7 +17,7 @@ from PaintConfig import (
     get_paint_attribute,
     update_paint_attribute
 )
-from Trackmate import execute_trackmate_in_Fiji
+from TrackMate import execute_trackmate_in_Fiji
 
 from FijiSupportFunctions import (
     fiji_get_file_open_write_attribute,
@@ -167,7 +167,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
                 os.remove(filename)
 
         except KeyError as e:
-            paint_logger.error("Run_Trackmate: Missing expected column in row: {}.format(e)")
+            paint_logger.error("Run_TrackMate: Missing expected column in row: {}.format(e)")
             suppress_fiji_output()
             sys.exit(0)
 

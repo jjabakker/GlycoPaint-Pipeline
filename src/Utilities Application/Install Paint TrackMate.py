@@ -145,7 +145,7 @@ def install():
             "Run_TrackMate_Batch.py",
             "Single_Analysis.py",
             "FijiSupportFunctions.py",
-            "Trackmate.py",
+            "TrackMate.py",
             "ConvertBrightfieldImages.py",
             "LoggerConfig.py",
             "DirectoriesAndLocations.py",
@@ -158,7 +158,7 @@ def install():
             copy_file(src_dir, dest_dir, file)
 
     # And finally the jar file
-    copy_file(source_root, dest_root, 'GlycoPaint.jar')
+    copy_file(source_root, os.path.join(fiji_app, 'Plugins'), 'GlycoPaint.jar')
 
 if __name__ == '__main__':
     setup_logging()

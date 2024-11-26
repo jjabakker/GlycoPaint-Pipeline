@@ -4,12 +4,12 @@
 The GlycoPaint pipeline is a research application and not developed for a large audience. Consequently, installing and running it requires some support.
 
 ### Fiji and TrackMate
-The pipeline depends heavily on Fiji and Trackmate. To install Fiji refer to the following website: [https://imagej.net/software/fiji/](https://imagej.net/software/fiji/).
-The trackmate plugin comes preconfigured with the Fiji installation and is available for running under Plugins -> Tracking -> Trackmate.
+The pipeline depends heavily on Fiji and TrackMate. To install Fiji refer to the following website: [https://imagej.net/software/fiji/](https://imagej.net/software/fiji/).
+The trackmate plugin comes preconfigured with the Fiji installation and is available for running under Plugins -> Tracking -> TrackMate.
 
-Detailed knowledge of Fiji and Trackmate is not required to run the pipeline, but it is recommended to familiarize yourself with the software. Excellent sourced are available at https://imagej.net/learn/fiji/ and https://imagej.net/plugins/trackmate/. 
+Detailed knowledge of Fiji and TrackMate is not required to run the pipeline, but it is recommended to familiarize yourself with the software. Excellent sourced are available at https://imagej.net/learn/fiji/ and https://imagej.net/plugins/trackmate/. 
 
-For a detailed description of Trackmate, see the following reference:
+For a detailed description of TrackMate, see the following reference:
 
 > Ershov, D., Phan, M.-S., Pylvänäinen, J. W., Rigaud, S. U., Le Blanc, L., Charles-Orszag, A., … Tinevez, J.-Y. (2022).
 TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking pipelines. Nature Methods, 19(7),

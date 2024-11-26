@@ -70,7 +70,7 @@ default_data = {
     "TrackMate": {
         "logging": {
             "level": "INFO",
-            "file": "Run Trackmate Batch.log"
+            "file": "Run TrackMate Batch.log"
         },
         "MAX_FRAME_GAP": 3,
         "LINKING_MAX_DISTANCE": 0.6,
