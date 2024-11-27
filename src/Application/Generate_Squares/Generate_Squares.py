@@ -167,7 +167,7 @@ def process_experiment(
 
     for index, recording_data in df_recordings_of_experiment.iterrows():
 
-        if recording_data['Process'].isin(['Yes', 'y', 'Y']):
+        if recording_data['Process'] in {'No', 'n', 'N'} :
             continue
 
         recording_name = recording_data['Ext Recording Name']
@@ -193,8 +193,8 @@ def process_experiment(
 
         # Update the Experiment with the results
         df_recordings_of_experiment.at[index, 'Ext Recording Name'] = recording_name
-        df_recordings_of_experiment.at[index, 'Tau'] = recording_tau
-        df_recordings_of_experiment.at[index, 'Density'] = recording_density
+        df_recordings_of_experiment.at[index, 'Tau'] = round(recording_tau, 0)
+        df_recordings_of_experiment.at[index, 'Density'] = round(recording_density, 5)
         df_recordings_of_experiment.at[index, 'R Squared'] = round(recording_r_squared, 3)
 
         current_image_nr += 1
@@ -386,7 +386,7 @@ def process_square(
             min_tracks_for_tau,
             min_allowable_r_squared)
 
-        # Calculate the density for the square-
+        # Calculate the density for the square
         density = calculate_density(
             nr_tracks=nr_of_tracks_in_square, area=square_area, time=100, concentration=concentration)
 
@@ -423,7 +423,7 @@ def process_square(
         'Y1': round(y1, 2),
         'Selected': True,
         'Variability': round(variability, 2),
-        'Density': round(density, 1),
+        'Density': round(density, 5),
         'Density Ratio': 0.0,
         'Tau': round(tau, 0),
         'R Squared': round(r_squared, 2),

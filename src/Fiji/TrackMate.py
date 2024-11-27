@@ -207,6 +207,8 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 
     fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Track Duration", 'Track X Location', 'Track Y Location',
               'Diffusion Coefficient']
+    fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Track Duration", 'Track X Location', 'Track Y Location',
+              'Track Max Speed', 'Track Median Speed', 'Track Total Distance', 'Diffusion Coefficient']
 
     # Determine write attributes
     open_attribute = fiji_get_file_open_write_attribute()
@@ -226,8 +228,17 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
             x = round(feature_model.getTrackFeature(track_id, 'TRACK_X_LOCATION'), 2)
             y = round(feature_model.getTrackFeature(track_id, 'TRACK_Y_LOCATION'), 2)
 
+            max_speed = round(feature_model.getTrackFeature(track_id, 'TRACK_MAX_SPEED'), 2)
+            # med_speed = round(feature_model.getTrackFeature(track_id, 'TRACK_MEDIAN_SPEED'), 2)
+            # total_distance = round(feature_model.getTrackFeature(track_id, 'TRACK_TOTAL_DISTANCE_TRAVELED'), 2)
+
+            med_speed = 2
+            total_distance = 3
+
             # Write the record for each track
-            csvwriter.writerow([recording_name, label, spots, duration, x, y, diffusion_coefficient_list[track_index]])
+            # csvwriter.writerow([recording_name, label, spots, duration, x, y, diffusion_coefficient_list[track_index]])
+            csvwriter.writerow([recording_name, label, spots, duration, x, y, max_speed, med_speed, total_distance,
+                                diffusion_coefficient_list[track_index]])
             track_index += 1
 
     model.getLogger().log('Found ' + str(model.getTrackModel().nTracks(True)) + ' tracks.')

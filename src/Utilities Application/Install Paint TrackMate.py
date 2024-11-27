@@ -127,8 +127,19 @@ def install():
             logging.critical("Please make sure that Fiji is installed and specify the path to the Fiji application in the paint.json file.")
             return
 
+    # Clean and create directory
     dest_root = os.path.join(fiji_app, 'Plugins', 'GlycoPaint')
+    if os.path.exists(dest_root):
+        shutil.rmtree(dest_root)
     os.makedirs(dest_root, exist_ok=True)
+
+    # Remove the old jar file
+    jar_file = os.path.join(fiji_app, 'Plugins', 'GlycoPaint.jar')
+    if os.path.exists(jar_file):
+        os.remove(jar_file)
+
+    create_jar_file()
+
     source_root = os.path.dirname(os.getcwd())
 
     source_directories = {
@@ -145,7 +156,7 @@ def install():
             "Run_TrackMate_Batch.py",
             "Single_Analysis.py",
             "FijiSupportFunctions.py",
-            "Trackmate.py",
+            "TrackMate.py",
             "ConvertBrightfieldImages.py",
             "LoggerConfig.py",
             "DirectoriesAndLocations.py",
@@ -158,7 +169,32 @@ def install():
             copy_file(src_dir, dest_dir, file)
 
     # And finally the jar file
-    copy_file(source_root, dest_root, 'GlycoPaint.jar')
+    copy_file(src_dir, os.path.join(fiji_app, 'Plugins'), 'GlycoPaint.jar')
+
+
+def run_bash_command(command):
+    try:
+        # Run the command
+        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        print("Command output:", result.stdout)
+    except subprocess.CalledProcessError as e:
+        print("An error occurred while running the command:")
+        print("Error message:", e.stderr)
+
+def create_jar_file():
+    try:
+        commands = """
+        cd ..
+        cd ..
+        cd src/Fiji
+        rm -f GlycoPaint.jar
+        jar cf GlycoPaint.jar .        
+        """
+        result = subprocess.run(commands, shell=True, check=True, text=True, capture_output=True)
+        print("Combined command output:", result.stdout)
+    except subprocess.CalledProcessError as e:
+        print("An error occurred while running the combined commands:")
+        print(e.stderr)
 
 if __name__ == '__main__':
     setup_logging()

@@ -59,9 +59,14 @@ def compile_project_output(
             nr_skipped += 1
             continue
 
-        experiment_dir_path = os.path.join(project_dir, experiment_name)
-        if not os.path.isdir(experiment_dir_path) or 'Output' in experiment_name or experiment_name.startswith('-'):
+        # Ignore Output directory
+        if experiment_name == 'Output':
             continue
+
+        experiment_dir_path = os.path.join(project_dir, experiment_name)
+        if not os.path.isdir(experiment_dir_path):
+            continue
+
         if False:
             paint_logger.debug(f'Processing experiment: {experiment_dir_path}')
 

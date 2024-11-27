@@ -80,13 +80,13 @@ def delete_files_in_directory(directory_path):
 
 def get_default_image_directory():
     """
-    Determine where the root is. We are looking for something like /Users/xxxx/Trackmate Data
+    Determine where the root is. We are looking for something like /Users/xxxx/TrackMate Data
     The only thing that can vary is the username.
     If the directory does not exist, just warn and abort
     :return:  the image root directory
     """
 
-    image_directory = os.path.expanduser('~') + os.sep + "Trackmate Data"
+    image_directory = os.path.expanduser('~') + os.sep + "TrackMate Data"
     if not os.path.isdir(image_directory):
         makedirs(image_directory)
     else:

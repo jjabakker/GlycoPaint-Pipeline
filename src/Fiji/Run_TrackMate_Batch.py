@@ -31,7 +31,7 @@ if __name__ == "__main__":
         JOptionPane.showMessageDialog(None, msg, "Warning", JOptionPane.WARNING_MESSAGE)
     else:
 
-        message = "Processing Trackmate batchfile: '{}'".format(batch_file_name)
+        message = "Processing TrackMate batchfile: '{}'".format(batch_file_name)
         paint_logger.info("")
         paint_logger.info("")
         paint_logger.info("-" * len(message))

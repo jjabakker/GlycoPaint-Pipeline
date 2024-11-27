@@ -36,7 +36,6 @@ def calculate_density(nr_tracks: int, area: float, time: float, concentration: f
     density = nr_tracks / area
     density /= time
     density /= concentration
-    density = round(density, 1)
     return density
 
 
