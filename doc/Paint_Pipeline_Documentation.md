@@ -1,4 +1,4 @@
-<div style="text-align: center;"> 
+  <div style="text-align: center;"> 
 <span style="font-size: 72px;">GlycoPaint Pipeline</span>
 
 <span style="font-size: 36px;">Functional description</span>
@@ -127,11 +127,11 @@ An example of a fully specified Experiment Info file, with values for Probe, Pro
 
 ## Run TrackMate
 
-The Trackmate plugin in the Fiji environment is used to analyse the recordings, detect spots and connect spots to tracks where possible.
+The TrackMate plugin in the Fiji environment is used to analyse the recordings, detect spots and connect spots to tracks where possible.
 
 The Experiment Info 'Threshold' parameter determines the spot detection sensitivity. With a low threshold value, even not very well-defined spots are detected. With a high threshold value, poorly defined spots are ignored. Experience indicates that with 1,000,000 plus spots, processing takes very long and does not lead to usable results. The user chooses for each recording a threshold value in an iterative process. The threshold should be set so that the number of spots preferably is in the 300,000 to 800,000 range. A good starting value for the Threshold is 20.
 
-The 'Run Trackmate' procedure is started from Fiji by selecting from the 'Plugins' menu the Paint group and in there 'Run Trackmate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
+The 'Run TrackMate' procedure is started from Fiji by selecting from the 'Plugins' menu the Paint group and in there 'Run TrackMate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
 
 <figure style="text-align: center;">
   <img src="Images/run_trackmate_dialog.png"  width="500">
@@ -258,7 +258,7 @@ Whilst the Heatmap dialogue is displayed, the user can scroll through images.
 
 ## All Recordings Format
 
-Holding information on an experiment. Two versions of All Recordings are shown. Version 1 shows the contents of All Recordings directly after Trackmate had been run and has some extra fields in additiion to the original Experiment Info file. Version 2 shows the contents after Generate Squares has been run. The Tau, Density and R Squared values relate to those calculated for the Recording. The Tau, Density and R Squared values for individual squares are in the All Squares file.
+Holding information on an experiment. Two versions of All Recordings are shown. Version 1 shows the contents of All Recordings directly after TrackMate had been run and has some extra fields in additiion to the original Experiment Info file. Version 2 shows the contents after Generate Squares has been run. The Tau, Density and R Squared values relate to those calculated for the Recording. The Tau, Density and R Squared values for individual squares are in the All Squares file.
 
 <figure style="text-align: center;">
   <img src="Images/all_recordings_format.png" >
@@ -307,13 +307,11 @@ The variability of a square calculation starts with overlaying a grid over the s
 
 The Square Density is normalised to duration and concentration and is calculated with the following formula:
 
-$$Square\ Density = \frac{Track\ Count}{Area*Duration*Concentration}$$
+$$Square\ Density = \frac{Track\ Count}{Area * Duration * Concentration}$$
 
 The area of a square is calculated with the following data: 0.1602804 µm per pixel, 512 pixels in a row (or column).
 
 $$Square\ Area = \left(\frac{0.1602804*512}{Nr\ of\ Squares\ in\ Row} \right)^{2}$$
-
-The Density reported is multiplied by 1000 to make it easier to handle numbers.
 
 ## Background Density and Density Ratio
 
@@ -321,7 +319,7 @@ The background 'density' represents the average track count of the lowest 10% of
 
 ## Diffusion Coefficient
 
-The diffusion coefficient is calculated for each track in the recording that contains three or more spots, using the following formula. Here, *n* represents the dimensionality (2), and *t* is the time interval over which displacement is measured (0.05 s). The Diffusion coefficient reported is multiplied by 1000 to make it easier to handle numbers.
+The diffusion coefficient is calculated for each track in the recording that contains three or more spots, using the following formula. Here, *n* represents the dimensionality (2), and *t* is the time interval over which displacement is measured (0.05 s).
 
 $$MSD = \sum_{i = 1}^{nr\ spots}{{(x_{i} - x_{0})}^{2} + \ {(y_{i} - y_{0})}^{2}}$$
 
@@ -336,7 +334,7 @@ The operation of the Paint Pipeline can be tuned with parameters that are kept i
 </figure>
 
 
-### Paint
+## Paint
 
 Two parameters are of interest:
 - Image File Extension: Specifies the extension nof the images gebereatd by the microscope. For example, for Nikon it is '.nb2'. Generally speaking, any tiff compatible format is suitable. 
@@ -344,13 +342,13 @@ Two parameters are of interest:
 - Fiji Path: Under normal circumstances, this does not have to be specified,as the software will detect the location of Fiji itself.  
 
 
-### User Directories
-In this section directories previoulsy specified by the user are stored. so they can be offered as defaults in a nect compinent of the pipeline.
+## User Directories
+In this section,directories previously specified by the user are stored. so they can be offered as defaults in a nect compinent of the pipeline.
 
 
-### Generate Squares
+## Generate Squares
 
-In this section parameters are stored that are used by the Generate Squares app.
+In this section, parameters are stored that are used by the Generate Squares app.
 
 - Five parameters, Nr of Squares in Row, Min Tracks to Calculate Tau, Min Allowable R Squared, Min Required Density Ratio and Max Allowable Variability,  have been entered previously by the user in the Generate Squares dialog and stored so they can be presented in the next invocation of Generate Squares.
 
@@ -358,18 +356,53 @@ In this section parameters are stored that are used by the Generate Squares app.
 
 - Fraction of Squares to Determine Background: Specifies the fraction of squares that are used to avarege the background.
 
-### TrackMate
+## TrackMate
 
 In this section parameters are stored that are used by TrackMate. The [TrackMate documentation pages](https://imagej.net/software/fiji/) contain much useful information on TrackMate.
 
-Parameters that are of particular importance in the GlycoPaint application are:
-
-- RADIUS (0.5)
-- LINKING_MAX_DISTANCE (0.6)
-- GAP_CLOSING_MAX_DISTANCE (1.2)
-
+In this section, TrackMate parameters that are important in GlycoPaint are explained. 
 Not parameterised, but important choices for TrackMate, are the 'LoG detector' model for spot detection and the 'Simple LAP tracker' model for tracking.
 
+
+### Spot Detection
+
+The RADIUS parameter is used during the spot detection phase to specify the size of the spots being tracked. It determines the radius of the detection filter applied to identify objects in the dataset.
+
+The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 $\mu$m was found to give good results.
+
+If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint positional accuracy is not important and the value of the paraneter is set to False, to avoid unncessarily increasing processing time.
+
+The DO_MEDIAN_FILTERING parameter determines whether a median filter should be applied to the image during the spot detection phase. This preprocessing step helps reduce noise and enhance the detection of objects, especially in noisy datasets. The proposed value is True.
+
+The TARGET_CHANNEL parameter specifies which image channel is used for spot detection in multi-channel datasets. This is critical when working with datasets containing multiple channels (e.g., fluorescence microscopy) and tracking is needed in only one specific channel. For GlycoPaint the parameter defaults to 1.
+
+### Building Tracks
+
+TrackMate constructs tracks from spots in subsequent frames. The LINKING_MAX_DISTANCE parameter plays a role in the linking phase of tracking. It sets the maximum spatial distance within which two spots in consecutive frames can be linked as part of the same trajectory. If the distance is exceeded than the two different tracks are assumed.
+
+If we expect that a lectin cano move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 $\mu$m (which is equal to the expected radius of the spots).
+
+In case there are multiple spot candidates for loinking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter the recommendedc value of 1.05 is used.
+
+### Gap Closing
+
+The MAX_FRAME_GAP parameter is part of the gap-closing step in the tracking process. It determines the maximum number of consecutive frames an object can disappear for and still be linked into the same trajectory if it reappears.  
+
+Imagine the following situation. There is a clearly defined track, with spots on proximate positions defined in subsequent frames. However, in some frames a spot is missing. Do we interpret these as  distinct tracks (binding events) or do assume that the camera just missed a spot and really this is one long track? 
+
+If ALLOW_GAP_CLOSING parameter is set to True, TrackMate will consider if gaps in what is possibly one track should be closed. If the number of consecutive frames where a spot is missing is smaller than MAX_FRAME_GAP and if the distance between the last known and new spot location is smaller than GAP_CLOSING_MAX_DISTANCE, the two tracks are interpreted to be one track with some spots missing, otherwise as separarate tracks.
+
+If we expect that a lectin can release a glycan and immeditialy bind another, a low value of  MAX_FRAME_GAP is required. 
+
+Proposed value for MAX_FRAME_GAP is 1 frame and for GAP_CLOSING_MAX_DISTANCE 0.5 $\mu$m (which is equal to the expected radius of the spots). 
+
+### Track Splitting
+Gap splitting concerns the ability for a track to split into two or more tracks during tracking. This commonly used in scenarios like Cell division: when a single cell divides into two daughter cells and branching motion (when a particle splits into multiple trajectories). For the GlycoPaint application this is not relevant and ALLOW_TRACK_SPLITTING is set to False.
+
+### Track Merging
+Track mergings describes the ability for two or more tracks to merge into one during tracking. This occurs in scenarios like cell aggregation (two cells move together and become indistinguishable) or particle collision (two particles collide and continue as one). For the GlycoPaint application this is not relevant and ALLOW_TRACK_MERGING is set to False.
+
+### GlycoPaint
 The MIN_NR_SPOTS_IN_TRACK parameter is specific for GlycoPaint, and with its default setting of 3, ignores the shortest possible tracks, consisting of only 2 spots, as they are considered imaging noise.
 
 The TRACK_COLOURING parameter determines what track characteristic is used for colouring the tracks. Valid choices are specified in the TrackMate documentation. Options currently supported are TRACK_ID

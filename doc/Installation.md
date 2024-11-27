@@ -33,7 +33,7 @@ You will have to set up a Pyhon interpreter in PyCharm and install the following
 The resulting environment, displayed below, should be able to run the pipeline.
 
 <figure style="text-align: center;">
-  <img src="Images/pycharm_environment.png" >
+  <img src="Images/pycharm_environment.png" width="700" >
 </figure>
 
 ### R Studio
@@ -45,5 +45,5 @@ The pipeline also uses R for the data analysis. R Studio can be downloaded from 
 With Pycharm installed, the environment set up, and the code cloned from the repository, you are ready to run the pipeline. There is a collection of scripts and support files, but for just tunning thr piepline a smnall number if scripts are needed. They are found in the src directory under Applications
 
 <figure style="text-align: center;">
-  <img src="Images/python_scripts.png" >
+  <img src="Images/python_scripts.png" width="500" >
 </figure>
