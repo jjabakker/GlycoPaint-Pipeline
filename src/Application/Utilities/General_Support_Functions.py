@@ -1,7 +1,7 @@
 import os
 import csv
 import time
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import shutil
 import pandas as pd
@@ -191,8 +191,10 @@ def classify_directory_work(directory_path):
                                   item.name != optional_file and \
                                   item != output_dir]
         if additional_contents:
-            feedback.append(f"Not an Experiment: directory contains unexpected files or directories: {additional_contents}.")
-        if not additional_contents and (not output_dir.exists() or output_dir.is_dir()):
+            file_names = [PurePosixPath(path).name for path in additional_contents]
+            paint_logger.debug(f"Not an Experiment: directory contains unexpected files or directories: {file_names}.")
+        # if not additional_contents and (not output_dir.exists() or output_dir.is_dir()):
+        if (not output_dir.exists() or output_dir.is_dir()):
             maturity = "Mature" if (directory / optional_file).is_file() else "Immature"
             return {"type": "Experiment", "maturity": maturity, "feedback": None}
         else:
