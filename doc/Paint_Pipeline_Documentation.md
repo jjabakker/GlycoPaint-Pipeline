@@ -370,8 +370,6 @@ The RADIUS parameter is used during the spot detection phase to specify the size
 
 The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 $\mu$m was found to give good results.
 
-The CUTOFF_PERCENTILE parameter is used to set an intensity threshold based on the brightness of the image. It determines the cutoff for selecting spots based on their intensity relative to other pixel intensities in the dataset. As example, a CUTOFF_PERCENTILE of 0.5 (50th percentile) keeps spots with intensity above the medians. For noisy images, the recommended value is 0.8 – 0.9.
-
 If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint positional accuracy is not important and the value of the paraneter is set to False, to avoid unncessarily increasing processing time.
 
 The DO_MEDIAN_FILTERING parameter determines whether a median filter should be applied to the image during the spot detection phase. This preprocessing step helps reduce noise and enhance the detection of objects, especially in noisy datasets. The proposed value is True.
