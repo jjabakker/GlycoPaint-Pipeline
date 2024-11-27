@@ -72,22 +72,27 @@ default_data = {
             "level": "INFO",
             "file": "Run TrackMate Batch.log"
         },
-        "MAX_FRAME_GAP": 3,
-        "LINKING_MAX_DISTANCE": 0.6,
-        "GAP_CLOSING_MAX_DISTANCE": 1.2,
-        "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,
-        "SPLITTING_MAX_DISTANCE": 15.0,
-        "ALLOW_GAP_CLOSING": True,
-        "ALLOW_TRACK_SPLITTING": False,
-        "ALLOW_TRACK_MERGING": False,
-        "MERGING_MAX_DISTANCE": 15.0,
-        "CUTOFF_PERCENTILE": 0.9,
-        "MIN_NR_SPOTS_IN_TRACK": 3,
-        "DO_SUBPIXEL_LOCALIZATION": False,
-        "RADIUS": 0.5,
-        "TARGET_CHANNEL": 1,
-        "DO_MEDIAN_FILTERING": False,
-        "TRACK_COLOURING": "TRACK_DURATION"
+
+        "TARGET_CHANNEL": 1,  # Old value: 1
+        "RADIUS": 0.5,  # Old value: 0.5
+        "DO_SUBPIXEL_LOCALIZATION": False,  # Old value: False
+        "DO_MEDIAN_FILTERING": True,  # Old value: False
+
+        "LINKING_MAX_DISTANCE": 0.5,  # Old value: 0.6
+        "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,  # Old value: 1.05
+
+        "ALLOW_GAP_CLOSING": True,  # Old value: True
+        "GAP_CLOSING_MAX_DISTANCE": 0.5,  # Old value: 1.2
+        "MAX_FRAME_GAP": 1,  # Old value: 3
+
+        "ALLOW_TRACK_SPLITTING": False,  # Old value: False
+        "SPLITTING_MAX_DISTANCE": 15.0,  # Old value: 15.0
+
+        "ALLOW_TRACK_MERGING": False,  # Old value: False
+        "MERGING_MAX_DISTANCE": 15.0,  # Old value: 15.0
+
+        "MIN_NR_SPOTS_IN_TRACK": 3,  # Old value: 3
+        "TRACK_COLOURING": "TRACK_DURATION"  # Old value: "TRACK_DURATION"
     }
 }
 

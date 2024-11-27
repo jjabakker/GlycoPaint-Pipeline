@@ -73,35 +73,59 @@ paint_logger_change_file_handler_name('Run Trackmate.log')
 # --------------------------------------------------------
 
 
-def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_filename, kas_special):
-    print("\nProcessing: " + tracks_filename)
+def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_filename, first, kas_special ):
 
     paint_config = load_paint_config(get_paint_defaults_file_path())
     trackmate_config = paint_config['TrackMate']
 
-    max_frame_gap = trackmate_config['MAX_FRAME_GAP']
-    linking_max_distance = trackmate_config['LINKING_MAX_DISTANCE']
-    gap_closing_max_distance = trackmate_config['GAP_CLOSING_MAX_DISTANCE']
+    max_frame_gap = trackmate_config['MAX_FRAME_GAP'] or 0.5
+    linking_max_distance = trackmate_config['LINKING_MAX_DISTANCE'] or 0.5
+    gap_closing_max_distance = trackmate_config['GAP_CLOSING_MAX_DISTANCE'] or 0.5
 
-    alternative_linking_cost_factor = trackmate_config['ALTERNATIVE_LINKING_COST_FACTOR']
-    splitting_max_distance = trackmate_config['SPLITTING_MAX_DISTANCE']
-    allow_gap_closing = trackmate_config['ALLOW_GAP_CLOSING']
-    allow_track_merging = trackmate_config['ALLOW_TRACK_MERGING']
-    allow_track_splitting = trackmate_config['ALLOW_TRACK_SPLITTING']
-    merging_max_distance = trackmate_config['MERGING_MAX_DISTANCE']
-    cutoff_percentile = trackmate_config['CUTOFF_PERCENTILE']
+    alternative_linking_cost_factor = trackmate_config['ALTERNATIVE_LINKING_COST_FACTOR'] or 1.05
+    splitting_max_distance = trackmate_config['SPLITTING_MAX_DISTANCE'] or 13.0
+    allow_gap_closing = trackmate_config['ALLOW_GAP_CLOSING'] or True
+    allow_track_merging = trackmate_config['ALLOW_TRACK_MERGING'] or False
+    allow_track_splitting = trackmate_config['ALLOW_TRACK_SPLITTING'] or False
+    merging_max_distance = trackmate_config['MERGING_MAX_DISTANCE'] or 12.0
 
-    do_subpixel_localization = trackmate_config['DO_SUBPIXEL_LOCALIZATION']
-    radius = trackmate_config['RADIUS']
-    target_channel = trackmate_config['TARGET_CHANNEL']
-    do_median_filtering = trackmate_config['DO_MEDIAN_FILTERING']
+    do_subpixel_localization = trackmate_config['DO_SUBPIXEL_LOCALIZATION'] or False
+    radius = trackmate_config['RADIUS'] or 0.5
+    target_channel = trackmate_config['TARGET_CHANNEL'] or 1
+    do_median_filtering = trackmate_config['DO_MEDIAN_FILTERING'] or True
 
-    min_number_of_spots = trackmate_config['MIN_NR_SPOTS_IN_TRACK']
+    min_number_of_spots = trackmate_config['MIN_NR_SPOTS_IN_TRACK'] or 3
 
-    track_colouring = trackmate_config['TRACK_COLOURING']
+    track_colouring = trackmate_config['TRACK_COLOURING'] or 'TRACK_DURATION'
     if track_colouring != 'TRACK_DURATION' and track_colouring != 'TRACK_INDEX':
         paint_logger.error('Invalid track colouring option in TrackMate configuration,default to TRACK_DURATION')
         track_colouring = 'TRACK_DURATION'
+
+    if first:
+        paint_logger.info('TrackMate Parameters')
+        paint_logger.info("")
+        paint_logger.info('TARGET_CHANNEL:                  ' + str(target_channel))
+        paint_logger.info('RADIUS:                          ' + str(radius))
+        paint_logger.info('DO_SUBPIXEL_LOCALIZATION:        ' + str(do_subpixel_localization))
+        paint_logger.info('DO_MEDIAN_FILTERING:             ' + str(do_median_filtering))
+        paint_logger.info("")
+        paint_logger.info('LINKING_MAX_DISTANCE:            ' + str(linking_max_distance))
+        paint_logger.info('ALTERNATIVE_LINKING_COST_FACTOR: ' + str(alternative_linking_cost_factor))
+        paint_logger.info("")
+        paint_logger.info('ALLOW_GAP_CLOSING:               ' + str(allow_gap_closing))
+        paint_logger.info('GAP_CLOSING_MAX_DISTANCE:        ' + str(gap_closing_max_distance))
+        paint_logger.info('MAX_FRAME_GAP:                   ' + str(max_frame_gap))
+        paint_logger.info("")
+        paint_logger.info('ALLOW_TRACK_SPLITTING:           ' + str(allow_track_splitting))
+        paint_logger.info('SPLITTING_MAX_DISTANCE:          ' + str(splitting_max_distance))
+        paint_logger.info("")
+        paint_logger.info('ALLOW_TRACK_MERGING:             ' + str(allow_track_merging))
+        paint_logger.info('MERGING_MAX_DISTANCE:            ' + str(merging_max_distance))
+        paint_logger.info("")
+        paint_logger.info('MIN_NR_SPOTS_IN_TRACK:           ' + str(min_number_of_spots))
+        paint_logger.info('TRACK_COLOURING:                 ' + str(track_colouring))
+        paint_logger.info("")
+        paint_logger.info("")
 
     # We have to do the following to avoid errors with UTF8 chars generated in
     # TrackMate that will mess with our Fiji Jython.
@@ -128,14 +152,14 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     # Configure detector - all important parameters
     settings.detectorFactory = LogDetectorFactory()
     settings.detectorSettings = {
+        'TARGET_CHANNEL': target_channel,
+        'RADIUS': radius,
         'DO_SUBPIXEL_LOCALIZATION': do_subpixel_localization,  # False
-        'RADIUS': radius,  # 0.5
-        'TARGET_CHANNEL': target_channel,  # 1
         'THRESHOLD': threshold,
-        'DO_MEDIAN_FILTERING': do_median_filtering,  # False
+        'DO_MEDIAN_FILTERING': do_median_filtering
     }
 
-    # Configure spot filters - Do not filter out any spots
+    # Configure spot filters - Do not filter out any nr_spots
     filter1 = FeatureFilter('QUALITY', 0, True)
     settings.addSpotFilter(filter1)
 
@@ -144,18 +168,19 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     settings.trackerSettings = settings.trackerFactory.getDefaultSettings()
 
     # These are the important parameters
-    settings.trackerSettings['MAX_FRAME_GAP'] = max_frame_gap  # 3
-    settings.trackerSettings['LINKING_MAX_DISTANCE'] = linking_max_distance  # 0.6
-    settings.trackerSettings['GAP_CLOSING_MAX_DISTANCE'] = gap_closing_max_distance  # 1.2
 
-    # These are default values made explicit
+    settings.trackerSettings['LINKING_MAX_DISTANCE'] = linking_max_distance  # 0.6
     settings.trackerSettings['ALTERNATIVE_LINKING_COST_FACTOR'] = alternative_linking_cost_factor  # 1.05
-    settings.trackerSettings['SPLITTING_MAX_DISTANCE'] = splitting_max_distance  # 15.0
-    settings.trackerSettings['ALLOW_GAP_CLOSING'] = allow_gap_closing  # True
-    settings.trackerSettings['ALLOW_TRACK_SPLITTING'] = allow_track_splitting  # False
-    settings.trackerSettings['ALLOW_TRACK_MERGING'] = allow_track_merging  # False
-    settings.trackerSettings['MERGING_MAX_DISTANCE'] = merging_max_distance  # 15 .0
-    settings.trackerSettings['CUTOFF_PERCENTILE'] = cutoff_percentile  # 0.9
+
+    settings.trackerSettings['ALLOW_GAP_CLOSING'] = allow_gap_closing
+    settings.trackerSettings['GAP_CLOSING_MAX_DISTANCE'] = gap_closing_max_distance  # 1.2
+    settings.trackerSettings['MAX_FRAME_GAP'] = max_frame_gap
+
+    settings.trackerSettings['ALLOW_TRACK_SPLITTING'] = allow_track_splitting
+    settings.trackerSettings['SPLITTING_MAX_DISTANCE'] = splitting_max_distance
+
+    settings.trackerSettings['ALLOW_TRACK_MERGING'] = allow_track_merging
+    settings.trackerSettings['MERGING_MAX_DISTANCE'] = merging_max_distance
 
     # Add ALL the feature analyzers known to TrackMate.
     # They will yield numerical features for the results, such as speed, mean intensity etc.
@@ -179,18 +204,18 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
         paint_logger.error('Routine paint_trackmate - process failed')
         return -1, -1, -1
 
-    # Get spots data, iterate through each track to calculate the mean square displacement
+    # Get nr_spots data, iterate through each track to calculate the mean square displacement
 
     track_ids = model.getTrackModel().trackIDs(True)  # True means only return visible tracks
     diffusion_coefficient_list = []
     for track_id in track_ids:
 
-        # Get the set of spots in this track
+        # Get the set of nr_spots in this track
         track_spots = model.getTrackModel().trackSpots(track_id)
 
         first_spot = True
         cum_msd = 0
-        # Iterate through the spots in this track, retrieve values for x and y (in micron)
+        # Iterate through the nr_spots in this track, retrieve values for x and y (in micron)
         for spot in track_spots:
             if first_spot:
                 x0 = spot.getFeature('POSITION_X')
@@ -245,8 +270,11 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 
     fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Track Duration", 'Track X Location', 'Track Y Location',
               'Diffusion Coefficient']
-    fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Track Duration", 'Track X Location', 'Track Y Location',
-              'Track Max Speed', 'Track Median Speed', 'Track Total Distance', 'Diffusion Coefficient']
+    fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Nr Gaps", "Longest Gap",
+              "Track Duration",
+              'Track X Location', 'Track Y Location', 'Track Displacement', 'Track Total Distance',
+              'Track Max Speed', 'Track Median Speed', 'Track Mean Speed',
+              'Diffusion Coefficient']
 
     # Determine write attributes
     open_attribute = fiji_get_file_open_write_attribute()
@@ -262,26 +290,63 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
             # Fetch the track feature from the feature model.
             label = 'Track_' + str(track_id)
             duration = round(feature_model.getTrackFeature(track_id, 'TRACK_DURATION'), 3)
-            spots = feature_model.getTrackFeature(track_id, 'NUMBER_SPOTS')
+            nr_spots = feature_model.getTrackFeature(track_id, 'NUMBER_SPOTS')
             x = round(feature_model.getTrackFeature(track_id, 'TRACK_X_LOCATION'), 2)
             y = round(feature_model.getTrackFeature(track_id, 'TRACK_Y_LOCATION'), 2)
-
-            max_speed = round(feature_model.getTrackFeature(track_id, 'TRACK_MAX_SPEED'), 2)
-            # med_speed = round(feature_model.getTrackFeature(track_id, 'TRACK_MEDIAN_SPEED'), 2)
-            # total_distance = round(feature_model.getTrackFeature(track_id, 'TRACK_TOTAL_DISTANCE_TRAVELED'), 2)
 
             med_speed = 2
             total_distance = 3
 
+            max_speed = feature_model.getTrackFeature(track_id, 'TRACK_MAX_SPEED')
+            if max_speed is None:
+                max_speed = -1
+            else:
+                max_speed = round(max_speed, 2)
+
+            med_speed = feature_model.getTrackFeature(track_id, 'TRACK_MEDIAN_SPEED')
+            if med_speed is None:
+                med_speed = -1
+            else:
+                med_speed = round(med_speed, 2)
+
+            mean_speed = feature_model.getTrackFeature(track_id, 'TRACK_MEAN_SPEED')
+            if mean_speed is None:
+                mean_speed = -1
+            else:
+                mean_speed = round(mean_speed, 2)
+
+            total_distance = feature_model.getTrackFeature(track_id, 'TRACK_TOTAL_DISTANCE_TRAVELED')
+            if total_distance is None:
+                total_distance = -2
+            else:
+                total_distance = round(total_distance, 2)
+
+            nr_gaps = feature_model.getTrackFeature(track_id, 'NUMBER_GAPS')
+            if nr_gaps is None:
+                nr_gaps = -1
+
+            longest_gap = feature_model.getTrackFeature(track_id, 'LONGEST_GAP')
+            if longest_gap is None:
+                longest_gap = -1
+
+            displacement = feature_model.getTrackFeature(track_id, 'TRACK_DISPLACEMENT')
+            if  displacement is None:
+                displacement = -1
+            else:
+                displacement = round(displacement, 2)
+
             # Write the record for each track
-            # csvwriter.writerow([recording_name, label, spots, duration, x, y, diffusion_coefficient_list[track_index]])
-            csvwriter.writerow([recording_name, label, spots, duration, x, y, max_speed, med_speed, total_distance,
+            # csvwriter.writerow([recording_name, label, nr_spots, duration, x, y, diffusion_coefficient_list[track_index]])
+            csvwriter.writerow([recording_name, label, nr_spots, nr_gaps, longest_gap,
+                                duration,
+                                x, y, displacement, total_distance,
+                                max_speed, med_speed, mean_speed,
                                 diffusion_coefficient_list[track_index]])
             track_index += 1
 
     model.getLogger().log('Found ' + str(model.getTrackModel().nTracks(True)) + ' tracks.')
 
-    nr_spots = model.getSpots().getNSpots(True)  # Get visible spots only
+    nr_spots = model.getSpots().getNSpots(True)  # Get visible nr_spots only
     tracks = model.getTrackModel().nTracks(False)  # Get all tracks
     filtered_tracks = model.getTrackModel().nTracks(True)  # Get filtered tracks
 
@@ -374,11 +439,12 @@ def run_trackmate(experiment_directory, recording_source_directory):
             for row in csv_reader:  # Here we are reading the experiment file
                 if 'y' in row['Process'].lower():
                     file_count += 1
-                    paint_logger.info(
-                        "Processing file nr " + str(file_count) + " of " + str(nr_to_process) + ": " + row[
-                            'Recording Name'])
 
-                    status, row = process_recording_trackmate(row, recording_source_directory, experiment_directory)
+
+                    status, row = process_recording_trackmate(row, recording_source_directory, experiment_directory, file_count==1)
+                    paint_logger.info(
+                        "Processed file nr " + str(file_count) + " of " + str(nr_to_process) + ": " + row[
+                            'Recording Name'])
                     if status == 'OK':
                         nr_recording_processed += 1
                     elif status == 'NOT_FOUND':
@@ -388,6 +454,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
 
                 write_row_to_temp_file(row, experiment_tm_file_path, col_names)
 
+            paint_logger.info("")
             paint_logger.info("Number of recordings processed successfully:      " + str(nr_recording_processed))
             paint_logger.info("Number of recordings not found:                   " + str(nr_recording_not_found))
             paint_logger.info("Number of recordings not  successfully processed: " + str(nr_recording_failed))
@@ -449,7 +516,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
     convert_bf_images(recording_source_directory, experiment_directory, force=True)
 
 
-def process_recording_trackmate(row, recording_source_directory, experiment_directory):
+def process_recording_trackmate(row, recording_source_directory, experiment_directory, first):
     status = 'OK'
     recording_name = row['Recording Name']
     threshold = float(row['Threshold'])
@@ -484,7 +551,7 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
 
         # suppress_fiji_output()
         nr_spots, total_tracks, long_tracks = execute_trackmate_in_Fiji(
-            ext_recording_name, threshold, tracks_file_path, recording_file_path, False)
+            ext_recording_name, threshold, tracks_file_path, recording_file_path, first, False, )
         # restore_fiji_output()
 
         # IJ.run("Set Scale...", "distance=6.2373 known=1 unit=micron")
