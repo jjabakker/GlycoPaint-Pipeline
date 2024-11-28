@@ -446,16 +446,6 @@ class RecordingViewer:
         if self.df_squares.empty:
             return
 
-        # Determine the command for opening Excel
-        if platform.system() == 'Darwin':
-            excel_command = 'open'
-            excel_args = ['-a', '/Applications/Microsoft Excel.app']
-        elif platform.system() == 'Windows':
-            excel_command = find_excel_executable()
-            excel_args = [excel_command]
-        else:
-            raise OSError("Unsupported operating system.")
-
         # Create a temporary file
         temp_dir = tempfile.mkdtemp()
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -469,9 +459,9 @@ class RecordingViewer:
         # Open the file in Excel
         try:
             if platform.system() == 'Darwin':
-                subprocess.run([excel_command] + excel_args + [temp_file], check=True)
+                subprocess.run(["open", "-a", "Microsoft Excel", temp_file], check=True)
             elif platform.system() == 'Windows':
-                subprocess.run(excel_args + [temp_file], shell=True, check=True)
+                subprocess.run(["start", "excel", temp_file], shell=True)
         except subprocess.CalledProcessError as e:
             msg = "Failed to open Excel, cannot display squares data."
             messagebox.showerror("Error", msg)
@@ -482,7 +472,7 @@ class RecordingViewer:
             return
 
         # Allow some time for Excel to process the file
-        time.sleep(2)
+        time.sleep(1)
 
         # Clean up the temporary directory
         if os.path.exists(temp_dir):
