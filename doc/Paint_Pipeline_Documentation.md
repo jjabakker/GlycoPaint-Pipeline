@@ -368,9 +368,9 @@ Not parameterised, but important choices for TrackMate, are the 'LoG detector' m
 
 The RADIUS parameter is used during the spot detection phase to specify the size of the spots being tracked. It determines the radius of the detection filter applied to identify objects in the dataset.
 
-The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 $\mu$m was found to give good results.
+The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 μm was found to give good results.
 
-If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint positional accuracy is not important and the value of the paraneter is set to False, to avoid unncessarily increasing processing time.
+If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint, positional accuracy is not important and the value of the parameter is set to False to avoid unncessarily increasing processing time.
 
 The DO_MEDIAN_FILTERING parameter determines whether a median filter should be applied to the image during the spot detection phase. This preprocessing step helps reduce noise and enhance the detection of objects, especially in noisy datasets. The proposed value is True.
 
@@ -378,11 +378,11 @@ The TARGET_CHANNEL parameter specifies which image channel is used for spot dete
 
 ### Building Tracks
 
-TrackMate constructs tracks from spots in subsequent frames. The LINKING_MAX_DISTANCE parameter plays a role in the linking phase of tracking. It sets the maximum spatial distance within which two spots in consecutive frames can be linked as part of the same trajectory. If the distance is exceeded than the two different tracks are assumed.
+TrackMate constructs tracks from spots in subsequent frames. The LINKING_MAX_DISTANCE parameter plays a role in the linking phase of tracking. It sets the maximum spatial distance within which two spots in consecutive frames can be linked as part of the same trajectory. If the distance is exceeded, then the two different tracks are assumed.
 
-If we expect that a lectin cano move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 $\mu$m (which is equal to the expected radius of the spots).
+If we expect that a lectin cano move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 μm (which is equal to the expected radius of the spots).
 
-In case there are multiple spot candidates for loinking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter the recommendedc value of 1.05 is used.
+In the case that there are multiple spot candidates for loinking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter the recommendedc value of 1.05 is used.
 
 ### Gap Closing
 
@@ -394,7 +394,7 @@ If ALLOW_GAP_CLOSING parameter is set to True, TrackMate will consider if gaps i
 
 If we expect that a lectin can release a glycan and immeditialy bind another, a low value of  MAX_FRAME_GAP is required. 
 
-Proposed value for MAX_FRAME_GAP is 1 frame and for GAP_CLOSING_MAX_DISTANCE 0.5 $\mu$m (which is equal to the expected radius of the spots). 
+Proposed value for MAX_FRAME_GAP is 1 frame and for GAP_CLOSING_MAX_DISTANCE 0.5 μm (which is equal to the expected radius of the spots). 
 
 ### Track Splitting
 Gap splitting concerns the ability for a track to split into two or more tracks during tracking. This commonly used in scenarios like Cell division: when a single cell divides into two daughter cells and branching motion (when a particle splits into multiple trajectories). For the GlycoPaint application this is not relevant and ALLOW_TRACK_SPLITTING is set to False.
