@@ -7,17 +7,13 @@ from fiji.plugin.trackmate import Logger
 from fiji.plugin.trackmate import Model
 from ij import IJ
 from ij.plugin.frame import RoiManager
+from fiji.util.gui import GenericDialogPlus
 
 from TrackMate import execute_trackmate_in_Fiji
-
 from DirectoriesAndLocations import (
     create_directories,
     get_default_image_directory)
-
 from FijiSupportFunctions import fiji_get_file_open_write_attribute
-
-from fiji.util.gui import GenericDialogPlus
-
 from LoggerConfig import paint_logger
 
 

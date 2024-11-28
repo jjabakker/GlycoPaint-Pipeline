@@ -64,7 +64,6 @@ paint_logger_change_file_handler_name('Run Trackmate.log')
 # --------------------------------------------------------
 # --------------------------------------------------------
 # --------------------------------------------------------
-# --------------------------------------------------------
 
 
 # --------------------------------------------------------
@@ -336,7 +335,6 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
                 displacement = round(displacement, 2)
 
             # Write the record for each track
-            # csvwriter.writerow([recording_name, label, nr_spots, duration, x, y, diffusion_coefficient_list[track_index]])
             csvwriter.writerow([recording_name, label, nr_spots, nr_gaps, longest_gap,
                                 duration,
                                 x, y, displacement, total_distance,
@@ -400,7 +398,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
         if not {'Recording Sequence Nr', 'Recording Name', 'Experiment Date', 'Experiment Name', 'Condition Nr',
                 'Replicate Nr', 'Probe', 'Probe Type', 'Cell Type', 'Adjuvant', 'Concentration', 'Threshold',
                 'Process'} <= set(csv_reader.fieldnames):
-            paint_logger.error("Error: Missing expected column headers ")
+            paint_logger.error("Error: Missing expected column headers in {}".format(experiment_info_path))
             suppress_fiji_output()
             sys.exit()
 
@@ -509,7 +507,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
                 os.remove(filename)
 
         except KeyError as e:
-            paint_logger.error("Run_TrackMate: Missing expected column in row: {}.format(e)")
+            paint_logger.error("Run_TrackMate could not process recording. Error {}".format(e))
             suppress_fiji_output()
             sys.exit(0)
 
