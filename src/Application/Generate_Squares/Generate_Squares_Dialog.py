@@ -177,7 +177,7 @@ class GenerateSquaresDialog:
         else:
             msg = "The selected directory does not seem to be a project directory, nor an experiment directory"
             paint_logger.error(msg)
-            messagebox.showwarning(self.root, title='Warning', message=msg)
+            messagebox.showwarning(title='Warning', message=msg)
             return
 
         select_parameters = pack_select_parameters(
