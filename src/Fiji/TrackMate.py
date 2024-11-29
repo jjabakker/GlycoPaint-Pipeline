@@ -27,40 +27,33 @@ from ij import WindowManager
 from ij.io import FileSaver
 from ij.plugin.frame import RoiManager
 
-
 from FijiSupportFunctions import fiji_get_file_open_write_attribute
 from LoggerConfig import paint_logger
-from PaintConfig import (
-    load_paint_config,
-    get_paint_defaults_file_path)
+from PaintConfig import get_paint_attribute
 
 
 def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_filename, kas_special):
     print("\nProcessing: " + tracks_filename)
 
-    paint_config = load_paint_config(get_paint_defaults_file_path())
-    trackmate_config = paint_config['TrackMate']
+    max_frame_gap = get_paint_attribute('Trackmate', 'MAX_FRAME_GAP', 0.5)
+    linking_max_distance = get_paint_attribute('Trackmate', 'LINKING_MAX_DISTANCE', 0.5)
+    gap_closing_max_distance = get_paint_attribute('Trackmate', 'GAP_CLOSING_MAX_DISTANCE', 0.5)
 
-    max_frame_gap = trackmate_config['MAX_FRAME_GAP']
-    linking_max_distance = trackmate_config['LINKING_MAX_DISTANCE']
-    gap_closing_max_distance = trackmate_config['GAP_CLOSING_MAX_DISTANCE']
+    alternative_linking_cost_factor = get_paint_attribute('Trackmate', 'ALTERNATIVE_LINKING_COST_FACTOR', 1.05)
+    splitting_max_distance = get_paint_attribute('Trackmate', 'SPLITTING_MAX_DISTANCE', 13.0)
+    allow_gap_closing = get_paint_attribute('Trackmate', 'ALLOW_GAP_CLOSING', False)
+    allow_track_merging = get_paint_attribute('Trackmate', 'ALLOW_TRACK_MERGING', False)
+    allow_track_splitting = get_paint_attribute('Trackmate', 'ALLOW_TRACK_SPLITTING', False)
+    merging_max_distance = get_paint_attribute('Trackmate', 'MERGING_MAX_DISTANCE', 12.0)
 
-    alternative_linking_cost_factor = trackmate_config['ALTERNATIVE_LINKING_COST_FACTOR']
-    splitting_max_distance = trackmate_config['SPLITTING_MAX_DISTANCE']
-    allow_gap_closing = trackmate_config['ALLOW_GAP_CLOSING']
-    allow_track_merging = trackmate_config['ALLOW_TRACK_MERGING']
-    allow_track_splitting = trackmate_config['ALLOW_TRACK_SPLITTING']
-    merging_max_distance = trackmate_config['MERGING_MAX_DISTANCE']
-    cutoff_percentile = trackmate_config['CUTOFF_PERCENTILE']
+    do_subpixel_localization = get_paint_attribute('Trackmate', 'DO_SUBPIXEL_LOCALIZATION', False)
+    radius = get_paint_attribute('Trackmate', 'RADIUS', 0.5)
+    target_channel = get_paint_attribute('Trackmate', 'TARGET_CHANNEL', 1)
+    do_median_filtering = get_paint_attribute('Trackmate', 'DO_MEDIAN_FILTERING', True)
 
-    do_subpixel_localization = trackmate_config['DO_SUBPIXEL_LOCALIZATION']
-    radius = trackmate_config['RADIUS']
-    target_channel = trackmate_config['TARGET_CHANNEL']
-    do_median_filtering = trackmate_config['DO_MEDIAN_FILTERING']
+    min_number_of_spots = get_paint_attribute('Trackmate', 'MIN_NR_SPOTS_IN_TRACK', 3)
 
-    min_number_of_spots = trackmate_config['MIN_NR_SPOTS_IN_TRACK']
-
-    track_colouring = trackmate_config['TRACK_COLOURING']
+    track_colouring = get_paint_attribute('Trackmate', 'TRACK_COLOURING', 'TRACK_DURATION')
     if track_colouring != 'TRACK_DURATION' and track_colouring != 'TRACK_INDEX':
         paint_logger.error('Invalid track colouring option in TrackMate configuration,default to TRACK_DURATION')
         track_colouring = 'TRACK_DURATION'

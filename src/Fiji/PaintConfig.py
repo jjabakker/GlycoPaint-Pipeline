@@ -127,7 +127,7 @@ def load_paint_config(file_path):
         return None
 
 
-def get_paint_attribute(application, attribute_name):
+def get_paint_attribute(application, attribute_name, default_value=None):
     config = load_paint_config(get_paint_defaults_file_path())
     if config is None:
         paint_logger.error("Error: Configuration file {} not found.".format(get_paint_defaults_file_path()))
@@ -139,6 +139,9 @@ def get_paint_attribute(application, attribute_name):
             pass  # ToDo
             paint_logger.error("Error: Attribute {} not found in configuration file {}.".format(attribute_name,
                                                                                                 get_paint_defaults_file_path()))
+            if default_value is not None:
+                value =  default_value
+
         return value
 
 
