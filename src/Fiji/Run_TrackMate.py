@@ -1,5 +1,6 @@
 import csv
 import os
+import json
 import sys
 import threading
 import time
@@ -33,24 +34,188 @@ from DirectoriesAndLocations import (
     get_experiment_info_file_path,
     get_experiment_tm_file_path)
 
-from PaintConfig import (
-    get_paint_attribute,
-    update_paint_attribute
-)
-
 from FijiSupportFunctions import (
     fiji_get_file_open_write_attribute,
     fiji_get_file_open_append_attribute,
     suppress_fiji_output,
     format_time_nicely)
 
-from LoggerConfig import (
-    paint_logger,
-    paint_logger_change_file_handler_name)
+from LoggerConfig import paint_logger_change_file_handler_name
 
 from ConvertBrightfieldImages import convert_bf_images
 
 paint_logger_change_file_handler_name('Run Trackmate.log')
+
+# --------------------------------------------------------
+# --------------------------------------------------------
+# --------------------------------------------------------
+# Start of Code originally kept in PaintConfig.py
+# --------------------------------------------------------
+# --------------------------------------------------------
+# --------------------------------------------------------
+
+
+def get_paint_defaults_file_path():  # ToDo
+    return os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'Paint.json')
+
+
+# This is unusual code. One import will work in Jython, the other in Python. The other will fail, but the error will
+# be caught.
+
+# Import for Jython
+try:
+    from LoggerConfig import paint_logger
+except:
+    pass
+
+# Import for Python
+try:
+    from src.Fiji.LoggerConfig import paint_logger
+except:
+    pass
+
+paint_configuration = None
+
+# Default JSON structure
+default_data = {
+    "Paint": {
+        "Version": "1.0",
+        "Image File Extension": ".nd2",
+        "Fiji Path": "/Applications/Fiji.app"
+    },
+    "User Directories": {
+        "Project Directory": "~",
+        "Experiment Directory": "~",
+        "Images Directory": "~",
+        "Level": "Experiment"
+    },
+    "Generate Squares": {
+        "Plot to File": False,
+        "Plot Max": 5,
+        "Fraction of Squares to Determine Background": 0.1,
+        "Exclude zero DC tracks from Tau Calculation": False,
+        "Neighbour Mode": "Free",
+        "Min Track Duration": 0,
+        "Max Track Duration": 1000000,
+        "Nr of Squares in Row": 20,
+        "Min Tracks to Calculate Tau": 20,
+        'Min Allowable R Squared': 0.9,
+        "Min Required Density Ratio": 2.0,
+        "Max Allowable Variability": 10.0,
+
+        "logging": {
+            "level": "INFO",
+            "file": "Generate Squares.log"
+        }
+    },
+    "Recording Viewer": {
+        "logging": {
+            "level": "INFO",
+            "file": "Image Viewer.log"
+        }
+    },
+    "Compile Project Output": {
+        "logging": {
+            "level": "INFO",
+            "file": "Compile Project Output.log"
+        }
+    },
+    "TrackMate": {
+        "logging": {
+            "level": "INFO",
+            "file": "Run TrackMate Batch.log"
+        },
+
+        "TARGET_CHANNEL": 1,  # Old value: 1
+        "RADIUS": 0.5,  # Old value: 0.5
+        "DO_SUBPIXEL_LOCALIZATION": False,  # Old value: False
+        "DO_MEDIAN_FILTERING": True,  # Old value: False
+
+        "LINKING_MAX_DISTANCE": 0.5,  # Old value: 0.6
+        "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,  # Old value: 1.05
+
+        "ALLOW_GAP_CLOSING": True,  # Old value: True
+        "GAP_CLOSING_MAX_DISTANCE": 0.5,  # Old value: 1.2
+        "MAX_FRAME_GAP": 1,  # Old value: 3
+
+        "ALLOW_TRACK_SPLITTING": False,  # Old value: False
+        "SPLITTING_MAX_DISTANCE": 15.0,  # Old value: 15.0
+
+        "ALLOW_TRACK_MERGING": False,  # Old value: False
+        "MERGING_MAX_DISTANCE": 15.0,  # Old value: 15.0
+
+        "MIN_NR_SPOTS_IN_TRACK": 3,  # Old value: 3
+        "TRACK_COLOURING": "TRACK_DURATION"  # Old value: "TRACK_DURATION"
+    }
+}
+
+
+def load_paint_config(file_path):
+    global paint_configuration
+
+    if paint_configuration is not None:
+        return paint_configuration
+
+    if file_path is None:
+        file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
+
+    if not os.path.exists(file_path):
+        # If not, create the file with default values
+        with open(file_path, "w") as file:
+            json.dump(default_data, file, indent=4)
+        paint_logger.info("File '{}' created with default values.".format(file_path))
+
+    try:
+        with open(file_path, 'r') as config_file:
+            paint_configuration = json.load(config_file)
+        return paint_configuration
+    except IOError:
+        paint_logger.error("Error: Configuration file {} not found.".format(file_path))
+        return None
+    except ValueError:
+        paint_logger.error("Failed to parse JSON from {}.".format(file_path))
+        return None
+    except:
+        paint_logger.error("Error: Problem with configuration file {}.".format(file_path))
+        return None
+
+
+def get_paint_attribute(application, attribute_name, default_value=None):
+    config = load_paint_config(get_paint_defaults_file_path())
+    if config is None:
+        paint_logger.error("Error: Configuration file {} not found.".format(get_paint_defaults_file_path()))
+        return None
+    else:
+        application = config.get(application)
+        value = application.get(attribute_name, None)
+        if value is None:
+            pass  # ToDo
+            paint_logger.error("Error: Attribute {} not found in configuration file {}.".format(attribute_name,
+                                                                                                get_paint_defaults_file_path()))
+            if default_value is not None:
+                value =  default_value
+
+        return value
+
+
+def update_paint_attribute(application, attribute_name, value):
+    try:
+        config = load_paint_config(get_paint_defaults_file_path())
+
+        # Update the RADIUS value under TrackMate
+        if application in config:
+            config[application][attribute_name] = value
+        else:
+            paint_logger.error("The {} section does not exist in the JSON file.".format(application))
+
+        # Save the updated data back to the JSON file
+        file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
+        with open(file_path, "w") as file:
+            json.dump(config, file, indent=4)
+
+    except Exception as e:
+        paint_logger.error("An unexpected error occurred: {}.format(e)")
+
 
 
 # --------------------------------------------------------
@@ -69,25 +234,25 @@ paint_logger_change_file_handler_name('Run Trackmate.log')
 
 
 def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_filename, first, kas_special ):
-    max_frame_gap = get_paint_attribute('Trackmate', 'MAX_FRAME_GAP', 0.5)
-    linking_max_distance = get_paint_attribute('Trackmate', 'LINKING_MAX_DISTANCE', 0.5)
-    gap_closing_max_distance = get_paint_attribute('Trackmate', 'GAP_CLOSING_MAX_DISTANCE', 0.5)
+    max_frame_gap = get_paint_attribute('TrackMate', 'MAX_FRAME_GAP', 0.5)
+    linking_max_distance = get_paint_attribute('TrackMate', 'LINKING_MAX_DISTANCE', 0.5)
+    gap_closing_max_distance = get_paint_attribute('TrackMate', 'GAP_CLOSING_MAX_DISTANCE', 0.5)
 
-    alternative_linking_cost_factor = get_paint_attribute('Trackmate', 'ALTERNATIVE_LINKING_COST_FACTOR', 1.05)
-    splitting_max_distance = get_paint_attribute('Trackmate', 'SPLITTING_MAX_DISTANCE', 13.0)
-    allow_gap_closing = get_paint_attribute('Trackmate', 'ALLOW_GAP_CLOSING', False)
-    allow_track_merging = get_paint_attribute('Trackmate', 'ALLOW_TRACK_MERGING', False)
-    allow_track_splitting = get_paint_attribute('Trackmate', 'ALLOW_TRACK_SPLITTING', False)
-    merging_max_distance = get_paint_attribute('Trackmate', 'MERGING_MAX_DISTANCE', 12.0)
+    alternative_linking_cost_factor = get_paint_attribute('TrackMate', 'ALTERNATIVE_LINKING_COST_FACTOR', 1.05)
+    splitting_max_distance = get_paint_attribute('TrackMate', 'SPLITTING_MAX_DISTANCE', 13.0)
+    allow_gap_closing = get_paint_attribute('TrackMate', 'ALLOW_GAP_CLOSING', False)
+    allow_track_merging = get_paint_attribute('TrackMate', 'ALLOW_TRACK_MERGING', False)
+    allow_track_splitting = get_paint_attribute('TrackMate', 'ALLOW_TRACK_SPLITTING', False)
+    merging_max_distance = get_paint_attribute('TrackMate', 'MERGING_MAX_DISTANCE', 12.0)
 
-    do_subpixel_localization = get_paint_attribute('Trackmate', 'DO_SUBPIXEL_LOCALIZATION', False)
-    radius = get_paint_attribute('Trackmate', 'RADIUS', 0.5)
-    target_channel = get_paint_attribute('Trackmate', 'TARGET_CHANNEL', 1)
-    do_median_filtering = get_paint_attribute('Trackmate', 'DO_MEDIAN_FILTERING', True)
+    do_subpixel_localization = get_paint_attribute('TrackMate', 'DO_SUBPIXEL_LOCALIZATION', False)
+    radius = get_paint_attribute('TrackMate', 'RADIUS', 0.5)
+    target_channel = get_paint_attribute('TrackMate', 'TARGET_CHANNEL', 1)
+    do_median_filtering = get_paint_attribute('TrackMate', 'DO_MEDIAN_FILTERING', True)
 
-    min_number_of_spots = get_paint_attribute('Trackmate', 'MIN_NR_SPOTS_IN_TRACK', 3)
+    min_number_of_spots = get_paint_attribute('TrackMate', 'MIN_NR_SPOTS_IN_TRACK', 3)
 
-    track_colouring = get_paint_attribute('Trackmate', 'TRACK_COLOURING', 'TRACK_DURATION')
+    track_colouring = get_paint_attribute('TrackMate', 'TRACK_COLOURING', 'TRACK_DURATION')
     if track_colouring != 'TRACK_DURATION' and track_colouring != 'TRACK_INDEX':
         paint_logger.error('Invalid track colouring option in TrackMate configuration,default to TRACK_DURATION')
         track_colouring = 'TRACK_DURATION'
@@ -342,18 +507,6 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 
     return nr_spots, tracks, filtered_tracks
 
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-# End of Code originally kept in TrackMate.py
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-
-
-
-
 # -----------------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------
@@ -361,7 +514,6 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 # -----------------------------------------------------------------------------------------------------------\
 # -----------------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------
-
 
 
 def run_trackmate(experiment_directory, recording_source_directory):
