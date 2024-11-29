@@ -219,12 +219,17 @@ def classify_directory_work(directory_path):
         additional_dirs = [item for item in contents if item.is_dir() and item != output_dir and item not in experiment_dirs]
         additional_files = [item for item in contents if item.is_file() and item.name not in project_files]
 
-        if not additional_dirs and not additional_files and (not output_dir.exists() or output_dir.is_dir()):
+        #if not additional_dirs and not additional_files and (not output_dir.exists() or output_dir.is_dir()):
+        if (not output_dir.exists() or output_dir.is_dir()):
             maturity = "Mature" if has_project_files else "Immature"
             return {"type": "Project", "maturity": maturity, "feedback": None}
         else:
             dir_names = [Path(path).name for path in additional_dirs if Path(path).is_dir()]
-            feedback.append(f"Not a Project: unexpected files {additional_files} or directories {dir_names}.")
+            #feedback.append(f"Not a Project: unexpected files {additional_files} or directories {dir_names}.")
+
+            file_names = [PurePosixPath(path).name for path in additional_files]
+            dir_names = [PurePosixPath(path).name for path in additional_dirs]
+            paint_logger.info(f"Not a Project: unexpected files {additional_files} or directories {dir_names}.")
     else:
         feedback.append("Not a Project: No valid experiment directories found for a project.")
 
