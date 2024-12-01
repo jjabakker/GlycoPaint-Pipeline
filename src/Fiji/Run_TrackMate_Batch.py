@@ -375,6 +375,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 
     track_ids = model.getTrackModel().trackIDs(True)  # True means only return visible tracks
     diffusion_coefficient_list = []
+    nr_spots_in_all_tracks = 0 # Total nr_spots in all tracks
     for track_id in track_ids:
 
         # Get the set of nr_spots in this track
@@ -384,6 +385,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
         cum_msd = 0
         # Iterate through the nr_spots in this track, retrieve values for x and y (in micron)
         for spot in track_spots:
+            nr_spots_in_all_tracks += 1
             if first_spot:
                 x0 = spot.getFeature('POSITION_X')
                 y0 = spot.getFeature('POSITION_Y')
@@ -435,8 +437,6 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     # Write the Tracks file
     # ----------------
 
-    fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Track Duration", 'Track X Location', 'Track Y Location',
-              'Diffusion Coefficient']
     fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Nr Gaps", "Longest Gap",
               "Track Duration",
               'Track X Location', 'Track Y Location', 'Track Displacement', 'Track Total Distance',
@@ -516,7 +516,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     tracks = model.getTrackModel().nTracks(False)  # Get all tracks
     filtered_tracks = model.getTrackModel().nTracks(True)  # Get filtered tracks
 
-    return nr_spots, tracks, filtered_tracks
+    return nr_spots, tracks, filtered_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance, nr_spots_in_all_tracks
 
 
 # -----------------------------------------------------------------------------------------------------------
@@ -575,7 +575,8 @@ def run_trackmate(experiment_directory, recording_source_directory):
 
             # Initialise the All Recordings file with the column headers
             col_names = csv_reader.fieldnames
-            new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp']
+            new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp',
+                           'Max Frame Gap', 'Linking Max Distance', 'Gap Closing Max Distance', 'Nr Spots in All Tracks']
             col_names += [col for col in new_columns if col not in col_names]
 
             # And create the header row
@@ -593,7 +594,6 @@ def run_trackmate(experiment_directory, recording_source_directory):
             for row in csv_reader:  # Here we are reading the experiment file
                 if 'y' in row['Process'].lower():
                     file_count += 1
-
 
                     status, row = process_recording_trackmate(row, recording_source_directory, experiment_directory, file_count==1)
                     paint_logger.info(
@@ -705,7 +705,7 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         recording_file_path = os.path.join(experiment_directory, 'TrackMate Images', ext_recording_name + '.jpg')
 
         # suppress_fiji_output()
-        nr_spots, total_tracks, long_tracks = execute_trackmate_in_Fiji(
+        nr_spots, total_tracks, long_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance, nr_spots_in_all_tracks = execute_trackmate_in_Fiji(
             ext_recording_name, threshold, tracks_file_path, recording_file_path, first, False, )
         # restore_fiji_output()
 
@@ -728,6 +728,10 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         row['Run Time'] = run_time
         row['Ext Recording Name'] = ext_recording_name
         row['Time Stamp'] = time.asctime(time.localtime(time.time()))
+        row['Max Frame Gap'] = max_frame_gap
+        row['Linking Max Distance'] = linking_max_distance
+        row['Gap Closing Max Distance'] = gap_closing_max_distance
+        row['Nr Spots in All Tracks'] = nr_spots_in_all_tracks
 
     return status, row
 
