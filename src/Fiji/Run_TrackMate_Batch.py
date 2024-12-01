@@ -824,11 +824,11 @@ def run_trackmate_batch():
                     sys.exit()
 
                 # Read and print each row
-                time_stamp = time.time()
+                time_stamp_overall = time.time()
                 error = False
                 for row in csv_reader:
                     if 'y' in row['Process'].lower():
-
+                        time_stamp = time.time()
                         if not os.path.exists(row['Project']):
                             paint_logger.error("Error: The Project source '{}' does not exist.".format(row['Project']))
                             error = True
@@ -845,7 +845,7 @@ def run_trackmate_batch():
                             error = True
                             continue
 
-                        message = "Processing image '{}'".format(row['Experiment'])
+                        message = "Processing experiment '{}'".format(row['Experiment'])
                         paint_logger.info("")
                         paint_logger.info("-" * len(message))
                         paint_logger.info(message)
@@ -854,9 +854,10 @@ def run_trackmate_batch():
                         paint_logger.info(os.path.join(row['Image Source'], row['Experiment']))
                         run_trackmate(experiment_directory=os.path.join(row['Project'], row['Experiment']),
                                       recording_source_directory=os.path.join(row['Image Source'], row['Experiment']))
+                        paint_logger.info("Processing completed in {} seconds".format(format_time_nicely(time.time() - time_stamp)))
                         paint_logger.info("")
                         paint_logger.info("")
-                run_time = round(time.time() - time_stamp, 1)
+                run_time = round(time.time() - time_stamp_overall, 1)
 
                 if error:
                     msg = "Errors occurred during processing. Refer to the log file for more information."
