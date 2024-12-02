@@ -107,7 +107,11 @@ def load_paint_config(file_path):
         file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
 
     if not os.path.exists(file_path):
-        # If not, create the file with default values
+
+        # Make sure the directory exists
+        if not os.path.exists(os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults')):
+            os.mkdir(os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults'))
+        # Then create the file with default values
         with open(file_path, "w") as file:
             json.dump(default_data, file, indent=4)
         paint_logger.info("File '{}' created with default values.".format(file_path))

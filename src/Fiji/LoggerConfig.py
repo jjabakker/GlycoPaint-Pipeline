@@ -31,6 +31,9 @@ console_handler.setFormatter(formatter)
 # ----------------------------------------------------------
 
 # file_handler = logging.FileHandler(os.path.join(get_paint_logger_directory(), 'paint.log'), mode='w')  # Logs to a file
+log_directory = os.path.join(os.path.expanduser('~'), 'Paint', 'Logger')
+if not os.path.exists(log_directory):
+    os.makedirs(log_directory)
 file_handler = logging.FileHandler(os.path.join(os.path.expanduser('~'), 'Paint', 'Logger', 'paint.log'),
                                    mode='w')  # Logs to a file   #ToDo
 file_handler.setLevel(logging.INFO)  # All logs at INFO level or higher go to the console
