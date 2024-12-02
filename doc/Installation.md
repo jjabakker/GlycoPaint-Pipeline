@@ -18,7 +18,7 @@ TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking 
 ### Python
 The Python scripts were developed in PyCharm, and you can use Pycharm to run them, but any Python IDE should work. A free community version from PyCharm can be downloaded from [https://www.jetbrains.com/pycharm/](https://www.jetbrains.com/pycharm/).
 
-The Python scripts are available from the GitHub repository https://github.com/jjabakker/Paint-v8. Easiest is to clone the repository to your local machine from PyCharm. To do that, you select 'Project from version control' and enter the repository URL https://github.com/jjabakker/Paint-v8. A local directory will be created and the code copied. 
+The Python scripts are available from the GitHub repository [https://github.com/jjabakker/GlycoPaint-Pipeline](https://github.com/jjabakker/GlycoPaint-Pipeline). Easiest is to clone the repository to your local machine from PyCharm. To do that, you select 'Project from version control' and enter the repository URL https://github.com/jjabakker/GlycoPaint-Pipeline. A local directory will be created and the code copied. 
 
 You will have to set up a Pyhon interpreter in PyCharm and install the following libraries (the version numbers are not critical, but just indicate the versions used during development):
 
@@ -39,19 +39,16 @@ The resulting environment, displayed below, should be able to run the pipeline.
 
 ### Installing the Trackmate plugin
 
-Fiji has been installed in an earlier step, and per default the TrackMate plugin is available. The GlycoPaint plugin however needs to be installed separately. This is done by copying a selection of files to the Fiji/Plugins directory. In the Python code hierarchy, in the src/Utilities Application directory, there is a utility that does that: Install Paint TrackMate.py. 
+Fiji has been installed in an earlier step, and per default the TrackMate plugin is available. The GlycoPaint plugin however needs to be installed separately. This is done by copying a selection of files to the Fiji/Plugins directory. In the Python code hierarchy, in the 'src/Utilities Application' directory, there is a utility that does that: 'Install Paint TrackMate.py'. 
 
-Running the utility will create the paint.json file to be created in the ~/Paint/Defaults directory if tit does not already exists. The utility will then try to establish the path of the Fiji app and  copy the necessary files to the plugin directory. If the path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
-
+Running the utility will create the paint.json file in the ~/Paint/Defaults directory if it does not already exists. The utility will then try to establish the path of the Fiji app and copy the necessary files to the plugin directory. If the path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
 
 <figure style="text-align: center;">
   <img src="Images/install_glycopaint.png" width="400" >
 </figure>
 
-
 ### R Studio
 The pipeline also uses R for the data analysis. R Studio can be downloaded from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/). You may have to install R also - instructions to do that are on the site. Examples of R scripts are available from the GitHub repository
-
 
 # Available scripts to run the pipeline
 
