@@ -83,7 +83,7 @@ default_data = {
 
         "ALLOW_GAP_CLOSING": True,  # Old value: True
         "GAP_CLOSING_MAX_DISTANCE": 0.5,  # Old value: 1.2
-        "MAX_FRAME_GAP": 1,  # Old value: 3
+        "MAX_FRAME_GAP": 2,  # Old value: 3, this causes the longest gap to be 1 (and not 2 as you would expect)
 
         "ALLOW_TRACK_SPLITTING": False,  # Old value: False
         "SPLITTING_MAX_DISTANCE": 15.0,  # Old value: 15.0
