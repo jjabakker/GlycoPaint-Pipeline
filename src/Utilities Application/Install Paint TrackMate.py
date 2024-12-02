@@ -3,9 +3,10 @@ import shutil
 import subprocess
 import logging
 import platform
-from os.path import exists
 
-from src.Fiji.PaintConfig import get_paint_attribute
+from src.Fiji.PaintConfig import (
+    get_paint_attribute,
+    update_paint_attribute)
 
 if platform.system() == "Windows":
     import winreg
@@ -85,17 +86,36 @@ def find_app_path_windows(app_name="Fiji"):
     return None
 
 def find_fiji_path():
-    """Locates the Fiji application path based on the platform."""
-    if platform.system() == "Darwin":
-        return find_app_path_macos()
-    elif platform.system() == "Windows":
-        try:
-            return find_app_path_windows()
-        except NotImplementedError:
-            logging.warning("Windows functionality is not available on this platform.")
+    """
+    Locates the Fiji application path based on the platform.
+    Calling get_paint_attribute('Paint', 'Fiji Path') will cause the paint.json file to be created if it does not exist
+    already.
+    If the default Fiji path is not found, the function will try to find the Fiji path based on the platform.
+    If no valid path is found, the function will return None (and the wuser will be invited to edit the paint.json file).
+    """
+
+    fiji_path = get_paint_attribute('Paint', 'Fiji Path')
+    if fiji_path and os.path.exists(fiji_path):
+        # We can assume we have a valid path to Fiji
+        pass
     else:
-        logging.error("Unsupported platform.")
-    return None
+        logging.warning("Fiji path not found in paint.json file. Trying to locate the Fiji application.")
+        fiji_path = None
+    if fiji_path is None:
+        if platform.system() == "Darwin":
+            fiji_path = find_app_path_macos()
+            if os.path.exists(fiji_path):
+                update_paint_attribute('Paint', 'Fiji Path', fiji_path)
+        elif platform.system() == "Windows":
+            try:
+                fiji_path = find_app_path_windows()
+                if os.path.exists(fiji_path):
+                    update_paint_attribute('Paint', 'Fiji Path', fiji_path)
+            except NotImplementedError:
+                logging.warning("Windows functionality is not available on this platform.")
+        else:
+            logging.error("Unsupported platform.")
+    return fiji_path
 
 
 def copy_file(source_dir, dest_dir, filename):
@@ -116,16 +136,12 @@ def copy_file(source_dir, dest_dir, filename):
 
 def install():
     """Main installation function for setting up Fiji plugins and scripts."""
+
     fiji_app = find_fiji_path()
     if not fiji_app:
-        # Last resort, allow the user to specify the path in the json file
-        fiji_app = get_paint_attribute('Paint', 'Fiji Path')
-        if os.path.isfile(fiji_app):
-            pass
-        else:
-            logging.critical("Fiji application not found an also not specified peroperly in the paint.json file.")
-            logging.critical("Please make sure that Fiji is installed and specify the path to the Fiji application in the paint.json file.")
-            return
+        logging.critical("Fiji application not found an also not specified properly in the paint.json file.")
+        logging.critical("Please make sure that Fiji is installed and specify the path to the Fiji application in the paint.json file.")
+        return
 
     # Clean and create directory
     dest_root = os.path.join(fiji_app, 'Plugins', 'GlycoPaint')
@@ -191,7 +207,6 @@ def create_jar_file():
         jar cf GlycoPaint.jar .        
         """
         result = subprocess.run(commands, shell=True, check=True, text=True, capture_output=True)
-        print("Combined command output:", result.stdout)
     except subprocess.CalledProcessError as e:
         print("An error occurred while running the combined commands:")
         print(e.stderr)
