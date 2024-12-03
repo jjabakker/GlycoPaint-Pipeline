@@ -9,7 +9,7 @@ from src.Application.Generate_Squares.Curvefit_and_Plot import (
     curve_fit_and_plot
 )
 from src.Fiji.LoggerConfig import paint_logger
-from src.Fiji.PaintConfig import get_paint_attribute
+from src.Fiji.NewPaintConfig import get_paint_attribute_with_default
 
 pd.options.mode.copy_on_write = True
 
@@ -209,7 +209,7 @@ def create_unique_key_for_squares(df):
 
 
 def extra_constraints_on_tracks_for_tau_calculation(df_tracks_in_square):
-    limit_dc = get_paint_attribute('Generate Squares', 'Exclude zero DC tracks from Tau Calculation') or False
+    limit_dc = get_paint_attribute_with_default('Generate Squares', 'Exclude zero DC tracks from Tau Calculation', False)
     if limit_dc:
         df_tracks_in_square = df_tracks_in_square[df_tracks_in_square['Diffusion Coefficient'] > 0]
     return df_tracks_in_square
@@ -317,8 +317,8 @@ def calculate_average_long_track(df_tracks):
         average_long_track = 0
     else:
         df_tracks.sort_values(by=['Track Duration'], inplace=True)
-        fraction = get_paint_attribute('Generate Squares',
-                                       'Fraction of Squares to Determine Background') or 0.1
+        fraction = get_paint_attribute_with_default('Generate Squares',
+                                       'Fraction of Squares to Determine Background', 0.1)
         nr_tracks_to_average = max(round(fraction * nr_of_tracks),  1)
         average_long_track = df_tracks.tail(nr_tracks_to_average)['Track Duration'].mean()
     return average_long_track

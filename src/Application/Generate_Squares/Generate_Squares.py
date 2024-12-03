@@ -37,8 +37,8 @@ from src.Application.Utilities.General_Support_Functions import (
 from src.Fiji.DirectoriesAndLocations import (
     delete_files_in_directory)
 
-from src.Fiji.PaintConfig import (
-    get_paint_attribute)
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default)
 
 if not paint_logger_file_name_assigned:
     paint_logger_change_file_handler_name('Generate Squares.log')
@@ -123,8 +123,8 @@ def process_experiment(
     """
 
     # Preparations
-    plot_to_file = get_paint_attribute('Generate Squares', 'Plot to File') or ""
-    plot_max = get_paint_attribute('Generate Squares', 'Plot Max') or 5
+    plot_to_file = get_paint_attribute_with_default('Generate Squares', 'Plot to File', "")
+    plot_max = get_paint_attribute_with_default('Generate Squares', 'Plot Max', 5)
     time_stamp = time.time()
     df_squares_of_experiment = pd.DataFrame()
     df_tracks_of_experiment_with_labels = pd.DataFrame()

@@ -11,8 +11,8 @@ from src.Application.Utilities.General_Support_Functions import (
     ToolTip
 )
 from src.Fiji.LoggerConfig import paint_logger
-from src.Fiji.PaintConfig import (
-    get_paint_attribute,
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default,
     update_paint_attribute)
 from src.Application.Compile_Project.Compile_Project import compile_project_output
 
@@ -26,9 +26,9 @@ class SelectViewerDataDialog:
         self.proceed = False
 
         self.dialog.title('Select a Project or Experiment Directory')
-        self.experiment_directory = get_paint_attribute('User Directories', 'Experiment Directory')
-        self.project_directory = get_paint_attribute('User Directories', 'Project Directory')
-        self.level = get_paint_attribute('User Directories', 'Level')
+        self.experiment_directory = get_paint_attribute_with_default('User Directories', 'Experiment Directory', '')
+        self.project_directory = get_paint_attribute_with_default('User Directories', 'Project Directory', '')
+        self.level = get_paint_attribute_with_default('User Directories', 'Level', '')
 
         self.mode = None
 

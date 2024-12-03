@@ -10,8 +10,8 @@ from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name,
     paint_logger_file_name_assigned)
-from src.Fiji.PaintConfig import (
-    get_paint_attribute,
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default,
     update_paint_attribute)
 from src.Application.Utilities.General_Support_Functions import (
     ToolTip,
@@ -30,10 +30,10 @@ class CheckIntegrityDialog:
 
     def load_saved_parameters(self):
         """Load parameters from disk or use default values if unavailable."""
-        self.project_directory = get_paint_attribute('User Directories', 'Project Directory')
-        self.experiment_directory = get_paint_attribute('User Directories', 'Experiment Directory')
-        self.images_directory = get_paint_attribute('User Directories', 'Images Directory')
-        self.level = get_paint_attribute('User Directories', 'Level')
+        self.project_directory = get_paint_attribute_with_default('User Directories', 'Project Directory','')
+        self.experiment_directory = get_paint_attribute_with_default('User Directories', 'Experiment Directory','')
+        self.images_directory = get_paint_attribute_with_default('User Directories', 'Images Directory','')
+        self.level = get_paint_attribute_with_default('User Directories', 'Level','')
 
         if self.level == 'Project':
             self.paint_directory = self.project_directory

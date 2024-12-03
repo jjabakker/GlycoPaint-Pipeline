@@ -131,7 +131,7 @@ def load_paint_config(file_path):
         return None
 
 
-def get_paint_attribute(application, attribute_name, default_value=None):
+def get_paint_attribute_with_default(application, attribute_name, default_value):
     config = load_paint_config(get_paint_defaults_file_path())
     if config is None:
         paint_logger.error("Error: Configuration file {} not found.".format(get_paint_defaults_file_path()))

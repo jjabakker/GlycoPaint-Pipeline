@@ -10,8 +10,8 @@ from src.Application.Utilities.General_Support_Functions import (
     classify_directory,
     set_application_icon
 )
-from src.Fiji.PaintConfig import (
-    get_paint_attribute,
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default,
     update_paint_attribute)
 
 # -------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ def inspect_experiment_squares_files(root_dir):
 
         logging.info(f'Inspecting directory: {paint_dir_path}')
 
-        # Read the experiments file in the directory
+        # Read the Experiments file in the directory
         experiment_file_name = os.path.join(paint_dir_path, 'All Recordings.csv')
 
         df_experiment = read_experiment_file(experiment_file_name, only_records_to_process=False)
@@ -81,7 +81,7 @@ class InspectDialog:
     def __init__(self, _root):
         self.root = _root
         self.root.title('Inspect Experiments Files')
-        self.project_directory = get_paint_attribute('User Directories', 'Project Directory')
+        self.project_directory = get_paint_attribute_with_default('User Directories', 'Project Directory', '')
 
         # Set up the UI layout
         self.root.geometry("800x140")

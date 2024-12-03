@@ -6,7 +6,7 @@ from PIL import Image
 from nd2reader import ND2Reader
 
 from src.Fiji.LoggerConfig import paint_logger
-from src.Fiji.PaintConfig import get_paint_attribute
+from src.Fiji.NewPaintConfig import get_paint_attribute_with_default
 
 
 def _convert_native_to_jpg(native_file_path, output_file):
@@ -42,7 +42,7 @@ def convert_bf_images(image_source_directory, paint_directory, force=False):
         force (bool): Force overwrite of existing JPEG files, even if up to date.
     """
 
-    img_file_ext = get_paint_attribute('Paint', 'Image File Extension')
+    img_file_ext = get_paint_attribute_with_default('Paint', 'Image File Extension', '.nd2')
 
     # Create a 'Brightfield Images' directory if it doesn't exist
     bf_jpeg_dir = os.path.join(image_source_directory, "Brightfield Images")

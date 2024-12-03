@@ -7,7 +7,7 @@ from ij import IJ
 from LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name)
-from PaintConfig import get_paint_attribute
+from NewPaintConfig import get_paint_attribute_with_default
 
 # Set up logging
 paint_logger_change_file_handler_name('Convert BF Images.log')
@@ -23,7 +23,7 @@ def convert_bf_images(image_source_directory, paint_directory, force=False):
         force (bool): Force overwrite of existing JPEG files, even if up to date.
     """
 
-    img_file_ext = get_paint_attribute('Paint', 'Image File Extension')
+    img_file_ext = get_paint_attribute_with_default('Paint', 'Image File Extension', '.nd2')
 
     # Create a 'Converted BF Images' directory if it doesn't exist
     bf_jpeg_dir = os.path.join(image_source_directory, "Converted BF Images")

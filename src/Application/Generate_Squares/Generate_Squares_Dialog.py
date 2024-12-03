@@ -17,8 +17,8 @@ from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name,
     paint_logger_file_name_assigned)
-from src.Fiji.PaintConfig import (
-    get_paint_attribute,
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default,
     update_paint_attribute)
 
 if not paint_logger_file_name_assigned:
@@ -35,16 +35,16 @@ class GenerateSquaresDialog:
 
     def load_saved_parameters(self):
         """Load parameters from disk or use default values if unavailable."""
-        nr_of_squares_in_row = get_paint_attribute('Generate Squares', 'Nr of Squares in Row')
-        min_tracks_to_calculate_tau = get_paint_attribute('Generate Squares', 'Min Tracks to Calculate Tau')
-        min_allowable_r_squared = get_paint_attribute('Generate Squares', 'Min Allowable R Squared')
-        min_required_density_ratio = get_paint_attribute('Generate Squares', 'Min Required Density Ratio')
-        max_allowable_variability = get_paint_attribute('Generate Squares', 'Max Allowable Variability')
+        nr_of_squares_in_row = get_paint_attribute_with_default ('Generate Squares', 'Nr of Squares in Row', 20)
+        min_tracks_to_calculate_tau = get_paint_attribute_with_default ('Generate Squares', 'Min Tracks to Calculate Tau', 20)
+        min_allowable_r_squared = get_paint_attribute_with_default ('Generate Squares', 'Min Allowable R Squared', 0.9)
+        min_required_density_ratio = get_paint_attribute_with_default ('Generate Squares', 'Min Required Density Ratio', 2)
+        max_allowable_variability = get_paint_attribute_with_default ('Generate Squares', 'Max Allowable Variability', 10)
 
-        self.project_directory = get_paint_attribute('User Directories', 'Project Directory')
-        self.experiment_directory = get_paint_attribute('User Directories', 'Experiment Directory')
-        self.images_directory = get_paint_attribute('User Directories', 'Images Directory')
-        self.level = get_paint_attribute('User Directories', 'Level')
+        self.project_directory = get_paint_attribute_with_default ('User Directories', 'Project Directory', '')
+        self.experiment_directory = get_paint_attribute_with_default ('User Directories', 'Experiment Directory', '')
+        self.images_directory = get_paint_attribute_with_default ('User Directories', 'Images Directory', '')
+        self.level = get_paint_attribute_with_default ('User Directories', 'Level', '')
 
         if self.level == 'Project':
             self.paint_directory = self.project_directory
@@ -183,10 +183,10 @@ class GenerateSquaresDialog:
         select_parameters = pack_select_parameters(
             min_required_density_ratio=self.min_required_density_ratio.get(),
             max_allowable_variability=self.max_allowable_variability.get(),
-            min_track_duration=get_paint_attribute('Generate Squares', 'Min Track Duration') or 0,
-            max_track_duration=get_paint_attribute('Generate Squares', 'Max Track Duration') or 10000,
-            min_allowable_r_squared=get_paint_attribute('Generate Squares', 'Min Allowable R Squared') or 0.9,
-            neighbour_mode=get_paint_attribute('Generate Squares', 'Neighbour Mode') or 'Free',
+            min_track_duration=get_paint_attribute_with_default ('Generate Squares', 'Min Track Duration', 0),
+            max_track_duration=get_paint_attribute_with_default ('Generate Squares', 'Max Track Duration', 10000),
+            min_allowable_r_squared=get_paint_attribute_with_default ('Generate Squares', 'Min Allowable R Squared', 0.9),
+            neighbour_mode=get_paint_attribute_with_default ('Generate Squares', 'Neighbour Mode', 'Free')
         )
         generate_function(
             self.paint_directory,

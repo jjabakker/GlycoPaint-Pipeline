@@ -11,7 +11,7 @@ from src.Application.Utilities.General_Support_Functions import set_application_
 from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name)
-from src.Fiji.PaintConfig import get_paint_attribute
+from src.Fiji.NewPaintConfig import get_paint_attribute_with_default
 
 
 def prepare_experiment_info_file(image_source_directory, experiment_directory):
@@ -23,7 +23,7 @@ def prepare_experiment_info_file(image_source_directory, experiment_directory):
     all_recordings = os.listdir(image_source_directory)
     all_recordings.sort()
     format_problem = False
-    img_file_ext = get_paint_attribute('Paint', 'Image File Extension')
+    img_file_ext = get_paint_attribute_with_default('Paint', 'Image File Extension', '.nd2')
 
     # Check if this is a likely correct directory. There should be lots of image files
     count = 0
@@ -55,7 +55,7 @@ def prepare_experiment_info_file(image_source_directory, experiment_directory):
 
     for recording_name in all_recordings:
 
-        # Skip files starting with .
+        # Skip files starting with a .
         if recording_name.startswith(('._', '.DS')) or not recording_name.endswith(img_file_ext):
             continue
 

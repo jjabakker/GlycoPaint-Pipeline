@@ -16,9 +16,9 @@ from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name,
     paint_logger_file_name_assigned)
-from src.Fiji.PaintConfig import (
-    get_paint_attribute,
-    update_paint_attribute)
+from src.Fiji.NewPaintConfig import (
+    update_paint_attribute,
+    get_paint_attribute_with_default)
 
 if not paint_logger_file_name_assigned:
     paint_logger_change_file_handler_name('Compile Output.log')
@@ -120,7 +120,7 @@ class CompileDialog:
         self.root = _root
 
         self.root.title('Compile Project')
-        self.project_directory = get_paint_attribute('User Directories', 'Project Directory')
+        self.project_directory = get_paint_attribute_with_default('User Directories', 'Project Directory', '')
 
         content = ttk.Frame(self.root)
         frame_buttons = ttk.Frame(content, borderwidth=5, relief='ridge')
