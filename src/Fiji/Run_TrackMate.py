@@ -131,12 +131,12 @@ default_data = {
         "DO_SUBPIXEL_LOCALIZATION": False,  # Old value: False
         "DO_MEDIAN_FILTERING": True,  # Old value: False
 
-        "LINKING_MAX_DISTANCE": 0.5,  # Old value: 0.6
+        "LINKING_MAX_DISTANCE": 0.6,  # Old value: 0.6
         "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,  # Old value: 1.05
 
         "ALLOW_GAP_CLOSING": True,  # Old value: True
-        "GAP_CLOSING_MAX_DISTANCE": 0.5,  # Old value: 1.2
-        "MAX_FRAME_GAP": 1,  # Old value: 3
+        "GAP_CLOSING_MAX_DISTANCE": 1.2,  # Old value: 1.2
+        "MAX_FRAME_GAP": 3,  # Old value: 3
 
         "ALLOW_TRACK_SPLITTING": False,  # Old value: False
         "SPLITTING_MAX_DISTANCE": 15.0,  # Old value: 15.0
