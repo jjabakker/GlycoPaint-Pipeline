@@ -1,6 +1,5 @@
 import csv
 import os
-import json
 import sys
 import threading
 import time
@@ -8,26 +7,11 @@ import time
 from java.awt import GridLayout, Dimension, FlowLayout
 from java.io import File
 from javax.swing import JFrame, JPanel, JButton, JTextField, JFileChooser, JOptionPane, BorderFactory
+from java.lang.System import getProperty
 
-import fiji.plugin.trackmate.features.FeatureFilter as FeatureFilter
-import fiji.plugin.trackmate.visualization.hyperstack.HyperStackDisplayer as HyperStackDisplayer
+paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
+sys.path.append(paint_dir)
 
-from fiji.plugin.trackmate.action import CaptureOverlayAction
-from fiji.plugin.trackmate.detection import LogDetectorFactory
-from fiji.plugin.trackmate.gui.displaysettings import DisplaySettingsIO
-from fiji.plugin.trackmate.gui.displaysettings.DisplaySettings import TrackMateObject
-from fiji.plugin.trackmate.tracking.jaqaman import SparseLAPTrackerFactory
-from fiji.plugin.trackmate.util import LogRecorder
-from fiji.plugin.trackmate import (
-    Logger,
-    Model,
-    SelectionModel,
-    Settings,
-    TrackMate)
-
-from ij import WindowManager
-from ij.io import FileSaver
-from ij.plugin.frame import RoiManager
 from ij import IJ
 
 from DirectoriesAndLocations import (
@@ -40,481 +24,20 @@ from FijiSupportFunctions import (
     suppress_fiji_output,
     format_time_nicely)
 
-from LoggerConfig import paint_logger_change_file_handler_name
+from LoggerConfig import (
+    paint_logger_change_file_handler_name,
+    paint_logger
+)
+
+from NewPaintConfig import (
+    get_paint_attribute_with_default,
+    update_paint_attribute)
+
+from NewTrackMate import execute_trackmate_in_Fiji
 
 from ConvertBrightfieldImages import convert_bf_images
 
 paint_logger_change_file_handler_name('Run Trackmate.log')
-
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-# Start of Code originally kept in PaintConfig.py
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-
-
-def get_paint_defaults_file_path():  # ToDo
-    return os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'Paint.json')
-
-
-# This is unusual code. One import will work in Jython, the other in Python. The other will fail, but the error will
-# be caught.
-
-# Import for Jython
-try:
-    from LoggerConfig import paint_logger
-except:
-    pass
-
-# Import for Python
-try:
-    from src.Fiji.LoggerConfig import paint_logger
-except:
-    pass
-
-paint_configuration = None
-
-# Default JSON structure
-default_data = {
-    "Paint": {
-        "Version": "1.0",
-        "Image File Extension": ".nd2",
-        "Fiji Path": "/Applications/Fiji.app"
-    },
-    "User Directories": {
-        "Project Directory": "~",
-        "Experiment Directory": "~",
-        "Images Directory": "~",
-        "Level": "Experiment"
-    },
-    "Generate Squares": {
-        "Plot to File": False,
-        "Plot Max": 5,
-        "Fraction of Squares to Determine Background": 0.1,
-        "Exclude zero DC tracks from Tau Calculation": False,
-        "Neighbour Mode": "Free",
-        "Min Track Duration": 0,
-        "Max Track Duration": 1000000,
-        "Nr of Squares in Row": 20,
-        "Min Tracks to Calculate Tau": 20,
-        'Min Allowable R Squared': 0.9,
-        "Min Required Density Ratio": 2.0,
-        "Max Allowable Variability": 10.0,
-
-        "logging": {
-            "level": "INFO",
-            "file": "Generate Squares.log"
-        }
-    },
-    "Recording Viewer": {
-        "logging": {
-            "level": "INFO",
-            "file": "Image Viewer.log"
-        }
-    },
-    "Compile Project Output": {
-        "logging": {
-            "level": "INFO",
-            "file": "Compile Project Output.log"
-        }
-    },
-    "TrackMate": {
-        "logging": {
-            "level": "INFO",
-            "file": "Run TrackMate Batch.log"
-        },
-
-        "TARGET_CHANNEL": 1,  # Old value: 1
-        "RADIUS": 0.5,  # Old value: 0.5
-        "DO_SUBPIXEL_LOCALIZATION": False,  # Old value: False
-        "DO_MEDIAN_FILTERING": True,  # Old value: False
-
-        "LINKING_MAX_DISTANCE": 0.6,  # Old value: 0.6
-        "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,  # Old value: 1.05
-
-        "ALLOW_GAP_CLOSING": True,  # Old value: True
-        "GAP_CLOSING_MAX_DISTANCE": 1.2,  # Old value: 1.2
-        "MAX_FRAME_GAP": 3,  # Old value: 3
-
-        "ALLOW_TRACK_SPLITTING": False,  # Old value: False
-        "SPLITTING_MAX_DISTANCE": 15.0,  # Old value: 15.0
-
-        "ALLOW_TRACK_MERGING": False,  # Old value: False
-        "MERGING_MAX_DISTANCE": 15.0,  # Old value: 15.0
-
-        "MIN_NR_SPOTS_IN_TRACK": 3,  # Old value: 3
-        "TRACK_COLOURING": "TRACK_DURATION"  # Old value: "TRACK_DURATION"
-    }
-}
-
-
-def load_paint_config(file_path):
-    global paint_configuration
-
-    if paint_configuration is not None:
-        return paint_configuration
-
-    if file_path is None:
-        file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
-
-    if not os.path.exists(file_path):
-        # If not, create the file with default values
-        with open(file_path, "w") as file:
-            json.dump(default_data, file, indent=4)
-        paint_logger.info("File '{}' created with default values.".format(file_path))
-
-    try:
-        with open(file_path, 'r') as config_file:
-            paint_configuration = json.load(config_file)
-        return paint_configuration
-    except IOError:
-        paint_logger.error("Error: Configuration file {} not found.".format(file_path))
-        return None
-    except ValueError:
-        paint_logger.error("Failed to parse JSON from {}.".format(file_path))
-        return None
-    except:
-        paint_logger.error("Error: Problem with configuration file {}.".format(file_path))
-        return None
-
-
-def get_paint_attribute(application, attribute_name, default_value=None):
-    config = load_paint_config(get_paint_defaults_file_path())
-    if config is None:
-        paint_logger.error("Error: Configuration file {} not found.".format(get_paint_defaults_file_path()))
-        return None
-    else:
-        application = config.get(application)
-        value = application.get(attribute_name, None)
-        if value is None:
-            pass  # ToDo
-            paint_logger.error("Error: Attribute {} not found in configuration file {}.".format(attribute_name,
-                                                                                                get_paint_defaults_file_path()))
-            if default_value is not None:
-                value =  default_value
-
-        return value
-
-
-def update_paint_attribute(application, attribute_name, value):
-    try:
-        config = load_paint_config(get_paint_defaults_file_path())
-
-        # Update the RADIUS value under TrackMate
-        if application in config:
-            config[application][attribute_name] = value
-        else:
-            paint_logger.error("The {} section does not exist in the JSON file.".format(application))
-
-        # Save the updated data back to the JSON file
-        file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
-        with open(file_path, "w") as file:
-            json.dump(config, file, indent=4)
-
-    except Exception as e:
-        paint_logger.error("An unexpected error occurred: {}.format(e)")
-
-
-
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-# Start of Code originally kept in TrackMate.py
-# --------------------------------------------------------
-# --------------------------------------------------------
-# --------------------------------------------------------
-
-
-# --------------------------------------------------------
-# Code adapted from
-# https://imagej.net/plugins/trackmate/scripting/scripting
-# --------------------------------------------------------
-
-
-def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_filename, first, kas_special ):
-    max_frame_gap = get_paint_attribute('TrackMate', 'MAX_FRAME_GAP', 0.5)
-    linking_max_distance = get_paint_attribute('TrackMate', 'LINKING_MAX_DISTANCE', 0.5)
-    gap_closing_max_distance = get_paint_attribute('TrackMate', 'GAP_CLOSING_MAX_DISTANCE', 0.5)
-
-    alternative_linking_cost_factor = get_paint_attribute('TrackMate', 'ALTERNATIVE_LINKING_COST_FACTOR', 1.05)
-    splitting_max_distance = get_paint_attribute('TrackMate', 'SPLITTING_MAX_DISTANCE', 13.0)
-    allow_gap_closing = get_paint_attribute('TrackMate', 'ALLOW_GAP_CLOSING', False)
-    allow_track_merging = get_paint_attribute('TrackMate', 'ALLOW_TRACK_MERGING', False)
-    allow_track_splitting = get_paint_attribute('TrackMate', 'ALLOW_TRACK_SPLITTING', False)
-    merging_max_distance = get_paint_attribute('TrackMate', 'MERGING_MAX_DISTANCE', 12.0)
-
-    do_subpixel_localization = get_paint_attribute('TrackMate', 'DO_SUBPIXEL_LOCALIZATION', False)
-    radius = get_paint_attribute('TrackMate', 'RADIUS', 0.5)
-    target_channel = get_paint_attribute('TrackMate', 'TARGET_CHANNEL', 1)
-    do_median_filtering = get_paint_attribute('TrackMate', 'DO_MEDIAN_FILTERING', True)
-
-    min_number_of_spots = get_paint_attribute('TrackMate', 'MIN_NR_SPOTS_IN_TRACK', 3)
-
-    track_colouring = get_paint_attribute('TrackMate', 'TRACK_COLOURING', 'TRACK_DURATION')
-    if track_colouring != 'TRACK_DURATION' and track_colouring != 'TRACK_INDEX':
-        paint_logger.error('Invalid track colouring option in TrackMate configuration,default to TRACK_DURATION')
-        track_colouring = 'TRACK_DURATION'
-
-    if first:
-        paint_logger.info('TrackMate Parameters')
-        paint_logger.info("")
-        paint_logger.info('TARGET_CHANNEL:                  ' + str(target_channel))
-        paint_logger.info('RADIUS:                          ' + str(radius))
-        paint_logger.info('DO_SUBPIXEL_LOCALIZATION:        ' + str(do_subpixel_localization))
-        paint_logger.info('DO_MEDIAN_FILTERING:             ' + str(do_median_filtering))
-        paint_logger.info("")
-        paint_logger.info('LINKING_MAX_DISTANCE:            ' + str(linking_max_distance))
-        paint_logger.info('ALTERNATIVE_LINKING_COST_FACTOR: ' + str(alternative_linking_cost_factor))
-        paint_logger.info("")
-        paint_logger.info('ALLOW_GAP_CLOSING:               ' + str(allow_gap_closing))
-        paint_logger.info('GAP_CLOSING_MAX_DISTANCE:        ' + str(gap_closing_max_distance))
-        paint_logger.info('MAX_FRAME_GAP:                   ' + str(max_frame_gap))
-        paint_logger.info("")
-        paint_logger.info('ALLOW_TRACK_SPLITTING:           ' + str(allow_track_splitting))
-        paint_logger.info('SPLITTING_MAX_DISTANCE:          ' + str(splitting_max_distance))
-        paint_logger.info("")
-        paint_logger.info('ALLOW_TRACK_MERGING:             ' + str(allow_track_merging))
-        paint_logger.info('MERGING_MAX_DISTANCE:            ' + str(merging_max_distance))
-        paint_logger.info("")
-        paint_logger.info('MIN_NR_SPOTS_IN_TRACK:           ' + str(min_number_of_spots))
-        paint_logger.info('TRACK_COLOURING:                 ' + str(track_colouring))
-        paint_logger.info("")
-        paint_logger.info("")
-
-    # We have to do the following to avoid errors with UTF8 chars generated in
-    # TrackMate that will mess with our Fiji Jython.
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
-
-    # ----------------------------
-    # Create the model object now
-    # ----------------------------
-
-    # Some of the parameters we configure below need to have
-    # a reference to the model at creation. So we create an
-    # empty model now.
-
-    model = Model()
-    model.setLogger(Logger.IJ_LOGGER)
-
-    # Get currently selected image
-    imp = WindowManager.getCurrentImage()
-
-    # Prepare Settings object
-    settings = Settings(imp)
-
-    # Configure detector - all important parameters
-    settings.detectorFactory = LogDetectorFactory()
-    settings.detectorSettings = {
-        'TARGET_CHANNEL': target_channel,
-        'RADIUS': radius,
-        'DO_SUBPIXEL_LOCALIZATION': do_subpixel_localization,  # False
-        'THRESHOLD': threshold,
-        'DO_MEDIAN_FILTERING': do_median_filtering
-    }
-
-    # Configure spot filters - Do not filter out any nr_spots
-    filter1 = FeatureFilter('QUALITY', 0, True)
-    settings.addSpotFilter(filter1)
-
-    # Configure tracker, first set the default, but then override parameters that we know are important
-    settings.trackerFactory = SparseLAPTrackerFactory()
-    settings.trackerSettings = settings.trackerFactory.getDefaultSettings()
-
-    # These are the important parameters
-
-    settings.trackerSettings['LINKING_MAX_DISTANCE'] = linking_max_distance  # 0.6
-    settings.trackerSettings['ALTERNATIVE_LINKING_COST_FACTOR'] = alternative_linking_cost_factor  # 1.05
-
-    settings.trackerSettings['ALLOW_GAP_CLOSING'] = allow_gap_closing
-    settings.trackerSettings['GAP_CLOSING_MAX_DISTANCE'] = gap_closing_max_distance  # 1.2
-    settings.trackerSettings['MAX_FRAME_GAP'] = max_frame_gap
-
-    settings.trackerSettings['ALLOW_TRACK_SPLITTING'] = allow_track_splitting
-    settings.trackerSettings['SPLITTING_MAX_DISTANCE'] = splitting_max_distance
-
-    settings.trackerSettings['ALLOW_TRACK_MERGING'] = allow_track_merging
-    settings.trackerSettings['MERGING_MAX_DISTANCE'] = merging_max_distance
-
-    # Add ALL the feature analyzers known to TrackMate.
-    # They will yield numerical features for the results, such as speed, mean intensity etc.
-    settings.addAllAnalyzers()
-
-    # Configure track filters - Only consider tracks of 3 and longer.
-    filter2 = FeatureFilter('NUMBER_SPOTS', min_number_of_spots, True)
-    settings.addTrackFilter(filter2)
-
-    # Instantiate plugin
-    trackmate = TrackMate(model, settings)
-
-    # Process
-    ok = trackmate.checkInput()
-    if not ok:
-        paint_logger.error('Routine paint_trackmate - checkInput failed')
-        return -1, -1, -1
-
-    ok = trackmate.process()
-    if not ok:
-        paint_logger.error('Routine paint_trackmate - process failed')
-        return -1, -1, -1
-
-    # Get nr_spots data, iterate through each track to calculate the mean square displacement
-
-    track_ids = model.getTrackModel().trackIDs(True)  # True means only return visible tracks
-    diffusion_coefficient_list = []
-    nr_spots_in_all_tracks = 0
-    for track_id in track_ids:
-
-        # Get the set of nr_spots in this track
-        track_spots = model.getTrackModel().trackSpots(track_id)
-
-        first_spot = True
-        cum_msd = 0
-        # Iterate through the nr_spots in this track, retrieve values for x and y (in micron)
-        for spot in track_spots:
-            nr_spots_in_all_tracks += 1
-            if first_spot:
-                x0 = spot.getFeature('POSITION_X')
-                y0 = spot.getFeature('POSITION_Y')
-                first_spot = False
-            else:
-                x = spot.getFeature('POSITION_X')
-                y = spot.getFeature('POSITION_Y')
-                cum_msd += (x - x0) ** 2 + (y - y0) ** 2
-        msd = cum_msd / (len(track_spots) - 1)
-        diffusion_coefficient = msd / (2 * 2 * 0.05)
-
-        nice_diffusion_coefficient = round(diffusion_coefficient, 4)
-        diffusion_coefficient_list.append(nice_diffusion_coefficient)
-
-    # ----------------
-    # Display results
-    # ----------------
-
-    if kas_special:
-        rm = RoiManager.getInstance()
-        rm.runCommand("Open", os.path.expanduser("~/paint.roi"))
-        rm.runCommand("Show All")
-
-    # A selection.
-    selection_model = SelectionModel(model)
-
-    # Read the default display settings.
-    ds = DisplaySettingsIO.readUserDefault()
-    ds.setSpotVisible(False)
-    ds.setTrackColorBy(TrackMateObject.TRACKS, track_colouring)
-
-    displayer = HyperStackDisplayer(model, selection_model, imp, ds)
-    displayer.render()
-    displayer.refresh()
-
-    # ---------------------------------------------------
-    # Save the image file with image with overlay as tiff
-    # ---------------------------------------------------
-
-    image = trackmate.getSettings().imp
-    tm_logger = LogRecorder(Logger.VOID_LOGGER)
-    capture = CaptureOverlayAction.capture(image, -1, 1, tm_logger)
-    FileSaver(capture).saveAsTiff(image_filename)
-
-    # The feature model, that stores edge and track features.
-    feature_model = model.getFeatureModel()
-
-    # ----------------
-    # Write the Tracks file
-    # ----------------
-
-    fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Nr Gaps", "Longest Gap",
-              "Track Duration",
-              'Track X Location', 'Track Y Location', 'Track Displacement', 'Track Total Distance',
-              'Track Max Speed', 'Track Median Speed', 'Track Mean Speed',
-              'Diffusion Coefficient']
-
-    # Determine write attributes
-    open_attribute = fiji_get_file_open_write_attribute()
-
-    # Iterate over all the tracks that are visible.
-    with open(tracks_filename, open_attribute) as csvfile:
-
-        csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(fields)
-
-        track_index = 0
-        for track_id in model.getTrackModel().trackIDs(True):
-            # Fetch the track feature from the feature model.
-            label = 'Track_' + str(track_id)
-            duration = round(feature_model.getTrackFeature(track_id, 'TRACK_DURATION'), 3)
-            nr_spots = feature_model.getTrackFeature(track_id, 'NUMBER_SPOTS')
-            x = round(feature_model.getTrackFeature(track_id, 'TRACK_X_LOCATION'), 2)
-            y = round(feature_model.getTrackFeature(track_id, 'TRACK_Y_LOCATION'), 2)
-
-            med_speed = 2
-            total_distance = 3
-
-            max_speed = feature_model.getTrackFeature(track_id, 'TRACK_MAX_SPEED')
-            if max_speed is None:
-                max_speed = -1
-            else:
-                max_speed = round(max_speed, 2)
-
-            med_speed = feature_model.getTrackFeature(track_id, 'TRACK_MEDIAN_SPEED')
-            if med_speed is None:
-                med_speed = -1
-            else:
-                med_speed = round(med_speed, 2)
-
-            mean_speed = feature_model.getTrackFeature(track_id, 'TRACK_MEAN_SPEED')
-            if mean_speed is None:
-                mean_speed = -1
-            else:
-                mean_speed = round(mean_speed, 2)
-
-            total_distance = feature_model.getTrackFeature(track_id, 'TRACK_TOTAL_DISTANCE_TRAVELED')
-            if total_distance is None:
-                total_distance = -2
-            else:
-                total_distance = round(total_distance, 2)
-
-            nr_gaps = feature_model.getTrackFeature(track_id, 'NUMBER_GAPS')
-            if nr_gaps is None:
-                nr_gaps = -1
-
-            longest_gap = feature_model.getTrackFeature(track_id, 'LONGEST_GAP')
-            if longest_gap is None:
-                longest_gap = -1
-
-            displacement = feature_model.getTrackFeature(track_id, 'TRACK_DISPLACEMENT')
-            if  displacement is None:
-                displacement = -1
-            else:
-                displacement = round(displacement, 2)
-
-            # Write the record for each track
-            csvwriter.writerow([recording_name, label, nr_spots, nr_gaps, longest_gap,
-                                duration,
-                                x, y, displacement, total_distance,
-                                max_speed, med_speed, mean_speed,
-                                diffusion_coefficient_list[track_index]])
-            track_index += 1
-
-    model.getLogger().log('Found ' + str(model.getTrackModel().nTracks(True)) + ' tracks.')
-
-    nr_spots = model.getSpots().getNSpots(True)  # Get visible nr_spots only
-    tracks = model.getTrackModel().nTracks(False)  # Get all tracks
-    filtered_tracks = model.getTrackModel().nTracks(True)  # Get filtered tracks
-
-    return nr_spots, tracks, filtered_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance, nr_spots_in_all_tracks
-
-
-# -----------------------------------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------------------------------
-# This is the start of the actual Run_TrackMate code
-# -----------------------------------------------------------------------------------------------------------\
-# -----------------------------------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------------------------------
 
 
 def run_trackmate(experiment_directory, recording_source_directory):
@@ -543,7 +66,8 @@ def run_trackmate(experiment_directory, recording_source_directory):
         if not {'Recording Sequence Nr', 'Recording Name', 'Experiment Date', 'Experiment Name', 'Condition Nr',
                 'Replicate Nr', 'Probe', 'Probe Type', 'Cell Type', 'Adjuvant', 'Concentration', 'Threshold',
                 'Process'} <= set(csv_reader.fieldnames):
-            paint_logger.error("Error: Missing expected column headers in {}".format(experiment_info_path))
+            msg = "Error!!!!!: Missing expected column headers in {}".format(experiment_info_path)
+            paint_logger.error(msg)
             suppress_fiji_output()
             sys.exit()
 
@@ -564,7 +88,8 @@ def run_trackmate(experiment_directory, recording_source_directory):
 
             # Initialise the All Recordings file with the column headers
             col_names = csv_reader.fieldnames
-            new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp']
+            new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp',
+                           'Nr Spots in All Tracks', 'Max Frame Gap', 'Gap Closing Max Distance', 'Linking Max Distance']
             col_names += [col for col in new_columns if col not in col_names]
 
             # And create the header row
@@ -585,9 +110,9 @@ def run_trackmate(experiment_directory, recording_source_directory):
 
                     recording_process_time = time.time()
                     status, row = process_recording_trackmate(row, recording_source_directory, experiment_directory, file_count==1)
-                    paint_logger.info(
-                        "Processed file nr " + str(file_count) + " of " + str(nr_to_process) + ": " + row[
-                            'Recording Name'] + " in " + format_time_nicely(time.time() - recording_process_time))
+                    paint_logger.info("Processed file nr " + str(file_count).rjust(2) + " of " + str(nr_to_process).rjust(2) + ": " +
+                                      row['Recording Name'] + " in " +
+                                      format_time_nicely(time.time() - recording_process_time))
                     if status == 'OK':
                         nr_recording_processed += 1
                     elif status == 'NOT_FOUND':
@@ -667,7 +192,7 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
     if row['Adjuvant'] == 'None':
         row['Adjuvant'] = 'No'
 
-    img_file_ext = get_paint_attribute('Paint', 'Image File Extension')
+    img_file_ext = get_paint_attribute_with_default('Paint', 'Image File Extension', '.nd2')
     recording_file_name = os.path.join(recording_source_directory, recording_name + img_file_ext)
 
     if not os.path.exists(recording_file_name):
@@ -692,10 +217,8 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         tracks_file_path = os.path.join(experiment_directory, ext_recording_name + '-tracks.csv')
         recording_file_path = os.path.join(experiment_directory, 'TrackMate Images', ext_recording_name + '.jpg')
 
-        # suppress_fiji_output()
         nr_spots, total_tracks, long_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance, nr_spots_in_all_tracks  = execute_trackmate_in_Fiji(
             ext_recording_name, threshold, tracks_file_path, recording_file_path, first, False, )
-        # restore_fiji_output()
 
         # IJ.run("Set Scale...", "distance=6.2373 known=1 unit=micron")
         # IJ.run("Scale Bar...", "width=10 height=5 thickness=3 bold overlay")
@@ -776,8 +299,8 @@ def create_gui():
     frame.setLayout(GridLayout(3, 1))
 
     # Get the default drectories
-    experiment_dir = get_paint_attribute('User Directories', 'Experiment Directory')
-    images_dir = get_paint_attribute('User Directories', 'Images Directory')
+    experiment_dir = get_paint_attribute_with_default('User Directories', 'Experiment Directory', '')
+    images_dir = get_paint_attribute_with_default('User Directories', 'Images Directory', '')
 
     # Add padding around the frame content
     frame.getRootPane().setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20))

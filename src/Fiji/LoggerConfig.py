@@ -1,6 +1,5 @@
 import logging
 import os
-from os import path
 
 DEBUG = logging.DEBUG
 INFO = logging.INFO
@@ -87,7 +86,7 @@ def paint_logger_change_file_handler_name(file_name):
 
     paint_logger.removeHandler(file_handler)
 
-    file_handler = logging.FileHandler(path.join(get_paint_logger_directory(), file_name), mode='w')  # Logs to a file
+    file_handler = logging.FileHandler(os.path.join(get_paint_logger_directory(), file_name), mode='w')  # Logs to a file
     file_handler.setLevel(logging.INFO)  # All logs at INFO level or higher go to the console
     file_handler.setFormatter(formatter)
 

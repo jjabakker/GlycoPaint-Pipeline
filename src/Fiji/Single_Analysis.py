@@ -10,7 +10,7 @@ from ij import IJ
 from ij.plugin.frame import RoiManager
 
 
-from TrackMate import execute_trackmate_in_Fiji
+from NewTrackMate import execute_trackmate_in_Fiji
 from DirectoriesAndLocations import (
     create_directories,
     get_default_image_directory)

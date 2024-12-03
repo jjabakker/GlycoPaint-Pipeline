@@ -39,9 +39,9 @@ The resulting environment, displayed below, should be able to run the pipeline.
 
 ### Installing the Trackmate plugin
 
-Fiji has been installed in an earlier step, and per default the TrackMate plugin is available. The GlycoPaint plugin however needs to be installed separately. This is done by copying a selection of files to the Fiji/Plugins directory. In the Python code hierarchy, in the 'src/Utilities Application' directory, there is a utility that does that: 'Install Paint TrackMate.py'. 
+Fiji has been installed in an earlier step, and per default the TrackMate plugin is available. The GlycoPaint plugin however, needs to be installed separately. This is done by copying a selection of files to the Fiji/Scripts/GlycoPaint directory. In the Python code hierarchy, in the 'src/Utilities Application' directory, there is a utility that does that: 'Install Paint TrackMate.py'. 
 
-Running the utility will create the paint.json file in the ~/Paint/Defaults directory if it does not already exists. The utility will then try to establish the path of the Fiji app and copy the necessary files to the plugin directory. If the path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
+Running the utility will create the paint.json file in the ~/Paint/Defaults directory if it does not already exist. The utility will then try to establish the path of the Fiji app and copy the necessary files to the plugin directory. If the Fiji path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
 
 <figure style="text-align: center;">
   <img src="Images/install_glycopaint.png" width="400" >

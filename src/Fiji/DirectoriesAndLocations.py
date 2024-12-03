@@ -1,5 +1,4 @@
 import os
-from os import makedirs
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Experiment
@@ -49,7 +48,7 @@ def create_directories(image_directory, delete_existing=True):
 def _get_paint_configuration_directory(sub_dir):
     conf_dir = os.path.join(os.path.expanduser('~'), 'Paint')
     if not os.path.exists(conf_dir):
-        makedirs(os.path.join(conf_dir, sub_dir))
+        os.makedirs(os.path.join(conf_dir, sub_dir))
     return conf_dir
 
 
@@ -88,6 +87,6 @@ def get_default_image_directory():
 
     image_directory = os.path.expanduser('~') + os.sep + "TrackMate Data"
     if not os.path.isdir(image_directory):
-        makedirs(image_directory)
+        os.makedirs(image_directory)
     else:
         return image_directory

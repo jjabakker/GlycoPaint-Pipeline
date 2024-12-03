@@ -149,19 +149,12 @@ def install():
         shutil.rmtree(dest_root)
     os.makedirs(dest_root, exist_ok=True)
 
-    # Remove the old jar file
-    # jar_file = os.path.join(fiji_app, 'Plugins', 'GlycoPaint.jar')
-    # if os.path.exists(jar_file):
-    #     os.remove(jar_file)
-
     # Remove the __pycache__ directory if it exists
     base_dir = os.path.abspath(os.path.join("..", "..", "src", "Fiji"))
     pycache_dir = os.path.join(base_dir, '__pycache__')
 
     if os.path.exists(pycache_dir):
         shutil.rmtree(pycache_dir)
-
-    # create_jar_file()
 
     source_root = os.path.dirname(os.getcwd())
 
@@ -179,7 +172,7 @@ def install():
             "Run_TrackMate_Batch.py",
             "Single_Analysis.py",
             "FijiSupportFunctions.py",
-            "TrackMate.py",
+            "NewTrackMate.py",
             "ConvertBrightfieldImages.py",
             "LoggerConfig.py",
             "DirectoriesAndLocations.py",
@@ -190,10 +183,6 @@ def install():
         dest_dir = dest_directories["fiji_dest"]
         for file in files:
             copy_file(src_dir, dest_dir, file)
-
-    # And finally the jar file
-    # if platform.system() == "Darwin":
-    #     copy_file(src_dir, os.path.join(fiji_app, 'plugins'), 'GlycoPaint.jar')
 
 
 def run_bash_command(command):
@@ -206,58 +195,6 @@ def run_bash_command(command):
         print("Error message:", e.stderr)
 
 
-def create_jar_file():
-
-    if platform.system() == "Windows":
-
-        # The trick as used in macOS does not work on Windows
-        # It is not a real problem, it is just that the GlycoPaint menu will end up at the bottom of the menu
-
-        return
-
-        try:
-            # Use os.path.join to create platform-independent paths
-            base_dir = os.path.abspath(os.path.join("..", "..", "src", "Fiji"))
-            jar_file = os.path.join(base_dir, "GlycoPaint.jar")
-            zip_file = os.path.join(base_dir, "GlycoPaint.zip")
-
-            # Change the working directory
-            os.chdir(base_dir)
-
-            # Remove the old JAR and zip file if it exists
-            if os.path.exists(jar_file):
-                os.remove(jar_file)
-            if os.path.exists(jar_file):
-                os.remove(jar_file)
-
-            # Use PowerShell's Compress-Archive cmdlet to create the ZIP file
-            command = f'powershell Compress-Archive -Path "{base_dir}\\*" -DestinationPath "{zip_file}"'
-            subprocess.run(command, shell=True, check=True)
-
-            # Rename the ZIP file to JAR
-            os.rename(zip_file, jar_file)
-
-            print("GlycoPaint.jar created successfully.")
-        except subprocess.CalledProcessError as e:
-            print("An error occurred while creating the JAR file:")
-            print(e.stderr)
-        except Exception as ex:
-            print("An unexpected error occurred:")
-            print(str(ex))
-
-    elif platform.system() == "Darwin":
-        try:
-            commands = """
-            cd ..
-            cd ..
-            cd src/Fiji
-            rm -f GlycoPaint.jar
-            jar cf GlycoPaint.jar .        
-            """
-            result = subprocess.run(commands, shell=True, check=True, text=True, capture_output=True)
-        except subprocess.CalledProcessError as e:
-            print("An error occurred while running the combined commands:")
-            print(e.stderr)
 
 if __name__ == '__main__':
     setup_logging()

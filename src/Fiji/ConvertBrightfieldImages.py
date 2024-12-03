@@ -3,7 +3,6 @@ import shutil
 
 from ij import IJ
 
-
 from LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name)

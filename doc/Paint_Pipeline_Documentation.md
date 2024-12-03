@@ -131,7 +131,7 @@ The TrackMate plugin in the Fiji environment is used to analyse the recordings, 
 
 The Experiment Info 'Threshold' parameter determines the spot detection sensitivity. With a low threshold value, even not very well-defined spots are detected. With a high threshold value, poorly defined spots are ignored. Experience indicates that with 1,000,000 plus spots, processing takes very long and does not lead to usable results. The user chooses for each recording a threshold value in an iterative process. The threshold should be set so that the number of spots preferably is in the 300,000 to 800,000 range. A good starting value for the Threshold is 20.
 
-The 'Run TrackMate' procedure is started from Fiji by selecting from the 'Plugins' menu the Paint group and in there 'Run TrackMate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
+The 'Run TrackMate' procedure is started from Fiji by selecting the GlycoPaint section from thr top level menu and from there 'Run TrackMate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
 
 <figure style="text-align: center;">
   <img src="Images/run_trackmate_dialog.png"  width="500">
@@ -142,7 +142,6 @@ Upon successful processing, the system generates for each recording an image. A 
 <figure style="text-align: center;">
   <img src="Images/sample_recording.png"  width="500">
 </figure>
-
 
 For the set of recordings in the experiment, the system generates one 'All Tracks' and one 'All Recordings' file with attributes such as Nr Spots, Nr Tracks, Run Time and a Time Stamp. The 'All Tracks' file contains, for every track, the average x and y position, and the number of spots and track duration. In addition, the diffusion coefficient (a measure of the displacement from the origin) has been calculated. An example of aan All Tracks file is shown below.
 
@@ -155,6 +154,13 @@ The Project directory contents just after TrackMate has been run for both the 24
 <figure style="text-align: center;">
   <img src="Images/demo_project_after_trackmate.png"  width="350">
 </figure>
+
+In the GlycoPaint menu a second option is listed: 'Run TrackMate Batch'. This option allows a number of projects to be processed without user intervention. In this option, a batch file needs to be provided, which is a csv file with 4 columns, specifing the Project directories, the Image Source, the Experiment and a Process flag indicating if the experiment needs to be processed or not. An example is shown below.
+
+<figure style="text-align: center;">
+  <img src="Images/batchfile_format.png"  width="700">
+</figure>
+
 
 ## Generate Squares
 

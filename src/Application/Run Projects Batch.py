@@ -20,7 +20,7 @@ from src.Fiji.LoggerConfig import (
     get_paint_logger_directory,
     DEBUG as PAINT_DEBUG
 )
-from src.Fiji.PaintConfig import get_paint_attribute
+from src.Fiji.NewPaintConfig import get_paint_attribute
 
 paint_logger_change_file_handler_name('Process All Projects.log')
 paint_logger_console_handle_set_level(PAINT_DEBUG)
