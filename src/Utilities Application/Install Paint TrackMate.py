@@ -4,8 +4,8 @@ import subprocess
 import logging
 import platform
 
-from src.Fiji.PaintConfig import (
-    get_paint_attribute,
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default,
     update_paint_attribute)
 
 if platform.system() == "Windows":
@@ -88,13 +88,13 @@ def find_app_path_windows(app_name="Fiji"):
 def find_fiji_path():
     """
     Locates the Fiji application path based on the platform.
-    Calling get_paint_attribute('Paint', 'Fiji Path') will cause the paint.json file to be created if it does not exist
+    Calling get_paint_attribute_with_default('Paint', 'Fiji Path') will cause the paint.json file to be created if it does not exist
     already.
     If the default Fiji path is not found, the function will try to find the Fiji path based on the platform.
     If no valid path is found, the function will return None (and the wuser will be invited to edit the paint.json file).
     """
 
-    fiji_path = get_paint_attribute('Paint', 'Fiji Path')
+    fiji_path = get_paint_attribute_with_default('Paint', 'Fiji Path', "")
     if fiji_path and os.path.exists(fiji_path):
         # We can assume we have a valid path to Fiji
         pass
@@ -144,15 +144,15 @@ def install():
         return
 
     # Clean and create directory
-    dest_root = os.path.join(fiji_app, 'Plugins', 'GlycoPaint')
+    dest_root = os.path.join(fiji_app, 'Scripts', 'GlycoPaint')
     if os.path.exists(dest_root):
         shutil.rmtree(dest_root)
     os.makedirs(dest_root, exist_ok=True)
 
     # Remove the old jar file
-    jar_file = os.path.join(fiji_app, 'Plugins', 'GlycoPaint.jar')
-    if os.path.exists(jar_file):
-        os.remove(jar_file)
+    # jar_file = os.path.join(fiji_app, 'Plugins', 'GlycoPaint.jar')
+    # if os.path.exists(jar_file):
+    #     os.remove(jar_file)
 
     # Remove the __pycache__ directory if it exists
     base_dir = os.path.abspath(os.path.join("..", "..", "src", "Fiji"))
@@ -161,7 +161,7 @@ def install():
     if os.path.exists(pycache_dir):
         shutil.rmtree(pycache_dir)
 
-    create_jar_file()
+    # create_jar_file()
 
     source_root = os.path.dirname(os.getcwd())
 
@@ -183,7 +183,7 @@ def install():
             "ConvertBrightfieldImages.py",
             "LoggerConfig.py",
             "DirectoriesAndLocations.py",
-            "PaintConfig.py"],
+            "NewPaintConfig.py"],
     }
 
     for src_dir, files in file_groups.items():
@@ -192,8 +192,8 @@ def install():
             copy_file(src_dir, dest_dir, file)
 
     # And finally the jar file
-    if platform.system() == "Darwin":
-        copy_file(src_dir, os.path.join(fiji_app, 'plugins'), 'GlycoPaint.jar')
+    # if platform.system() == "Darwin":
+    #     copy_file(src_dir, os.path.join(fiji_app, 'plugins'), 'GlycoPaint.jar')
 
 
 def run_bash_command(command):
