@@ -141,7 +141,7 @@ default_data = {
         "DO_SUBPIXEL_LOCALIZATION": False,  # Old value: False
         "DO_MEDIAN_FILTERING": True,  # Old value: False
 
-        "LINKING_MAX_DISTANCE": 0.5,  # Old value: 0.6
+        "LINKING_MAX_DISTANCE": 0.6,  # Old value: 0.6
         "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,  # Old value: 1.05
 
         "ALLOW_GAP_CLOSING": True,  # Old value: True
@@ -595,10 +595,11 @@ def run_trackmate(experiment_directory, recording_source_directory):
                 if 'y' in row['Process'].lower():
                     file_count += 1
 
+                    recording_process_time = time.time()
                     status, row = process_recording_trackmate(row, recording_source_directory, experiment_directory, file_count==1)
                     paint_logger.info(
                         "Processed file nr " + str(file_count) + " of " + str(nr_to_process) + ": " + row[
-                            'Recording Name'])
+                            'Recording Name'] + " in " + format_time_nicely(time.time() - recording_process_time))
                     if status == 'OK':
                         nr_recording_processed += 1
                     elif status == 'NOT_FOUND':
