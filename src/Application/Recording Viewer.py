@@ -34,8 +34,7 @@ from src.Application.Recording_Viewer.Heatmap_Support import (
     get_heatmap_data)
 from src.Application.Recording_Viewer.Recording_Viewer_Support_Functions import (
     test_if_square_is_in_rectangle,
-    save_as_png,
-    find_excel_executable)
+    save_as_png)
 from src.Application.Recording_Viewer.Select_Squares import (
     relabel_tracks,
     select_squares)
@@ -331,9 +330,10 @@ class RecordingViewer:
         if self.df_experiment is None:
             self.show_error_and_exit("No 'All Recordings' file, Did you select an image directory?")
         self.df_experiment.set_index('Ext Recording Name', drop=False, inplace=True)
+        df_filtered = self.df_experiment[self.df_experiment['Process'].isin(['Yes', 'yes', 'Y', 'y'])]
 
         # Check that the two files align
-        if set(self.df_all_squares['Ext Recording Name']) != set(self.df_experiment['Ext Recording Name']):
+        if set(self.df_all_squares['Ext Recording Name']) != set(df_filtered['Ext Recording Name']):
             self.show_error_and_exit(
                 "The recordings in the 'All Squares' file do not align with the 'All Experiments' file")
 
@@ -342,7 +342,7 @@ class RecordingViewer:
         if self.df_all_tracks is None:
             self.show_error_and_exit("No 'All Tracks' file, Did you select an image directory?")
         if 'Unique Key' not in self.df_all_tracks.columns:
-            self.show_error("No 'Unique Key' in the All Tracks file. Did you run Generate Squares?")
+            self.show_error_and_exit("No 'Unique Key' in the All Tracks file. Did you run Generate Squares?")
         self.df_all_tracks.set_index('Unique Key', inplace=True, drop=False)
 
         self.nr_of_squares_in_row = int(self.df_experiment.iloc[0]['Nr of Squares in Row'])
@@ -1084,7 +1084,7 @@ class RecordingViewer:
         else:  # Then must be 'Always'
             save = True
         if save:
-            # Save the Squares  data
+            # Save the Squares data
             self.df_all_squares.to_csv(os.path.join(self.user_specified_directory, 'All Squares.csv'), index=False)
             self.df_all_tracks.to_csv(os.path.join(self.user_specified_directory, 'All Tracks.csv'), index=False)
             self.df_experiment.to_csv(os.path.join(self.user_specified_directory, 'All Recordings.csv'), index=False)
@@ -1235,10 +1235,10 @@ def recalc_recording_tau_and_density(self):
     """
 
     df_squares_for_single_tau = self.df_squares[self.df_squares['Selected']]
-    df_tracks_for_reecording = self.df_all_tracks[self.df_all_tracks['Ext Recording Name'] == self.image_name]
+    df_tracks_for_recording = self.df_all_tracks[self.df_all_tracks['Ext Recording Name'] == self.image_name]
 
-    df_tracks_for_tau = df_tracks_for_reecording[
-        df_tracks_for_reecording['Square Nr'].isin(df_squares_for_single_tau['Square Nr'])]
+    df_tracks_for_tau = df_tracks_for_recording[
+        df_tracks_for_recording['Square Nr'].isin(df_squares_for_single_tau['Square Nr'])]
     df_tracks_for_tau = extra_constraints_on_tracks_for_tau_calculation(df_tracks_for_tau)
 
     tau, r_squared = calculate_tau(
