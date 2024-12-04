@@ -88,7 +88,7 @@ class SelectViewerDataDialog:
             return
 
         type, maturity = classify_directory(self.directory)
-        if type is None:
+        if type is 'Unknown':
             paint_logger.error("The selected directory does not seem to be a project or experiment directory")
             messagebox.showwarning(
                 title='Warning',

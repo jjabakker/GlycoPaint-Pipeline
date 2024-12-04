@@ -238,7 +238,7 @@ def classify_directory_work(directory_path):
 
     # Classify as unknown if criteria are not met
     feedback_message = "; ".join(feedback)
-    return {"type": "unknown", "maturity": "immature", "feedback": feedback_message}
+    return {"type": "Unknown", "maturity": "Immature", "feedback": feedback_message}
 
 
 def classify_directory(directory_path):
