@@ -859,7 +859,7 @@ class RecordingViewer:
         self.square_info_popup = Toplevel(self.viewer_dialog)
         self.square_info_popup.transient(self.viewer_dialog)
         self.square_info_popup.resizable(False, False)
-        self.square_info_popup.attributes('-topmost', True)
+        # self.square_info_popup.attributes('-topmost', True)
         self.square_info_popup.title("Square Info")
 
         # Calculate popup position based on the mouse click
