@@ -23,13 +23,12 @@ from FijiSupportFunctions import (
 from LoggerConfig import paint_logger
 
 from Run_TrackMate import run_trackmate
+
 # Set an appropriate name for the log file
 paint_logger_change_file_handler_name('Run TrackMate Batch.log')
 
 
 def run_trackmate_batch():
-
-    print('\n'.join(sys.path))
 
     batch_file_name = ask_user_for_file("Specify the batch file")
     if not batch_file_name:
