@@ -20,7 +20,7 @@ from src.Fiji.LoggerConfig import (
     get_paint_logger_directory,
     DEBUG as PAINT_DEBUG
 )
-from src.Fiji.NewPaintConfig import get_paint_attribute
+from src.Fiji.NewPaintConfig import get_paint_attribute_with_default
 
 paint_logger_change_file_handler_name('Process All Projects.log')
 paint_logger_console_handle_set_level(PAINT_DEBUG)
@@ -202,10 +202,10 @@ def main():
             select_parameters = pack_select_parameters(
                 min_required_density_ratio=entry['min_required_density_ratio'],
                 max_allowable_variability=entry['max_allowable_variability'],
-                min_track_duration=get_paint_attribute('Generate Squares', 'Min Track Duration'),
-                max_track_duration=get_paint_attribute('Generate Squares', 'Max Track Duration'),
-                min_allowable_r_squared=get_paint_attribute('Generate Squares', 'Min Allowable R Squared'),
-                neighbour_mode=get_paint_attribute('Generate Squares', 'Neighbour Mode'))
+                min_track_duration=get_paint_attribute_with_default('Generate Squares', 'Min Track Duration', 0),
+                max_track_duration=get_paint_attribute_with_default('Generate Squares', 'Max Track Duration', 100000),
+                min_allowable_r_squared=get_paint_attribute_with_default('Generate Squares', 'Min Allowable R Squared',0.9),
+                neighbour_mode=get_paint_attribute_with_default('Generate Squares', 'Neighbour Mode', 'Free'))
 
             if not process_json_configuration_block(
                     paint_source_dir=paint_source_dir,
