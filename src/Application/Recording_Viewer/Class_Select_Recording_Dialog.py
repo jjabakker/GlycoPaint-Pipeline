@@ -52,7 +52,10 @@ class SelectRecordingDialog():
 
         self.setup_userinterface()
 
-
+        # Enable the reset buttons for the filters that were applied
+        for col in self.filter_applied:
+            if self.filter_applied[col]:
+                enable_button(self.reset_buttons[col])
 
     def setup_userinterface(self):
         # Frame to hold list boxes and buttons
