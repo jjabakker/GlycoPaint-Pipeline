@@ -142,6 +142,8 @@ class SelectViewerDataDialog:
         for experiment in experiments:
             if not os.path.isdir(os.path.join(project_directory, experiment)):
                 continue
+            if experiment == 'Output':
+                continue
             experiment_directory = os.path.join(project_directory, experiment)
             time_stamp_experiment = os.path.getmtime(os.path.join(experiment_directory, 'All Recordings.csv'))
             if time_stamp_project < time_stamp_experiment:
