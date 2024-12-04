@@ -57,17 +57,32 @@ def _select_squares_actual(
     """
 
     # Define the conditions for squares to be visible
-    df_squares['Selected'] = (
+    if only_valid_tau:
+        df_squares['Selected'] = (
             (df_squares['Density Ratio'] >= min_required_density_ratio) &
             (df_squares['Variability'] <= max_allowable_variability) &
             (df_squares['Max Track Duration'] >= min_track_duration) &
             (df_squares['Max Track Duration'] <= max_track_duration) &
-            (df_squares['R Squared'] >= min_allowable_r_squared))
-
-    if only_valid_tau:
+            (df_squares['R Squared'] >= min_allowable_r_squared) &
+            (df_squares['Tau'] > 0))
+    else: # If we want to include squares with invalid Tau values
         df_squares['Selected'] = (
-                (df_squares['Selected']) &
-                (df_squares['Tau'] > 0)
+                # So either the R square is good (and that means that the Tau is valid
+                (
+                    (df_squares['Density Ratio'] >= min_required_density_ratio) &
+                    (df_squares['Variability'] <= max_allowable_variability) &
+                    (df_squares['Max Track Duration'] >= min_track_duration) &
+                    (df_squares['Max Track Duration'] <= max_track_duration) &
+                    (df_squares['R Squared'] >= min_allowable_r_squared)
+                ) |
+                # Or the Tau is invalid, but then do not require a good R square
+                (
+                    (df_squares['Density Ratio'] >= min_required_density_ratio) &
+                    (df_squares['Variability'] <= max_allowable_variability) &
+                    (df_squares['Max Track Duration'] >= min_track_duration) &
+                    (df_squares['Max Track Duration'] <= max_track_duration) &
+                    (df_squares['Tau'] < 0)
+                )
         )
 
     # Eliminate isolated squares based on neighborhood rules
