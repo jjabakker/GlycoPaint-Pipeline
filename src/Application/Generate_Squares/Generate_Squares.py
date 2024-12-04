@@ -146,9 +146,11 @@ def process_experiment(
 
     # Determine how many names there are from Recordings and Tracks anc compare
     nr_files_tracks = df_tracks_of_experiment['Ext Recording Name'].nunique()
-    nr_files_recordings = len(df_recordings_of_experiment)
-    if nr_files_recordings != nr_files_tracks:
-        paint_logger.info("All Squares file is not consistent with All Recordings")
+    nr_of_recordings_to_process = len(df_recordings_of_experiment[
+                                  df_recordings_of_experiment['Process'].isin(['Yes', 'yes', 'Y'])
+                              ])
+    if nr_of_recordings_to_process != nr_files_tracks:
+        paint_logger.info(f"All Squares file is not consistent with All Recordings for {experiment_path}")
     nr_files = nr_files_tracks
     if nr_files <= 0:
         paint_logger.info("No files selected for processing")
@@ -161,10 +163,7 @@ def process_experiment(
     current_image_nr = 1
     processed = 0
 
-    nr_of_recordings_to_process = len(
-        df_recordings_of_experiment[df_recordings_of_experiment['Process'].isin(['Yes', 'y', 'Y'])])
     paint_logger.info(f"Processing {nr_of_recordings_to_process:2d} images in {experiment_path}")
-
     for index, recording_data in df_recordings_of_experiment.iterrows():
 
         if recording_data['Process'] in {'No', 'n', 'N'} :
