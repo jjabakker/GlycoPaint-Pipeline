@@ -76,7 +76,7 @@ default_data = {
         "TARGET_CHANNEL": 1,  # Old value: 1
         "RADIUS": 0.5,  # Old value: 0.5
         "DO_SUBPIXEL_LOCALIZATION": False,  # Old value: False
-        "DO_MEDIAN_FILTERING": True,  # Old value: False
+        "DO_MEDIAN_FILTERING": False,  # Old value: False
 
         "LINKING_MAX_DISTANCE": 0.6,  # Old value: 0.6
         "ALTERNATIVE_LINKING_COST_FACTOR": 1.05,  # Old value: 1.05
