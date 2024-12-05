@@ -260,32 +260,113 @@ Whilst the Heatmap dialogue is displayed, the user can scroll through images.
 </figure>
 
 
+### Special keybindings
+
+In addition to the interactions that are presented through user interface elements, there are a number of interactions that are bound to keys. 
+
+- Key 's' toggles the display of squares.
+- Key 'n' toggles the display of label numbers.
+- Key 'v' toggles the display of squares that meet the filtering criteria, but for which no Tau was calculated because the number of tracks is insufficient.
+- Key 'o' writes the currently displayed images to disc (with and without squares). Images are placed in the Output/Squares directory under the Experiment. 
+- Key 'p' writes all images of the current experiment to disc (with and without squares). Images are placed in the Output/Squares directory under the Experiment.
+
 # Data formats
 
 ## All Recordings Format
 
 Holding information on an experiment. Two versions of All Recordings are shown. Version 1 shows the contents of All Recordings directly after TrackMate had been run and has some extra fields in additiion to the original Experiment Info file. Version 2 shows the contents after Generate Squares has been run. The Tau, Density and R Squared values relate to those calculated for the Recording. The Tau, Density and R Squared values for individual squares are in the All Squares file.
 
-<figure style="text-align: center;">
-  <img src="Images/all_recordings_format.png" >
-</figure>
+
+|    | Experiment Info   | All Recordings-1  | All Recordings-2          | Comment              |
+|:---|:------------------|:------------------|:--------------------------|:---------------------|
+| 1  | Recording Seq. Nr | Recording Seq. Nr | Recording Sequence Nr     | Factor for selection |
+| 2  | Recording Name    | Recording Name    | Recording Name            | Factor for selection |
+| 3  | Experiment Date   | Experiment Date   | Experiment Date           | Factor for selection |
+| 4  | Experiment Name   | Experiment Name   | Experiment Name           | Factor for selection |
+| 5  | Condition Nr      | Condition Nr      | Condition Nr              | Factor for selection |
+| 6  | Replicate Nr      | Replicate Nr      | Replicate Nr              | Factor for selection |
+| 7  | Probe             | Probe             | Probe                     | Meta Data            |
+| 8  | Probe Type        | Probe Type        | Probe Type                | Meta Data            |
+| 9  | Cell Type         | Cell Type         | Cell Type                 | Meta Data            |
+| 10 | Adjuvant          | Adjuvant          | Adjuvant                  | Meta Data            |
+| 11 | Concentration     | Concentration     | Concentration             | Meta Data            |
+| 12 | Threshold         | Threshold         | Threshold                 | TrackMate            |
+| 13 | Process           | Process           | Process                   | TrackMate            |
+| 14 |                   | Nr Spots          | Nr Spots                  | TrackMate            |
+| 15 |                   | Nr Tracks         | Nr Tracks                 | TrackMate            |
+| 16 |                   | Run Time          | Run Time                  | TrackMate            |
+| 17 |                   | Ext Rec. Name     | Ext Recording Name        | Factor for selection |
+| 18 |                   | Recording Size    | Recording Size            | TrackMate            |
+| 19 |                   | Time Stamp        | Time Stamp                | TrackMate            |
+| 20 |                   |                   | Max Frame Gap             | TrackMate            |
+| 21 |                   |                   | Linking Max Distance      | TrackMate            |
+| 22 |                   |                   | Gap Closing Max Distance  | TrackMate            |
+| 23 |                   |                   | Nr Spots in All Tracks    | TrackMate            |
+| 24 |                   |                   | Min Tracks for Tau        | User specified       |
+| 25 |                   |                   | Min Allowable R Squared   | User specified       |
+| 26 |                   |                   | Nr of Squares in Row      | User specified       |
+| 27 |                   |                   | Max Allowable Variability | User specified       |
+| 28 |                   |                   | Min Req. Density Ratio    | User specified       |
+| 29 |                   |                   | Exclude                   | User specified       |
+| 30 |                   |                   | Neighbour Mode            | User specified       |
+| 31 |                   |                   | Tau                       | Calculated           |
+| 32 |                   |                   | Density                   | Calculated           |
+| 33 |                   |                   | R Squared                 | Calculated           |
 
 ## All Squares format
 
-Holding information on a single square
+| 	   | All Squares                 |
+|-----|:----------------------------|
+| 1   | Unique Key                  | 
+| 2   | Recording Sequence Nr       |
+| 3   | Ext Recording Name          |
+| 4   | Experiment Name             |
+| 5   | Experiment Date             |
+| 6   | Condition Nr                |
+| 7   | Replicate Nr                |
+| 8   | Square Nr                   |
+| 9   | Probe                       |
+| 10  | Probe Type                  |
+| 11  | Cell Type                   |
+| 12  | Adjuvant                    |
+| 13  | Concentration               |
+| 14  | Threshold                   |
+| 15  | Row Nr                      |
+| 16  | Col Nr                      |
+| 17  | Label Nr                    |
+| 18  | Cell Id                     |
+| 19  | Nr Spots                    |
+| 20  | Nr Tracks                   |
+| 21  | X0                          |
+| 22  | Y0                          |
+| 23  | X1                          |
+| 24  | Y1                          |
+| 25  | Visible                     |
+| 26  | Variability                 |
+| 27  | Density                     |
+| 28  | Density Ratio               |
+| 29  | Tau                         |
+| 30  | R2                          |
+| 31  | Diffusion Coefficient       |
+| 32  | Average Long Track Duration |
+| 33  | Max Track Duration          |
+| 34  | Total Track Duration        |
 
-<figure style="text-align: center;">
-  <img src="Images/all_squares_format.png" >
-</figure>
 
 ## All Tracks
 
 Holding information on all tracks in a recording
 
+|    | All Tracks            |
+|----|:----------------------|
+| 1  | Recording Name        |
+| 2  | Track Label           |
+| 3  | Nr Spots              |
+| 4  | Track Duration        |
+| 5  | Track X Location      |
+| 6  | Track Y Location      |
+| 7  | Diffusion Coefficient |
 
-<figure style="text-align: center;">
-  <img src="Images/all_tracks_format.png" >
-</figure>
 
 # Algorithms
 
@@ -485,5 +566,5 @@ The core of the data processing takes place in Generate Squares. To facilitate s
     3. If no tracks:
        - Assign default values for metrics (e.g., Tau, Density = 0).
     4. If tracks exist:
-       - Compute metrics (Tau, R-squared, Density, Variability, etc.).
+       - Compute metrics (Tau, R-squared, Density, Varia| bility, etc.).
     5. Return a dictionary containing square-level data.
