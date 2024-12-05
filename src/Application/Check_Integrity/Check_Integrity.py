@@ -175,7 +175,7 @@ def check_all_recordings_file(file):
 
     expected_columns_2 = [
         'Min Tracks for Tau',
-        'Min Allowable R Squared',
+        'Min Required R Squared',
         'Nr of Squares in Row',
         'Max Allowable Variability',
         'Min Required Density Ratio',

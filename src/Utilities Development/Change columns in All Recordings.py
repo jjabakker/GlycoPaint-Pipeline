@@ -20,7 +20,7 @@ def update_csv_columns(directory):
                         print(f"Updating column in file: {file_path}")
 
                         # Rename the column
-                        df.rename(columns={'Min R Squared': 'Min Allowable R Squared'}, inplace=True)
+                        df.rename(columns={'Min R Squared': 'Min Required R Squared'}, inplace=True)
 
                         # Save the updated DataFrame back to the same CSV file
                         df.to_csv(file_path, index=False)

@@ -46,7 +46,7 @@ default_data = {
         "Max Track Duration": 1000000,
         "Nr of Squares in Row": 20,
         "Min Tracks to Calculate Tau": 20,
-        'Min Allowable R Squared': 0.9,
+        'Min Required R Squared': 0.9,
         "Min Required Density Ratio": 2.0,
         "Max Allowable Variability": 10.0,
 

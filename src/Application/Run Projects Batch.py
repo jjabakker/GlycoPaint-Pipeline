@@ -37,7 +37,7 @@ def process_json_configuration_block(paint_source_dir,
                                      nr_of_squares_in_row: int,
                                      nr_to_process: int,
                                      current_process: int,
-                                     min_allowable_r_squared: float,
+                                     min_required_r_squared: float,
                                      min_tracks_for_tau: int,
                                      time_string: str,
                                      paint_force: bool) -> bool:
@@ -55,7 +55,7 @@ def process_json_configuration_block(paint_source_dir,
     paint_logger.info(f"Min Track Duration          : {select_parameters['min_track_duration']}")
     paint_logger.info(f"Max Track Duration          : {select_parameters['max_track_duration']}")
     paint_logger.info(f"Neighbour Mode              : {select_parameters['neighbour_mode']}")
-    paint_logger.info(f"Min Allowable R squared     : {min_allowable_r_squared}")
+    paint_logger.info(f"Min Allowable R squared     : {min_required_r_squared}")
     paint_logger.info(f"Min tracks for tau          : {min_tracks_for_tau}")
     paint_logger.info(f"Paint Force                 : {paint_force}")
 
@@ -83,7 +83,7 @@ def process_json_configuration_block(paint_source_dir,
         project_path=project_path,
         select_parameters=select_parameters,
         nr_of_squares_in_row=nr_of_squares_in_row,
-        min_allowable_r_squared=min_allowable_r_squared,
+        min_required_r_squared=min_required_r_squared,
         min_tracks_for_tau=min_tracks_for_tau,
         paint_force=paint_force)
 
@@ -204,7 +204,7 @@ def main():
                 max_allowable_variability=entry['max_allowable_variability'],
                 min_track_duration=get_paint_attribute_with_default('Generate Squares', 'Min Track Duration', 0),
                 max_track_duration=get_paint_attribute_with_default('Generate Squares', 'Max Track Duration', 100000),
-                min_allowable_r_squared=get_paint_attribute_with_default('Generate Squares', 'Min Allowable R Squared',0.9),
+                min_required_r_squared=get_paint_attribute_with_default('Generate Squares', 'Min Required R Squared',0.9),
                 neighbour_mode=get_paint_attribute_with_default('Generate Squares', 'Neighbour Mode', 'Free'))
 
             if not process_json_configuration_block(
@@ -217,7 +217,7 @@ def main():
                     nr_to_process=nr_to_process,
                     current_process=current_process_seq_nr,
                     select_parameters=select_parameters,
-                    min_allowable_r_squared=entry['min_allowable_r_squared'],
+                    min_required_r_squared=entry['min_required_r_squared'],
                     min_tracks_for_tau=entry['min_tracks_for_tau'],
                     time_string=time_string,
                     paint_force=paint_force):

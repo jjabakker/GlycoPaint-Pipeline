@@ -17,7 +17,7 @@ def select_squares_with_parameters(df_squares, select_parameters, nr_of_squares_
         select_parameters['max_allowable_variability'],
         select_parameters['min_track_duration'],
         select_parameters['max_track_duration'],
-        select_parameters['min_allowable_r_squared'],
+        select_parameters['min_required_r_squared'],
         select_parameters['neighbour_mode'],
         nr_of_squares_in_row,
         only_valid_tau=only_valid_tau)
@@ -35,7 +35,7 @@ def select_squares(self, only_valid_tau=True):
         self.max_allowable_variability,
         self.min_track_duration,
         self.max_track_duration,
-        self.min_allowable_r_squared,
+        self.min_required_r_squared,
         self.neighbour_mode,
         self.nr_of_squares_in_row,
         only_valid_tau=only_valid_tau)
@@ -47,7 +47,7 @@ def _select_squares_actual(
         max_allowable_variability,
         min_track_duration,
         max_track_duration,
-        min_allowable_r_squared,
+        min_required_r_squared,
         neighbour_mode,
         nr_of_squares_in_row,
         only_valid_tau=True):
@@ -63,7 +63,7 @@ def _select_squares_actual(
             (df_squares['Variability'] <= max_allowable_variability) &
             (df_squares['Max Track Duration'] >= min_track_duration) &
             (df_squares['Max Track Duration'] <= max_track_duration) &
-            (df_squares['R Squared'] >= min_allowable_r_squared) &
+            (df_squares['R Squared'] >= min_required_r_squared) &
             (df_squares['Tau'] > 0))
     else: # If we want to include squares with invalid Tau values
         df_squares['Selected'] = (
@@ -73,7 +73,7 @@ def _select_squares_actual(
                     (df_squares['Variability'] <= max_allowable_variability) &
                     (df_squares['Max Track Duration'] >= min_track_duration) &
                     (df_squares['Max Track Duration'] <= max_track_duration) &
-                    (df_squares['R Squared'] >= min_allowable_r_squared)
+                    (df_squares['R Squared'] >= min_required_r_squared)
                 ) |
                 # Or the Tau is invalid, but then do not require a good R square
                 (

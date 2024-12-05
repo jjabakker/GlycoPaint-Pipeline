@@ -303,7 +303,7 @@ Holding information on an experiment. Two versions of All Recordings are shown. 
 | 22 |                   |                   | Gap Closing Max Distance  | TrackMate            |
 | 23 |                   |                   | Nr Spots in All Tracks    | TrackMate            |
 | 24 |                   |                   | Min Tracks for Tau        | User specified       |
-| 25 |                   |                   | Min Allowable R Squared   | User specified       |
+| 25 |                   |                   | Min Required R Squared    | User specified       |
 | 26 |                   |                   | Nr of Squares in Row      | User specified       |
 | 27 |                   |                   | Max Allowable Variability | User specified       |
 | 28 |                   |                   | Min Req. Density Ratio    | User specified       |
@@ -315,42 +315,42 @@ Holding information on an experiment. Two versions of All Recordings are shown. 
 
 ## All Squares format
 
-| 	   | All Squares                 |
-|-----|:----------------------------|
-| 1   | Unique Key                  | 
-| 2   | Recording Sequence Nr       |
-| 3   | Ext Recording Name          |
-| 4   | Experiment Name             |
-| 5   | Experiment Date             |
-| 6   | Condition Nr                |
-| 7   | Replicate Nr                |
-| 8   | Square Nr                   |
-| 9   | Probe                       |
-| 10  | Probe Type                  |
-| 11  | Cell Type                   |
-| 12  | Adjuvant                    |
-| 13  | Concentration               |
-| 14  | Threshold                   |
-| 15  | Row Nr                      |
-| 16  | Col Nr                      |
-| 17  | Label Nr                    |
-| 18  | Cell Id                     |
-| 19  | Nr Spots                    |
-| 20  | Nr Tracks                   |
-| 21  | X0                          |
-| 22  | Y0                          |
-| 23  | X1                          |
-| 24  | Y1                          |
-| 25  | Visible                     |
-| 26  | Variability                 |
-| 27  | Density                     |
-| 28  | Density Ratio               |
-| 29  | Tau                         |
-| 30  | R2                          |
-| 31  | Diffusion Coefficient       |
-| 32  | Average Long Track Duration |
-| 33  | Max Track Duration          |
-| 34  | Total Track Duration        |
+|    | All Squares                 |
+|----|:----------------------------|
+| 1  | Unique Key                  | 
+| 2  | Recording Sequence Nr       |
+| 3  | Ext Recording Name          |
+| 4  | Experiment Name             |
+| 5  | Experiment Date             |
+| 6  | Condition Nr                |
+| 7  | Replicate Nr                |
+| 8  | Square Nr                   |
+| 9  | Probe                       |
+| 10 | Probe Type                  |
+| 11 | Cell Type                   |
+| 12 | Adjuvant                    |
+| 13 | Concentration               |
+| 14 | Threshold                   |
+| 15 | Row Nr                      |
+| 16 | Col Nr                      |
+| 17 | Label Nr                    |
+| 18 | Cell Id                     |
+| 19 | Nr Spots                    |
+| 20 | Nr Tracks                   |
+| 21 | X0                          |
+| 22 | Y0                          |
+| 23 | X1                          |
+| 24 | Y1                          |
+| 25 | Visible                     |
+| 26 | Variability                 |
+| 27 | Density                     |
+| 28 | Density Ratio               |
+| 29 | Tau                         |
+| 30 | R2                          |
+| 31 | Diffusion Coefficient       |
+| 32 | Average Long Track Duration |
+| 33 | Max Track Duration          |
+| 34 | Total Track Duration        |
 
 
 ## All Tracks
@@ -437,7 +437,7 @@ In this section,directories previously specified by the user are stored. so they
 
 In this section, parameters are stored that are used by the Generate Squares app.
 
-- Five parameters, Nr of Squares in Row, Min Tracks to Calculate Tau, Min Allowable R Squared, Min Required Density Ratio and Max Allowable Variability,  have been entered previously by the user in the Generate Squares dialog and stored so they can be presented in the next invocation of Generate Squares.
+- Five parameters, Nr of Squares in Row, Min Tracks to Calculate Tau, Min Required R Squared, Min Required Density Ratio and Max Allowable Variability,  have been entered previously by the user in the Generate Squares dialog and stored so they can be presented in the next invocation of Generate Squares.
 
 - Three other parameters, Neighbour Mode, Min Track Duration and Max Track Duration, provide values that cannot be specified in the user interfaces. The defaukts are chosen so that no squares are eliminated.
 

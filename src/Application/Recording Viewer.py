@@ -123,7 +123,7 @@ class RecordingViewer:
         self.min_required_density_ratio = None
         self.min_track_duration = None
         self.max_track_duration = None
-        self.min_allowable_r_squared = None
+        self.min_required_r_squared = None
         self.neighbour_mode = None
 
         # Variables to hold references to the Dialogs, initially all empty
@@ -409,7 +409,7 @@ class RecordingViewer:
         self.set_dialog_buttons(tk.DISABLED)
         self.min_required_density_ratio = self.list_images[self.img_no]['Min Required Density Ratio']
         self.max_allowable_variability = self.list_images[self.img_no]['Max Allowable Variability']
-        self.min_allowable_r_squared = self.list_images[self.img_no]['Min Allowable R Squared']
+        self.min_required_r_squared = self.list_images[self.img_no]['Min Required R Squared']
         self.neighbour_mode = self.list_images[self.img_no]['Neighbour Mode']
 
         self.min_track_duration = 1  # ToDo thi does not look ok
@@ -423,7 +423,7 @@ class RecordingViewer:
                 self.max_allowable_variability,
                 self.min_track_duration,
                 self.max_track_duration,
-                self.min_allowable_r_squared,
+                self.min_required_r_squared,
                 self.neighbour_mode)
 
     def on_define_cells(self):
@@ -761,7 +761,7 @@ class RecordingViewer:
             max_allowable_variability: float,
             min_duration: float,
             max_duration: float,
-            min_allowable_r_squared: float,
+            min_required_r_squared: float,
             neighbour_mode: str,
     ) -> None:
         """
@@ -782,10 +782,10 @@ class RecordingViewer:
             self.min_track_duration = min_duration
         elif setting_type == "Max Track Duration":  # ToDo
             self.max_track_duration = max_duration
-        elif setting_type == "Min Allowable R Squared":
-            self.min_allowable_r_squared = min_allowable_r_squared
-            self.list_images[self.img_no]['Min Allowable R Squared'] = min_allowable_r_squared
-            self.df_experiment.loc[self.image_name, 'Min Allowable R Squared'] = min_allowable_r_squared
+        elif setting_type == "Min Required R Squared":
+            self.min_required_r_squared = min_required_r_squared
+            self.list_images[self.img_no]['Min Required R Squared'] = min_required_r_squared
+            self.df_experiment.loc[self.image_name, 'Min Required R Squared'] = min_required_r_squared
         elif setting_type == "Neighbour Mode":
             self.neighbour_mode = neighbour_mode
             self.list_images[self.img_no]['Neighbour Mode'] = neighbour_mode
@@ -794,7 +794,7 @@ class RecordingViewer:
             # Set the same settings for all recordings
             self.min_required_density_ratio = min_required_density_ratio
             self.max_allowable_variability = max_allowable_variability
-            self.min_allowable_r_squared = min_allowable_r_squared
+            self.min_required_r_squared = min_required_r_squared
             self.neighbour_mode = neighbour_mode
 
             self.min_track_duration = min_duration
@@ -803,19 +803,19 @@ class RecordingViewer:
             for index, row in self.df_experiment.iterrows():
                 self.df_experiment.loc[index, 'Min Required Density Ratio'] = min_required_density_ratio
                 self.df_experiment.loc[index, 'Max Allowable Variability'] = max_allowable_variability
-                self.df_experiment.loc[index, 'Min Allowable R Squared'] = min_allowable_r_squared
+                self.df_experiment.loc[index, 'Min Required R Squared'] = min_required_r_squared
                 self.df_experiment.loc[index, 'Neighbour Mode'] = neighbour_mode
 
             self.df_experiment.loc[self.image_name, 'Min Required Density Ratio'] = min_required_density_ratio
             self.df_experiment.loc[self.image_name, 'Max Allowable Variability'] = max_allowable_variability
-            self.df_experiment.loc[self.image_name, 'Min Allowable R Squared'] = min_allowable_r_squared
+            self.df_experiment.loc[self.image_name, 'Min Required R Squared'] = min_required_r_squared
             self.df_experiment.loc[self.image_name, 'Neighbour Mode'] = neighbour_mode
 
             for image in self.list_images:
                 image['Min Required Density Ratio'] = min_required_density_ratio
                 image['Max Allowable Variability'] = max_allowable_variability
                 image['Neighbour Mode'] = neighbour_mode
-                image['Min Allowable R Squared'] = min_allowable_r_squared
+                image['Min Required R Squared'] = min_required_r_squared
         elif setting_type == "Exit":
             self.select_square_dialog = None
         else:
@@ -1033,7 +1033,7 @@ class RecordingViewer:
 
             self.min_required_density_ratio = self.list_images[self.img_no]['Min Required Density Ratio']
             self.max_allowable_variability = self.list_images[self.img_no]['Max Allowable Variability']
-            self.min_allowable_r_squared = self.list_images[self.img_no]['Min Allowable R Squared']
+            self.min_required_r_squared = self.list_images[self.img_no]['Min Required R Squared']
             self.neighbour_mode = self.list_images[self.img_no]['Neighbour Mode']
 
             if self.select_square_dialog:
@@ -1042,7 +1042,7 @@ class RecordingViewer:
                     self.max_allowable_variability,
                     self.min_track_duration,
                     self.max_track_duration,
-                    self.min_allowable_r_squared,
+                    self.min_required_r_squared,
                     self.neighbour_mode)
 
         # Then display
@@ -1245,7 +1245,7 @@ def recalc_recording_tau_and_density(self):
         df_tracks_for_tau,
         # self.min_tracks_for_tau,
         10,
-        self.min_allowable_r_squared)
+        self.min_required_r_squared)
 
     # Calculate the Density values
     area = calc_area_of_square(self.nr_of_squares_in_row)

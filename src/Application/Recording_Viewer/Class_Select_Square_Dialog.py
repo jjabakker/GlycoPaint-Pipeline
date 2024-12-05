@@ -9,7 +9,7 @@ class SelectSquareDialog:
     # --------------------------------------------------------------------------------------------------------
 
     def __init__(self, image_viewer, callback_update_select_squares, min_required_density_ratio,
-                 max_allowable_variability, min_track_duration, max_track_duration, min_allowable_r_squared,
+                 max_allowable_variability, min_track_duration, max_track_duration, min_required_r_squared,
                  neighbour_mode):
         """
         The callback function that is called is self.update_select_squares
@@ -23,7 +23,7 @@ class SelectSquareDialog:
         self.max_allowable_variability = None
         self.min_track_duration = None
         self.max_track_duration = None
-        self.min_allowable_r_squared = None
+        self.min_required_r_squared = None
         self.neighbour_mode = None
 
         # Set window properties
@@ -47,7 +47,7 @@ class SelectSquareDialog:
             max_allowable_variability,
             min_track_duration,
             max_track_duration,
-            min_allowable_r_squared,
+            min_required_r_squared,
             neighbour_mode)
 
     def setup_userinterface(self):
@@ -72,7 +72,7 @@ class SelectSquareDialog:
                                                          padding=(5, 5, 5, 5))
         self.frame_min_duration = ttk.Frame(self.frame_filter, borderwidth=1, relief='groove', padding=(5, 5, 5, 5))
         self.frame_max_duration = ttk.Frame(self.frame_filter, borderwidth=1, relief='groove', padding=(5, 5, 5, 5))
-        self.frame_min_allowable_r_squared = ttk.Frame(self.frame_filter, borderwidth=1, relief='groove',
+        self.frame_min_required_r_squared = ttk.Frame(self.frame_filter, borderwidth=1, relief='groove',
                                                        padding=(5, 5, 5, 5))
         self.frame_neighbours = ttk.Frame(self.frame_filter, borderwidth=1, relief='groove', padding=(5, 5, 5, 5))
 
@@ -81,7 +81,7 @@ class SelectSquareDialog:
         self.setup_frame_max_allowable_variability()
         self.setup_min_duration()
         self.setup_max_duration()
-        self.setup_frame_min_allowable_r_squared()
+        self.setup_frame_min_required_r_squared()
         self.setup_frame_neighbours()
 
         # Place all frames in a single row for horizontal alignment
@@ -89,7 +89,7 @@ class SelectSquareDialog:
         self.frame_max_allowable_variability.grid(column=1, row=0, padx=5, pady=5, sticky=(tk.N, tk.S, tk.E, tk.W))
         self.frame_min_duration.grid(column=2, row=0, padx=5, pady=5, sticky=(tk.N, tk.S, tk.E, tk.W))
         self.frame_max_duration.grid(column=3, row=0, padx=5, pady=5, sticky=(tk.N, tk.S, tk.E, tk.W))
-        self.frame_min_allowable_r_squared.grid(column=4, row=0, padx=5, pady=5, sticky=(tk.N, tk.S, tk.E, tk.W))
+        self.frame_min_required_r_squared.grid(column=4, row=0, padx=5, pady=5, sticky=(tk.N, tk.S, tk.E, tk.W))
         self.frame_neighbours.grid(column=5, row=0, padx=5, pady=5, sticky=(tk.N, tk.S, tk.E, tk.W))
 
         # Add buttons below the sliders, spanning all columns
@@ -196,22 +196,22 @@ class SelectSquareDialog:
         self.lbl_max_track_duration_text.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W + tk.E)
         self.sc_max_track_duration.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W + tk.E)
 
-    def setup_frame_min_allowable_r_squared(self):
+    def setup_frame_min_required_r_squared(self):
         """
         Create a scale for a min r squared slider.
 
         """
-        self.min_allowable_r_squared = tk.DoubleVar(value=0.9)  # Default value
-        self.lbl_min_allowable_r_squared_text = ttk.Label(self.frame_min_allowable_r_squared, text='Min\nR Squared',
+        self.min_required_r_squared = tk.DoubleVar(value=0.9)  # Default value
+        self.lbl_min_required_r_squared_text = ttk.Label(self.frame_min_required_r_squared, text='Min Required\nR Squared',
                                                           width=10)
-        self.sc_min_allowable_r_squared = tk.Scale(
-            self.frame_min_allowable_r_squared, from_=0, to=1.0, variable=self.min_allowable_r_squared,
+        self.sc_min_required_r_squared = tk.Scale(
+            self.frame_min_required_r_squared, from_=0, to=1.0, variable=self.min_required_r_squared,
             orient='vertical', resolution=0.01)
-        self.sc_min_allowable_r_squared.bind("<ButtonRelease-1>",
-                                             lambda event: self.on_filter_changed('Min Allowable R Squared'))
+        self.sc_min_required_r_squared.bind("<ButtonRelease-1>",
+                                             lambda event: self.on_filter_changed('Min Required R Squared'))
 
-        self.lbl_min_allowable_r_squared_text.grid(column=0, row=0, padx=5, pady=5)
-        self.sc_min_allowable_r_squared.grid(column=0, row=1, padx=5, pady=5)
+        self.lbl_min_required_r_squared_text.grid(column=0, row=0, padx=5, pady=5)
+        self.sc_min_required_r_squared.grid(column=0, row=1, padx=5, pady=5)
 
     def setup_frame_neighbours(self):
         # Create a label for the neighbour mode
@@ -251,7 +251,7 @@ class SelectSquareDialog:
             self.sc_max_allowable_variability.get(),
             self.sc_min_track_duration.get(),
             self.sc_max_track_duration.get(),
-            self.sc_min_allowable_r_squared.get(),
+            self.sc_min_required_r_squared.get(),
             self.neighbour_mode.get())
 
     def on_set_for_all(self):
@@ -260,7 +260,7 @@ class SelectSquareDialog:
                       self.sc_max_allowable_variability.get(),
                       self.sc_min_track_duration.get(),
                       self.sc_max_track_duration.get(),
-                      self.min_allowable_r_squared.get(),
+                      self.min_required_r_squared.get(),
                       self.neighbour_mode.get())
         pass
 
@@ -276,7 +276,7 @@ class SelectSquareDialog:
             self.sc_max_allowable_variability.get(),
             self.sc_min_track_duration.get(),
             self.sc_max_track_duration.get(),
-            self.sc_min_allowable_r_squared.get(),
+            self.sc_min_required_r_squared.get(),
             self.neighbour_mode.get())
         self.image_viewer.set_dialog_buttons(tk.NORMAL)
         self.select_square_dialog.destroy()
@@ -291,12 +291,12 @@ class SelectSquareDialog:
             max_allowable_variability,
             min_track_duration,
             max_track_duration,
-            min_allowable_r_squared,
+            min_required_r_squared,
             neighbour_mode):
         # Set the sliders to the initial values
         self.min_required_density_ratio.set(min_required_density_ratio)
         self.max_allowable_variability.set(max_allowable_variability)
         self.min_track_duration.set(min_track_duration)
         self.max_track_duration.set(max_track_duration)
-        self.min_allowable_r_squared.set(min_allowable_r_squared)
+        self.min_required_r_squared.set(min_required_r_squared)
         self.neighbour_mode.set(neighbour_mode)

@@ -37,7 +37,7 @@ class GenerateSquaresDialog:
         """Load parameters from disk or use default values if unavailable."""
         nr_of_squares_in_row = get_paint_attribute_with_default ('Generate Squares', 'Nr of Squares in Row', 20)
         min_tracks_to_calculate_tau = get_paint_attribute_with_default ('Generate Squares', 'Min Tracks to Calculate Tau', 20)
-        min_allowable_r_squared = get_paint_attribute_with_default ('Generate Squares', 'Min Allowable R Squared', 0.9)
+        min_required_r_squared = get_paint_attribute_with_default ('Generate Squares', 'Min Required R Squared', 0.9)
         min_required_density_ratio = get_paint_attribute_with_default ('Generate Squares', 'Min Required Density Ratio', 2)
         max_allowable_variability = get_paint_attribute_with_default ('Generate Squares', 'Max Allowable Variability', 10)
 
@@ -55,7 +55,7 @@ class GenerateSquaresDialog:
 
         self.nr_of_squares_in_row = tk.IntVar(value=nr_of_squares_in_row)
         self.min_tracks_for_tau = tk.IntVar(value=min_tracks_to_calculate_tau)
-        self.min_allowable_r_squared = tk.DoubleVar(value=min_allowable_r_squared)
+        self.min_required_r_squared = tk.DoubleVar(value=min_required_r_squared)
         self.min_required_density_ratio = tk.DoubleVar(value=min_required_density_ratio)
         self.max_allowable_variability = tk.DoubleVar(value=max_allowable_variability)
 
@@ -95,14 +95,14 @@ class GenerateSquaresDialog:
         """Create parameter controls for the UI."""
         msg_nr_of_squares = "The number of squares in a row for the grid. The total number of squares will be this value squared."
         msg_min_tracks = "The minimum number of tracks required to calculate Tau. With too few tracks, curvefitting is unreliable."
-        msg_min_allowable_r_squared = "The minimum allowable R-squared value for the tracks. Tau values with lower R-squared values are discarded."
+        msg_min_required_r_squared = "The minimum required R-squared value for the tracks. Tau values with lower R-squared values are discarded."
         msg_min_required_density_ratio = "The minimum required density ratio for the tracks. Used to distinguish 'cell' squares from background"
         msg_max_allowable_variability = "The maximum allowable variability for the tracks. Used to filter out squares with high variability."
 
         params = [
             ("Nr of Squares in Row", self.nr_of_squares_in_row, 1, msg_nr_of_squares),
             ("Minimum tracks to calculate Tau", self.min_tracks_for_tau, 2, msg_min_tracks),
-            ("Min allowable R-squared", self.min_allowable_r_squared, 3, msg_min_allowable_r_squared),
+            ("Min allowable R-squared", self.min_required_r_squared, 3, msg_min_required_r_squared),
             ("Min Required Density Ratio", self.min_required_density_ratio, 4, msg_min_required_density_ratio),
             ("Max Allowable Variability", self.max_allowable_variability, 5, msg_max_allowable_variability),
         ]
@@ -185,14 +185,14 @@ class GenerateSquaresDialog:
             max_allowable_variability=self.max_allowable_variability.get(),
             min_track_duration=get_paint_attribute_with_default ('Generate Squares', 'Min Track Duration', 0),
             max_track_duration=get_paint_attribute_with_default ('Generate Squares', 'Max Track Duration', 10000),
-            min_allowable_r_squared=get_paint_attribute_with_default ('Generate Squares', 'Min Allowable R Squared', 0.9),
+            min_required_r_squared=get_paint_attribute_with_default ('Generate Squares', 'Min Required R Squared', 0.9),
             neighbour_mode=get_paint_attribute_with_default ('Generate Squares', 'Neighbour Mode', 'Free')
         )
         generate_function(
             self.paint_directory,
             select_parameters=select_parameters,
             nr_of_squares_in_row=self.nr_of_squares_in_row.get(),
-            min_allowable_r_squared=self.min_allowable_r_squared.get(),
+            min_required_r_squared=self.min_required_r_squared.get(),
             min_tracks_for_tau=self.min_tracks_for_tau.get(),
             paint_force=True
         )
@@ -204,7 +204,7 @@ class GenerateSquaresDialog:
     def save_parameters(self):
         update_paint_attribute('Generate Squares', 'Nr of Squares in Row', self.nr_of_squares_in_row.get())
         update_paint_attribute('Generate Squares', 'Min Tracks to Calculate Tau', self.min_tracks_for_tau.get())
-        update_paint_attribute('Generate Squares', 'Min Allowable R Squared', self.min_allowable_r_squared.get())
+        update_paint_attribute('Generate Squares', 'Min Required R Squared', self.min_required_r_squared.get())
         update_paint_attribute('Generate Squares', 'Min Required Density Ratio', self.min_required_density_ratio.get())
         update_paint_attribute('Generate Squares', 'Max Allowable Variability', self.max_allowable_variability.get())
 

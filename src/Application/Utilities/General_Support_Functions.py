@@ -60,7 +60,7 @@ def correct_all_recordings_column_types(file_path):
         df_experiment['Experiment Date'] = df_experiment['Experiment Date'].astype(str)
         df_experiment['Threshold'] = df_experiment['Threshold'].astype(int)
         df_experiment['Min Tracks for Tau'] = df_experiment['Min Tracks for Tau'].astype(int)
-        df_experiment['Min Allowable R Squared'] = df_experiment['Min Allowable R Squared'].astype(float)
+        df_experiment['Min Required R Squared'] = df_experiment['Min Required R Squared'].astype(float)
         df_experiment['Nr of Squares in Row'] = df_experiment['Nr of Squares in Row'].astype(int)
         df_experiment.to_csv(file_path, index=False)
     except (ValueError, TypeError):
