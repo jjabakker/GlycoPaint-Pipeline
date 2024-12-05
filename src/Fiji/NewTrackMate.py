@@ -310,4 +310,5 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     tracks = model.getTrackModel().nTracks(False)  # Get all tracks
     filtered_tracks = model.getTrackModel().nTracks(True)  # Get filtered tracks
 
-    return nr_spots, tracks, filtered_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance, nr_spots_in_all_tracks
+    return (nr_spots, tracks, filtered_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance,
+            nr_spots_in_all_tracks, do_median_filtering)

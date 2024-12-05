@@ -89,7 +89,8 @@ def run_trackmate(experiment_directory, recording_source_directory):
             # Initialise the All Recordings file with the column headers
             col_names = csv_reader.fieldnames
             new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp',
-                           'Nr Spots in All Tracks', 'Max Frame Gap', 'Gap Closing Max Distance', 'Linking Max Distance']
+                           'Max Frame Gap', 'Gap Closing Max Distance', 'Linking Max Distance', 'Median Filtering',
+                           'Nr Spots in All Tracks', ]
             col_names += [col for col in new_columns if col not in col_names]
 
             # And create the header row
@@ -109,7 +110,8 @@ def run_trackmate(experiment_directory, recording_source_directory):
                     file_count += 1
 
                     recording_process_time = time.time()
-                    status, row = process_recording_trackmate(row, recording_source_directory, experiment_directory, file_count==1)
+                    status, row = process_recording_trackmate(row, recording_source_directory,
+                                                              experiment_directory, file_count==1)
                     paint_logger.info("Processed file nr " + str(file_count).rjust(2) + " of " + str(nr_to_process).rjust(2) + ": " +
                                       row['Recording Name'] + " in " +
                                       format_time_nicely(time.time() - recording_process_time))
@@ -217,8 +219,9 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         tracks_file_path = os.path.join(experiment_directory, ext_recording_name + '-tracks.csv')
         recording_file_path = os.path.join(experiment_directory, 'TrackMate Images', ext_recording_name + '.jpg')
 
-        nr_spots, total_tracks, long_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance, nr_spots_in_all_tracks  = execute_trackmate_in_Fiji(
-            ext_recording_name, threshold, tracks_file_path, recording_file_path, first, False, )
+        (nr_spots, total_tracks, long_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance,
+         nr_spots_in_all_tracks, do_median_filtering)  = execute_trackmate_in_Fiji(
+            ext_recording_name, threshold, tracks_file_path, recording_file_path, first, False )
 
         # IJ.run("Set Scale...", "distance=6.2373 known=1 unit=micron")
         # IJ.run("Scale Bar...", "width=10 height=5 thickness=3 bold overlay")
@@ -242,6 +245,7 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         row['Max Frame Gap'] = max_frame_gap
         row['Linking Max Distance'] = linking_max_distance
         row['Gap Closing Max Distance'] = gap_closing_max_distance
+        row['Median Filtering'] = do_median_filtering
         row['Nr Spots in All Tracks'] = nr_spots_in_all_tracks
 
     return status, row
