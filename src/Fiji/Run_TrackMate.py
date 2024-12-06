@@ -7,8 +7,8 @@ import time
 from java.awt import GridLayout, Dimension, FlowLayout
 from java.io import File
 from javax.swing import JFrame, JPanel, JButton, JTextField, JFileChooser, JOptionPane, BorderFactory
+from javax.swing.filechooser import FileFilter
 from java.lang.System import getProperty
-
 paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
 sys.path.append(paint_dir)
 
@@ -320,13 +320,21 @@ def create_gui():
     # Action to open JFileChooser for directory 1
     def browse_action1(event):
         chooser = JFileChooser()
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
-        chooser.setCurrentDirectory(File(images_dir))
-        chooser.rescanCurrentDirectory()  # Ensures the directory tree is refreshed
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)  # Restrict to directories
+        chooser.setCurrentDirectory(File(images_dir))  # Set initial directory
+
+        # Disable file filters completely
+        chooser.setAcceptAllFileFilterUsed(False)
+        chooser.setFileFilter(None)  # Remove the "File of Type" label
+
         result = chooser.showOpenDialog(frame)
+
         if result == JFileChooser.APPROVE_OPTION:
-            selected_dir = chooser.getSelectedFile().getAbsolutePath()
-            textField1.setText(selected_dir)
+            selected_file = chooser.getSelectedFile()
+            if selected_file and selected_file.isDirectory():
+                textField1.setText(selected_file.getAbsolutePath())
+            else:
+                textField1.setText("")  # Clear text field if invalid
 
     browseButton1.addActionListener(browse_action1)
     panel1.add(browseButton1)
@@ -343,13 +351,21 @@ def create_gui():
     # Action to open JFileChooser for directory 2
     def browse_action2(event):
         chooser = JFileChooser()
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
-        chooser.setCurrentDirectory(File(experiment_dir))
-        chooser.rescanCurrentDirectory()  # Ensures the directory tree is refreshed
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)  # Restrict to directories
+        chooser.setCurrentDirectory(File(experiment_dir))  # Set initial directory
+
+        # Completely disable file filters and remove "File of Type" label
+        chooser.setAcceptAllFileFilterUsed(False)  # Disable default "All Files" filter
+        chooser.setFileFilter(None)  # Remove custom or default filters
+
         result = chooser.showOpenDialog(frame)
+
         if result == JFileChooser.APPROVE_OPTION:
-            selected_dir = chooser.getSelectedFile().getAbsolutePath()
-            textField2.setText(selected_dir)
+            selected_file = chooser.getSelectedFile()
+            if selected_file and selected_file.isDirectory():
+                textField2.setText(selected_file.getAbsolutePath())
+            else:
+                textField2.setText("")  # Clear text field if invalid
 
     browseButton2.addActionListener(browse_action2)
     panel2.add(browseButton2)
