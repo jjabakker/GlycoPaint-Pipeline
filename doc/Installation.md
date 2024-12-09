@@ -1,3 +1,9 @@
+---
+header-includes:
+   - \usepackage{fontspec}
+   - \setmainfont{Arial}
+--- 
+
 
 # Installing the Pipeline
 
@@ -32,10 +38,7 @@ You will have to set up a Pyhon interpreter in PyCharm and install the following
 
 The resulting environment, displayed below, should be able to run the pipeline.
 
-<figure style="text-align: center;">
-  <img src="Images/pycharm_environment.png" width="700" >
-</figure>
-
+![](./Images/pycharm_environment.png)
 
 ### Installing the Trackmate plugin
 
@@ -43,9 +46,7 @@ Fiji has been installed in an earlier step, and per default the TrackMate plugin
 
 Running the utility will create the paint.json file in the ~/Paint/Defaults directory if it does not already exist. The utility will then try to establish the path of the Fiji app and copy the necessary files to the plugin directory. If the Fiji path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
 
-<figure style="text-align: center;">
-  <img src="Images/install_glycopaint.png" width="400" >
-</figure>
+![](./Images/install_glycopaint.png)
 
 ### R Studio
 The pipeline also uses R for the data analysis. R Studio can be downloaded from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/). You may have to install R also - instructions to do that are on the site. Examples of R scripts are available from the GitHub repository
@@ -54,6 +55,4 @@ The pipeline also uses R for the data analysis. R Studio can be downloaded from 
 
 With Pycharm installed, the environment set up, and the code cloned from the repository, you are ready to run the pipeline. There is a collection of scripts and support files, but for just tunning thr piepline a smnall number if scripts are needed. They are found in the src directory under Applications
 
-<figure style="text-align: center;">
-  <img src="Images/python_scripts.png" width="500" >
-</figure>
+![](Images/python_scripts.png)

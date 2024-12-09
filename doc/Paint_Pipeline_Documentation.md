@@ -1,16 +1,15 @@
-  <div style="text-align: center;"> 
-<span style="font-size: 72px;">GlycoPaint Pipeline</span>
+---
+header-includes:
+   - \usepackage{fontspec}
+   - \setmainfont{Arial}
+--- 
 
-<span style="font-size: 36px;">Functional description</span>
-
+<div style="text-align: center;"> 
+  <span style="font-size: 72px;">GlycoPaint Pipeline</span><br>
+  <span style="font-size: 36px;">Functional description</span>
 </div>
 
-
-
-<figure style="text-align: center;">
-  <img src="Images/paint_logo.png" alt="Image Description" width="500">
-</figure>
-
+![](./Images/paint_logo.png)
 
 <br>
 <br>
@@ -75,10 +74,8 @@ For recordings metadata needs to be provided for the Paint pipeline to work. On 
 
 ## Overview
 
-<figure style="text-align: center;">
-  <img src="Images/process_flow.png" alt="Paint Process" width="300">
 
-</figure>
+![](./Images/process_flow.png)
 
 The GlycoPaint process starts with a **microscopy experiment**, in which binding events are observed under a fluorescent microscope. Such an experiment leads to a set of recordings,
 each consisting of a bright field image and a multi-frame image.
@@ -102,28 +99,19 @@ The steps will be described in detail in coming sections, using demo data that c
 
 The metadata of the experiment is information about the conditions under which each recording is made and recorded in an 'Experiment Info' file. The Paint processing pipeline contains a 'Prepare Experiments Info' utility to prepare this file. The user provides two parameters: the directory that contains the recordings and the location of the Paint Experiment directory where the Experiment Info file (and all subsequent data) will be written.
 
-<figure style="text-align: center;">
-  <img src="Images/prepare_experiments_info_dialog.png"  width="500">
-</figure>
+![](./Images/prepare_experiments_info_dialog.png)
 
 After this has been done for both demo experiments, two directories have been created each with an 'Experiment Info' file.
 
-<figure style="text-align: center;">
-  <img src="Images/demo_after_prepare_experiment.png"  width="350">
-</figure>
+![](./Images/demo_after_prepare_experiment.png)
 
 If the Paint file naming convention is used, columns such as Experiment Date, Experiment Name, Condition Nr and Replicate Nr will be filled in automatically, if not the user has to provide this information manually.
 
-<figure style="text-align: center;">
-  <img src="Images/empty_experiments_info.png"  width="800">
-</figure>
+![](./Images/empty_experiments_info.png)
 
 An example of a fully specified Experiment Info file, with values for Probe, Probe Type, Cell Type, Adjuvant and Concentration provided is shown below. The Threshold parameter is necessary for TrackMate processing (refer to next section). The 'Process' flag indicates whether a recording is processed or ignored.
 
-<figure style="text-align: center;">
-  <img src="Images/experiments_info_with_metadata.png"  width="800">
-</figure>
-
+![](./Images/experiments_info_with_metadata.png)
 
 ## Run TrackMate
 
@@ -133,42 +121,29 @@ The Experiment Info 'Threshold' parameter determines the spot detection sensitiv
 
 The 'Run TrackMate' procedure is started from Fiji by selecting the GlycoPaint section from thr top level menu and from there 'Run TrackMate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
 
-<figure style="text-align: center;">
-  <img src="Images/run_trackmate_dialog.png"  width="500">
-</figure>
+![](./Images/run_trackmate_dialog.png)
 
 Upon successful processing, the system generates for each recording an image. A representative example of an image is shown below.
 
-<figure style="text-align: center;">
-  <img src="Images/sample_recording.png"  width="500">
-</figure>
+![](./Images/sample_recording.png)
 
 For the set of recordings in the experiment, the system generates one 'All Tracks' and one 'All Recordings' file with attributes such as Nr Spots, Nr Tracks, Run Time and a Time Stamp. The 'All Tracks' file contains, for every track, the average x and y position, and the number of spots and track duration. In addition, the diffusion coefficient (a measure of the displacement from the origin) has been calculated. An example of aan All Tracks file is shown below.
 
-<figure style="text-align: center;">
-  <img src="Images/experiments_info_after_generate_squares.png"  width="800">
-</figure>
+![](./Images/experiments_info_after_generate_squares.png)
 
 The Project directory contents just after TrackMate has been run for both the 240104 and 241116 experiment is shown below.
 
-<figure style="text-align: center;">
-  <img src="Images/demo_project_after_trackmate.png"  width="350">
-</figure>
+![](./Images/demo_project_after_trackmate.png)
 
 In the GlycoPaint menu a second option is listed: 'Run TrackMate Batch'. This option allows a number of projects to be processed without user intervention. In this option, a batch file needs to be provided, which is a csv file with 4 columns, specifing the Project directories, the Image Source, the Experiment and a Process flag indicating if the experiment needs to be processed or not. An example is shown below.
 
-<figure style="text-align: center;">
-  <img src="Images/batchfile_format.png"  width="700">
-</figure>
-
+![](./Images/batchfile_format.png)
 
 ## Generate Squares
 
 With the tracks for the experiment available in the 'All Tracks' file, the recordings in the Experiment folder (or for all experiments in a Project folder) are analysed by superimposing a grid over the image and determining the characteristics of each square. The user interface to invoke this function is shown below.
 
-<figure style="text-align: center;">
-  <img src="Images/generate_squares.png"  width="700">
-</figure>
+![](./Images/generate_squares.png)
 
 The Number of Squares in a Row (and Column) determines the size of the squares in the grid (typical values are 20 or 30). The number of tracks is then determined for each square. The 10% least dense squares determine a 'background' density. All square densities are compared to this background density. If the density ratio exceeds the 'Minimum Required Density Ratio', squares are interpreted to be sufficiently distinct from the background to be of interest, otherwise they are ignored. The homogeneity of squares is also determined and, if requested, the lack of homogeneity, i.e., the variability, can be limited, excluding squares with too much variability.
 
@@ -182,50 +157,38 @@ For all squares in each recording, several attributes are calculated:
 - The duration of the longest track
 - The average duration of the longest 10 tracks
 - The total track duration
-- The Tau (provided that the squares meet the selection criteria
+- The Tau (provided that the squares meet the selection criteria)
 - The R<sup>2</sup> indicating the quality of the Tau curve fitting
 
 With the 'Generate Squares' function run, the directory structure is shown below (with now additional the All Squares files.).
 
-<figure style="text-align: center;">
-  <img src="Images/demo_project_after_generate_squares.png"  width="350">
-</figure>
+![](./Images/demo_project_after_generate_squares.png)
 
 ## Compile Project
 
 Typically, data to be analysed comes from more than one experiment. With the Compile project option, the data from the experiments in the project are compiled and an 'All Recordings', 'All Squares' and 'All Tracks' file on project level is generated.
 
-<figure style="text-align: center;">
-  <img src="Images/compile_project_dialog.png"  width="700">
-</figure>
+![](./Images/compile_project_dialog.png)
 
-<figure style="text-align: center;">
-  <img src="Images/demo_project_after_compile.png"  width="350">
-</figure>
+![](./Images/demo_project_after_compile.png)
 
 ## Visual Inspection
 
 Once the squares are generated, the results can be reviewed in the Image Viewer. A straightforward dialogue enables the selection of the Project or Experiment directory.
 
-<figure style="text-align: center;">
-  <img src="Images/select_viewer_dialog.png"  width="700">
-</figure>
+![](./Images/select_viewer_dialog.png)
 
 The Viewer dialogue appears, showing on the left the image with tracks and squares, and on the right the corresponding bright field image. Through scroll buttons at the bottom (or the combo box immediately under the 'Squares' window), different recordings can be selected.
 
 Metadata of the recording in view is displayed below the Squares image. To better view the underlying cells and tracks, keyboard options allow toggling between showing squares or not (key 'ts') or showing numbers or not (key 'n').
 
-<figure style="text-align: center;">
-  <img src="Images/recording_viewer.png"  width="900">
-</figure>
+![](./Images/recording_viewer.png)
 
 ### Select Recordings
 
 The 'Select Recordings' dialogue allows users to narrow down the recordings being viewed. In the example provided, recordings are available for two Cell Types and three Probes. If the user is only interested in BMDC recordings, they can select 'BMDC,' then click 'Filter' followed by 'Apply All Filters' to display only the relevant recordings. The'Reset' buttons undo a previoulsy made selection. 'Reset All' undoes all selections previously made.
 
-<figure style="text-align: center;">
-  <img src="Images/select_recordings.png"  width="900">
-</figure>
+![](./Images/select_recordings.png)
 
 ### Select Squares
 
@@ -235,9 +198,7 @@ The 'Neighbour' mode defines limitations in the spatial distribution of squares.
 
 The Recording Viewer dialogue has three options 'Always Save', 'Never Save' and 'Ask to Save' that determine if the changes are saved or not when the user closes the Recording Viewer.
 
-<figure style="text-align: center;">
-  <img src="Images/select_squares_dialog.png"  width="900">
-</figure>
+![](./Images/select_squares_dialog.png)
 
 ### Define Cells
 
@@ -245,9 +206,7 @@ In the Define Cells dialogue it is possible to assign squares to cells. The user
 
 Any changes made will be saved when the user exits the Recording Viewer, depending on the selected save options.
 
-<figure style="text-align: center;">
-  <img src="Images/define_cells_dialog.png"  width="900">
-</figure>
+![](./Images/define_cells_dialog.png)
 
 ### Show Heatmap
 
@@ -255,9 +214,7 @@ The Heatmap dialogue allows properties of squares to be viewed relative to each 
 
 Whilst the Heatmap dialogue is displayed, the user can scroll through images.
 
-<figure style="text-align: center;">
-  <img src="Images/heatmap_dialog.png"  width="800">
-</figure>
+![](./Images/heatmap_dialog.png)
 
 
 ### Special keybindings
@@ -317,7 +274,7 @@ Holding information on an experiment. Two versions of All Recordings are shown. 
 
 |    | All Squares                 |
 |----|:----------------------------|
-| 1  | Unique Key                  | 
+| 1  | Unique Key                  |
 | 2  | Recording Sequence Nr       |
 | 3  | Ext Recording Name          |
 | 4  | Experiment Name             |
@@ -378,17 +335,13 @@ All tracks in that square are included in the Tau calculation, but the calculati
 
 To calculate one Tau for the whole Recording, all tracks within squares that meet the specified selection criteria - such as the minimum required density ratio, maximum allowable variability, minimum and maximum track durations, and neighbour state - are considered.
 
-<figure style="text-align: center;">
-  <img src="Images/curve_fitting.png" width="500">
-</figure>
+![](./Images/curve_fitting.png)
 
 ## Variability
 
 The variability of a square calculation starts with overlaying a grid over the square (i.e., a finer grid over the already exisitng grid) and determining the number of tracks in each grid element. The variability is then calculated as the quotient of the standard deviation and the mean of the grid track numbers. In the figure below the variability for four fictional squares is shown.
 
-<figure style="text-align: center;">
-  <img src="Images/variability.png" width="1200">
-</figure>  
+![](./Images/variability.png)  
 
 ## Square Density
 
@@ -396,7 +349,7 @@ The Square Density is normalised to duration and concentration and is calculated
 
 $$Square\ Density = \frac{Track\ Count}{Area * Duration * Concentration}$$
 
-The area of a square is calculated with the following data: 0.1602804 µm per pixel, 512 pixels in a row (or column).
+The area of a square is calculated with the following data: 0.1602804 micrometer per pixel, 512 pixels in a row (or column).
 
 $$Square\ Area = \left(\frac{0.1602804*512}{Nr\ of\ Squares\ in\ Row} \right)^{2}$$
 
@@ -416,17 +369,15 @@ $$Diffusion\ Coefficient = \frac{MSD}{(2\ *n*t)}$$
 
 The operation of the Paint Pipeline can be tuned with parameters that are kept in 'Paint.json' file.
 
-<figure style="text-align: center;">
-  <img src="Images/paint_json.png" width="500">
-</figure>
+![](./Images/paint_json.png)
 
 
 ## Paint
 
 Two parameters are of interest:
-- Image File Extension: Specifies the extension nof the images gebereatd by the microscope. For example, for Nikon it is '.nb2'. Generally speaking, any tiff compatible format is suitable. 
+- Image File Extension: Specifies the extension of the images generated by the microscope. For example, for Nikon it is '.nb2'. Generally speaking, any tiff-compatible format is suitable. 
 
-- Fiji Path: Under normal circumstances, this does not have to be specified,as the software will detect the location of Fiji itself.  
+- Fiji Path: Under normal circumstances, this does not have to be specified, as the software will detect the location of Fiji itself.  
 
 
 ## User Directories
@@ -445,17 +396,17 @@ In this section, parameters are stored that are used by the Generate Squares app
 
 ## TrackMate
 
-In this section parameters are stored that are used by TrackMate. The [TrackMate documentation pages](https://imagej.net/software/fiji/) contain much useful information on TrackMate.
+In this section, parameters are stored that are used by TrackMate. The [TrackMate documentation pages](https://imagej.net/software/fiji/) contain much useful information on TrackMate.
 
-In this section, TrackMate parameters that are important in GlycoPaint are explained. 
-Not parameterised, but important choices for TrackMate, are the 'LoG detector' model for spot detection and the 'Simple LAP tracker' model for tracking.
+In this section, TrackMate parameters that are important in GlycoPaint are explained.
+Not parameterised, but important choices for TrackMate are the 'LoG detector' model for spot detection and the 'Simple LAP tracker' model for tracking.
 
 
 ### Spot Detection
 
 The RADIUS parameter is used during the spot detection phase to specify the size of the spots being tracked. It determines the radius of the detection filter applied to identify objects in the dataset.
 
-The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 μm was found to give good results.
+The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 micrometerm was found to give good results.
 
 If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint, positional accuracy is not important and the value of the parameter is set to False to avoid unncessarily increasing processing time.
 
@@ -467,9 +418,9 @@ The TARGET_CHANNEL parameter specifies which image channel is used for spot dete
 
 TrackMate constructs tracks from spots in subsequent frames. The LINKING_MAX_DISTANCE parameter plays a role in the linking phase of tracking. It sets the maximum spatial distance within which two spots in consecutive frames can be linked as part of the same trajectory. If the distance is exceeded, then the two different tracks are assumed.
 
-If we expect that a lectin cano move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 μm (which is equal to the expected radius of the spots).
+If we expect that a lectin cano move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 micrometerm (which is equal to the expected radius of the spots).
 
-In the case that there are multiple spot candidates for loinking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter the recommendedc value of 1.05 is used.
+In the case that there are multiple spot candidates for linking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter the recommendedc value of 1.05 is used.
 
 ### Gap Closing
 
@@ -481,7 +432,7 @@ If ALLOW_GAP_CLOSING parameter is set to True, TrackMate will consider if gaps i
 
 If we expect that a lectin can release a glycan and immeditialy bind another, a low value of  MAX_FRAME_GAP is required. 
 
-Proposed value for MAX_FRAME_GAP is 1 frame and for GAP_CLOSING_MAX_DISTANCE 0.5 μm (which is equal to the expected radius of the spots). 
+The suggested value for MAX_FRAME_GAP is 1 frame and for GAP_CLOSING_MAX_DISTANCE 0.5 micrometerm (which is equal to the expected radius of the spots).
 
 ### Track Splitting
 Gap splitting concerns the ability for a track to split into two or more tracks during tracking. This commonly used in scenarios like Cell division: when a single cell divides into two daughter cells and branching motion (when a particle splits into multiple trajectories). For the GlycoPaint application this is not relevant and ALLOW_TRACK_SPLITTING is set to False.
@@ -506,7 +457,7 @@ The Paint pipeline creates a 'Paint' directory in the user's home directory, wit
 
 # Structure of Generate Squares
 
-The core of the data processing takes place in Generate Squares. To facilitate stuyding the cose, some high level pseudo code is presented hers.
+The core of the data processing takes place in Generate Squares. To facilitate stuyding the cose, some high level pseudo-code is presented hers.
 
 **Generate Squares manin structure**
 
@@ -522,7 +473,7 @@ The core of the data processing takes place in Generate Squares. To facilitate s
     1. Start project processing and log the project path.
     2. List and sort all experiment directories.
     3. For each directory:
-      - Skip if it is not an experiment directory (e.g. if it is an 'Output' directory.
+      - Skip if it is not an experiment directory (e.g. if it is an 'Output' directory).
       - Skip if already processed, unless forced by a paint_force flag.
       - Call process_experiment for each unprocessed experiments.
     4. Return the number of experiments processed.

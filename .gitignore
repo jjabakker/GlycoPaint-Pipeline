@@ -11,6 +11,8 @@ src/Demo/
 *.jar
 .venv/
 ../.venv/
+*.pdf
+
 
 
 
