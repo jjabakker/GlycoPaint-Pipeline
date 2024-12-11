@@ -302,4 +302,5 @@ def relabel_tracks(df_squares, df_tracks):
     df_tracks['Label Nr'] = df_tracks['Label Nr_from_squares']  # Use the merged Label Nr
     df_tracks.drop(columns=['Label Nr_from_squares'], inplace=True)  # Remove the extra column
     df_tracks.set_index('Unique Key', inplace=True, drop=True)
+    df_squares.set_index('Unique Key', inplace=True, drop=True)
     return df_squares, df_tracks
