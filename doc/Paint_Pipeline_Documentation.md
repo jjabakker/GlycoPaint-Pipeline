@@ -418,7 +418,7 @@ The TARGET_CHANNEL parameter specifies which image channel is used for spot dete
 
 TrackMate constructs tracks from spots in subsequent frames. The LINKING_MAX_DISTANCE parameter plays a role in the linking phase of tracking. It sets the maximum spatial distance within which two spots in consecutive frames can be linked as part of the same trajectory. If the distance is exceeded, then the two different tracks are assumed.
 
-If we expect that a lectin cano move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 micrometerm (which is equal to the expected radius of the spots).
+If we expect that a lectin cannot move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 micrometerm (which is equal to the expected radius of the spots).
 
 In the case that there are multiple spot candidates for linking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter the recommendedc value of 1.05 is used.
 
