@@ -1,5 +1,8 @@
+import numpy as np
+
+
 # -------------------------------------------------------------------------------------------------------------
-# There are two ways to run the select squares files, either by calling  select_squares_with_parameters or by calling
+# There are two ways to run the select squares files, either by calling select_squares_with_parameters or by calling
 # select_squares.
 #
 # Both functions call select_squares_actual which is the main function that selects squares based on defined conditions
@@ -227,22 +230,16 @@ def get_relaxed_neighbours(row, col, nr_of_squares_in_row):
 def label_selected_squares(df_squares):
     """
     Assigns label numbers to selected squares in descending order of 'Nr Tracks'.
+    This function changes only df_squares (df_tracks still needs to be aligned
     """
 
     # Sort by 'Nr Tracks' in descending order
     df_squares.sort_values(by=['Nr Tracks'], inplace=True, ascending=False)
     df_squares.set_index('Square Nr', inplace=True, drop=False)
 
-    # Initialize label number
-    label_nr = 1
-
-    # Iterate through rows and label selected ones
-    for idx, row in df_squares.iterrows():
-        if row['Selected']:
-            df_squares.at[idx, 'Label Nr'] = label_nr
-            label_nr += 1
-        else:
-            df_squares.at[idx, 'Label Nr'] = None  # Clear label for unselected rows
+    df_squares['Label Nr'] = np.nan  # Initialize the column
+    selected_indices = df_squares.loc[df_squares['Selected']].index
+    df_squares.loc[selected_indices, 'Label Nr'] = range(1, len(selected_indices) + 1)
 
     # Restore original order
     df_squares.sort_index(inplace=True)
@@ -256,33 +253,8 @@ def label_selected_squares_and_tracks(df_squares, df_tracks):
     Optimized for performance using vectorized operations.
     """
 
-    # Step 1: Sort by 'Nr Tracks' in descending order             #ToDO Do we handle indices correctly??
-    df_squares.set_index('Square Nr', drop=False, inplace=True)
-    df_squares = df_squares.sort_values(by='Nr Tracks', ascending=False).copy()
-
-    # Step 2: Generate labels for selected squares
-    df_squares['Label Nr'] = None  # Initialize the column
-    selected_indices = df_squares.loc[df_squares['Selected']].index
-    df_squares.loc[selected_indices, 'Label Nr'] = range(1, len(selected_indices) + 1)
-
-    # Step 3: Restore the original order
-    df_squares = df_squares.sort_index()
-
-    # Step 4: Propagate labels to df_tracks
-    # Merge the Label Nr column with df_tracks using 'Square Nr' and 'Ext Recording Name' as keys
-    df_squares.reset_index(drop=True, inplace=True)
-    df_tracks = df_tracks.merge(
-        df_squares[['Square Nr', 'Ext Recording Name', 'Label Nr']],
-        on=['Square Nr', 'Ext Recording Name'],
-        how='left',
-        suffixes=('', '_from_squares')  # Avoid '_x' and '_y', rename the merged Label Nr
-    )
-    df_tracks['Label Nr'] = df_tracks['Label Nr_from_squares']  # Use the merged Label Nr
-    df_tracks.drop(columns=['Label Nr_from_squares'], inplace=True)  # Remove the extra column
-
-    # Step 5: Clean up any unselected rows in df_tracks
-    # df_tracks['Label Nr'] = df_tracks['Label Nr'].fillna(0).astype(int)
-
+    label_selected_squares(df_squares)
+    relabel_tracks(df_squares, df_tracks)
     return df_squares, df_tracks
 
 

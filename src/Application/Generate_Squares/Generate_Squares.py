@@ -301,6 +301,7 @@ def process_recording(
         select_parameters=select_parameters,
         nr_of_squares_in_row=nr_of_squares_in_row,
         only_valid_tau=True)
+    df_squares_of_recording = create_unique_key_for_squares(df_squares_of_recording)
     df_squares_of_recording, df_tracks_of_recording = label_selected_squares_and_tracks(df_squares_of_recording,
                                                                                         df_tracks_of_recording)
 
