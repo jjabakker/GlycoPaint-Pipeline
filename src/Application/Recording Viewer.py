@@ -37,7 +37,7 @@ from src.Application.Recording_Viewer.Recording_Viewer_Support_Functions import 
     save_as_png)
 from src.Application.Recording_Viewer.Select_Squares import (
     relabel_tracks,
-    select_squares)
+    select_squares, label_selected_squares)
 from src.Application.Utilities.General_Support_Functions import (
     read_squares_from_file,
     set_application_icon)
@@ -959,14 +959,13 @@ class RecordingViewer:
             if self.img_no != 0:
                 self.img_no -= 1
 
-        # Set the name of the new image
-        self.image_name = self.list_images[self.img_no]['Left Image Name']
-
         # Save and update the Squares info
         if self.recording_changed:
             self.save_changes_on_recording_change(self)
             self.save_on_exit = True
             self.recording_changed = False
+
+        self.image_name = self.list_images[self.img_no]['Left Image Name']
         self.df_squares = self.df_all_squares[self.df_all_squares['Ext Recording Name'] == self.image_name]
 
         # Set the correct state of Forward and back buttons
@@ -1060,13 +1059,24 @@ class RecordingViewer:
 
         # Save the changes in All Squares
         self.df_squares.set_index('Unique Key', inplace=True, drop=False)
-        self.df_all_squares.update(self.df_squares)
 
         # Update the labels in All Tracks
         df_recording_squares = self.df_squares
         df_recording_tracks = self.df_all_tracks[self.df_all_tracks['Ext Recording Name'] == self.image_name]
+
+        label_selected_squares(df_recording_squares)
+
         dfs, dft = relabel_tracks(df_recording_squares, df_recording_tracks)
-        self.df_all_tracks.update(dft)
+
+        # self.df_all_tracks.update(dft, overwrite=True)
+        # self.df_all_squares.update(dfs, overwrite=True)
+
+        self.df_all_tracks.loc[dft.index, 'Label Nr'] = dft['Label Nr']
+        self.df_all_tracks.loc[dft.index, 'Square Nr'] = dft['Square Nr']
+
+        self.df_all_squares.loc[dfs.index, 'Label Nr'] = dfs['Label Nr']
+        self.df_all_squares.loc[dfs.index, 'Square Nr'] = dfs['Square Nr']
+        self.df_all_squares.loc[dfs.index, 'Selected'] = dfs['Selected']
 
     def save_changes_on_exit(self, save_experiment=True, save_squares=True):
 
