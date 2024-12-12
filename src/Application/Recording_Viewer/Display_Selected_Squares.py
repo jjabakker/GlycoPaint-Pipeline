@@ -91,6 +91,7 @@ def draw_single_square(
     row_nr = square_nr // nr_of_squares_in_row
     width = 512 / nr_of_squares_in_row
     height = 512 / nr_of_squares_in_row
+    tau = squares_row['Tau']
 
     square_tag = f'square-{square_nr}'
     text_tag = f'text-{square_nr}'
@@ -112,7 +113,7 @@ def draw_single_square(
 
         # Show the cell number in the square
         if show_squares_numbers:
-            if not pd.isna(squares_row['Label Nr']):
+            if not pd.isna(squares_row['Label Nr']) and squares_row['Tau'] >= 0:
                 canvas.create_text(
                     col_nr * width + 0.5 * width,
                     row_nr * width + 0.5 * width,
@@ -122,7 +123,7 @@ def draw_single_square(
                     tags=text_tag
                 )
 
-    if label_nr == 0:  # The square is selected but does not have a valid Tau: give it a colour
+    if tau < 0:  # The square is selected but does not have a valid Tau: give it a colour
         col = colour_table[squares_row['Square Nr'] % 6 + 1][0]
         canvas.create_rectangle(
             col_nr * width,
@@ -150,7 +151,7 @@ def draw_single_square(
             # The number of a square assigned to a cell should not be overwritten
             pass
         else:
-            if not pd.isna(squares_row['Label Nr']):
+            if not pd.isna(squares_row['Label Nr']) and squares_row['Tau'] >= 0:
                 canvas.create_text(
                     col_nr * width + 0.5 * width,
                     row_nr * width + 0.5 * width,

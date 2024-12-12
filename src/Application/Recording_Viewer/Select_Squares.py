@@ -238,7 +238,7 @@ def label_selected_squares(df_squares):
     df_squares.set_index('Square Nr', inplace=True, drop=False)
 
     df_squares['Label Nr'] = np.nan  # Initialize the column
-    selected_indices = df_squares.loc[df_squares['Selected']].index
+    selected_indices = df_squares.loc[(df_squares['Selected']) & (df_squares['Tau'] >= 0)].index
     df_squares.loc[selected_indices, 'Label Nr'] = range(1, len(selected_indices) + 1)
 
     # Restore original order
