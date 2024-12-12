@@ -887,7 +887,7 @@ class RecordingViewer:
             ("Density Ratio", squares_row['Density Ratio']),
             ("Variability", squares_row['Variability']),
             ("Max Track Duration", squares_row['Max Track Duration']),
-            ("Mean Diffusion Coefficient", int(squares_row['Diffusion Coefficient']))
+            ("Mean Diffusion Coefficient", round(squares_row['Diffusion Coefficient'],4))
         ]
 
         # Fill the popup with labels using a loop

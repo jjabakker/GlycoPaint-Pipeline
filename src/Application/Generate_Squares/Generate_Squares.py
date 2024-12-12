@@ -427,7 +427,7 @@ def process_square(
         'Density Ratio': 0.0,
         'Tau': round(tau, 0),
         'R Squared': round(r_squared, 2),
-        'Diffusion Coefficient': round(dc_mean, 0),
+        'Diffusion Coefficient': dc_mean,
         'Average Long Track Duration': round(average_long_track, 1),
         'Max Track Duration': round(max_track_duration, 1),
         'Total Track Duration': round(total_track_duration, 1),
