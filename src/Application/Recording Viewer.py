@@ -26,8 +26,7 @@ from src.Application.Recording_Viewer.Class_Heatmap_Dialog import HeatMapDialog
 from src.Application.Recording_Viewer.Class_Select_Recording_Dialog import SelectRecordingDialog
 from src.Application.Recording_Viewer.Class_Select_Square_Dialog import SelectSquareDialog
 from src.Application.Recording_Viewer.Class_Select_Viewer_Data_Dialog import SelectViewerDataDialog
-from src.Application.Recording_Viewer.Display_Selected_Squares import (
-    display_selected_squares)
+from src.Application.Recording_Viewer.Display_Selected_Squares import display_selected_squares
 from src.Application.Recording_Viewer.Get_Images import get_images
 from src.Application.Recording_Viewer.Heatmap_Support import (
     get_colormap_colors, get_color_index,
@@ -359,6 +358,9 @@ class RecordingViewer:
         self.initialise_image_display()
         self.img_no = -1
         self.on_forward_backward('FORWARD')
+
+        # Set the focus to the left image canvas
+        self.left_image_canvas.focus_set()
 
     def setup_exclude_button(self):
         # Find the index of the row matching the image name
@@ -851,7 +853,7 @@ class RecordingViewer:
         self.left_image_canvas.focus_set()
 
         # Destroy the existing popup if it exists
-        if self.square_info_popup:
+        if self.square_info_popup and self.square_info_popup.winfo_exists():
             self.square_info_popup.destroy()
             self.square_info_popup = None
 
@@ -859,7 +861,6 @@ class RecordingViewer:
         self.square_info_popup = Toplevel(self.viewer_dialog)
         self.square_info_popup.transient(self.viewer_dialog)
         self.square_info_popup.resizable(False, False)
-        # self.square_info_popup.attributes('-topmost', True)
         self.square_info_popup.title("Square Info")
 
         # Calculate popup position based on the mouse click
@@ -867,16 +868,20 @@ class RecordingViewer:
         y = self.viewer_dialog.winfo_rooty() + event.y + 40
         self.square_info_popup.geometry(f"+{x}+{y}")
 
+        # Handle closing of the popup to reset the reference
+        def on_close_popup():
+            self.square_info_popup.destroy()
+            self.square_info_popup = None
+
+        self.square_info_popup.protocol("WM_DELETE_WINDOW", on_close_popup)
+
         # Get the data to display from the dataframe
         self.df_squares.set_index('Square Nr', inplace=True, drop=False)
         squares_row = self.df_squares.loc[square_nr]
         self.df_squares.set_index('Unique Key', inplace=True, drop=False)
 
         # Define the fields to display
-        if math.isnan(label_nr) or label_nr is None:
-            label_nr = "-"
-        else:
-            label_nr = str(int(label_nr))
+        label_nr = "-" if math.isnan(label_nr) or label_nr is None else str(int(label_nr))
         fields = [
             ("Label Nr", label_nr),
             ("Square Nr", squares_row['Square Nr']),
@@ -887,17 +892,17 @@ class RecordingViewer:
             ("Density Ratio", squares_row['Density Ratio']),
             ("Variability", squares_row['Variability']),
             ("Max Track Duration", squares_row['Max Track Duration']),
-            ("Mean Diffusion Coefficient", round(squares_row['Diffusion Coefficient'],4))
+            ("Mean Diffusion Coefficient", round(squares_row['Diffusion Coefficient'], 4))
         ]
 
         # Fill the popup with labels using a loop
-
         for idx, (label, value) in enumerate(fields, start=1):
             ttk.Label(self.square_info_popup, text=label, anchor=W, width=20).grid(row=idx, column=1, padx=10, pady=2)
             ttk.Label(self.square_info_popup, text=str(value), anchor=W).grid(row=idx, column=2, padx=10, pady=2)
 
-        # Bring the focus back to the root window so the canvas can detect more clicks
+        # Bring focus back to the canvas after displaying the popup
         self.viewer_dialog.focus_force()
+        self.left_image_canvas.focus_set()
 
     # --------------------------------------------------------------------------------------
     # User square selection rectangle functions
@@ -1017,7 +1022,12 @@ class RecordingViewer:
 
         # If the heatmap control dialog is up display the heatmap
         if self.heatmap_control_dialog:
+            # Make sure that the correct squares are selected
+            self.select_squares_for_display()
+
+            # Display the heatmap
             self.display_heatmap()
+
             # And Send the heatmap control dialog a sign that min max values have changed
             self.heatmap_control_dialog.on_heatmap_global_local_change()
             return
