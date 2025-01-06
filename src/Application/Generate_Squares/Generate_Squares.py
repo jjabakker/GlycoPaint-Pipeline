@@ -394,7 +394,7 @@ def process_square(
         variability = calc_variability(df_tracks_of_square, square_seq_nr, nr_of_squares_in_row, 10)
 
         # Calculate the diffusion coefficient for the square
-        dc_mean = df_tracks_of_square['Diffusion Coefficient'].mean()
+        dc_mean = round(df_tracks_of_square['Diffusion Coefficient'].mean(), 4)
 
     # Create the new squares record to add all the data for this square
     square_data = {
