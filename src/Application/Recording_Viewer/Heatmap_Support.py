@@ -46,7 +46,7 @@ def get_heatmap_data(df_squares, df_all_squares, heatmap_mode, experiment_min_ma
         column_name = heatmap_modes[heatmap_mode]
 
         if not column_name in df_squares.columns:
-            paint_logger.error(f"No data vailable for {column_name} - possibly Generate All tracks was not run")
+            paint_logger.error(f"No data available for {column_name} - possibly Generate All tracks was not run")
             min_val = 0
             max_val = 0
             df_heatmap_data = None
@@ -62,7 +62,7 @@ def get_heatmap_data(df_squares, df_all_squares, heatmap_mode, experiment_min_ma
 
         df_heatmap_data = df_squares[[column_name]]
 
-        # Change the name of the first colums to something independent of the actual parameter
+        # Change the name of the first column to something independent of the actual parameter
         df_heatmap_data.columns = ['Value'] + df_heatmap_data.columns[1:].tolist()
 
         # There can be Nan values in the data, so we need to replace them
