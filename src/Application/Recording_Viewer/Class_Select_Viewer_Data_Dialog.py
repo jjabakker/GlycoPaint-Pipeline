@@ -114,13 +114,15 @@ class SelectViewerDataDialog:
                     return
                 # Ok, it all looks good. Check if very many recordings are requested and warn the user
                 nr = nr_recordings(self.directory)
+                result = True
                 if nr_recordings(self.directory) > 100:
-                    msg = f"You are about to view {nr} recordings. This may take a while."
+                    msg = f"You are about to view {nr} recordings. This may take a while. Do you want to proceed?"
                     paint_logger.info(msg)
-                    messagebox.showinfo('Warning', msg)
-                self.mode = type
-                self.proceed = True
-                self.dialog.destroy()
+                    result = messagebox.askokcancel("Confirmation", msg)
+                if result:
+                    self.mode = type
+                    self.proceed = True
+                    self.dialog.destroy()
             else:
                 paint_logger.error("The selected directory is an immature project directory")
                 messagebox.showwarning(
