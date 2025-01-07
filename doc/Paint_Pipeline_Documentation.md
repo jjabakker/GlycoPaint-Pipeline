@@ -180,7 +180,9 @@ Once the squares are generated, the results can be reviewed in the Image Viewer.
 
 The Viewer dialogue appears, showing on the left the image with tracks and squares, and on the right the corresponding bright field image. Through scroll buttons at the bottom (or the combo box immediately under the 'Squares' window), different recordings can be selected.
 
-Metadata of the recording in view is displayed below the Squares image. To better view the underlying cells and tracks, keyboard options allow toggling between showing squares or not (key 'ts') or showing numbers or not (key 'n').
+Squares are only shown when they meet certain selection criteria (density ratio exceeding a minimum, variability less than a maximum, the maximum track  duration between a minimum and maximum and when a valid Tau exists for the square). By pressing the 'v' key also squares are shown that meet the selection criteria, but for which no valid Tau exists. 
+
+Metadata of the recording in view is displayed below the Squares image. To better view the underlying cells and tracks, keyboard options allow toggling between showing squares or not (key 's') or showing numbers or not (key 'n').
 
 ![](./Images/recording_viewer.png)
 
@@ -211,6 +213,8 @@ Any changes made will be saved when the user exits the Recording Viewer, dependi
 ### Show Heatmap
 
 The Heatmap dialogue allows properties of squares to be viewed relative to each other. Five properties are available: Tau, Density, Average Diffusion Coefficient, Longest Track Duration and Cumulative Track Duration. A colour range of 20 steps is used to display values. The minimum and maximum value is limited to the current recording unless the 'global' option is checked and the minimum and maximum are determined for the current set of recordings. The 'Toggle' function, which can also be invoked by pressing 't', switches between the heatmap and regular display.
+
+Note that for the heatmap values are shown for all squares, i.e. without regard to the selection status.  
 
 Whilst the Heatmap dialogue is displayed, the user can scroll through images.
 
