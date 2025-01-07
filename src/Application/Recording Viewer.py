@@ -493,7 +493,7 @@ class RecordingViewer:
             tau_max = max(tau_values)
             tau_mean = round(statistics.mean(tau_values), 0)
             tau_median = round(statistics.median(tau_values), 0)
-            tau_std = round(statistics.stdev(tau_values), 1)
+            tau_std = round(statistics.stdev(tau_values), 1) if len(tau_values) > 1 else 0
 
         # Display statistics   #ToDo print statements are not good
         print('\n\n')
