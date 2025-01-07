@@ -361,6 +361,7 @@ class RecordingViewer:
 
         # Set the focus to the left image canvas
         self.left_image_canvas.focus_set()
+        self.left_image_canvas.focus_force()
 
     def setup_exclude_button(self):
         # Find the index of the row matching the image name
@@ -901,8 +902,10 @@ class RecordingViewer:
             ttk.Label(self.square_info_popup, text=str(value), anchor=W).grid(row=idx, column=2, padx=10, pady=2)
 
         # Bring focus back to the canvas after displaying the popup
-        self.viewer_dialog.focus_force()
+
         self.left_image_canvas.focus_set()
+        self.viewer_dialog.focus_force()
+        self.left_image_canvas.focus_force()
 
     # --------------------------------------------------------------------------------------
     # User square selection rectangle functions
