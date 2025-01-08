@@ -139,6 +139,8 @@ class RecordingViewer:
         self.selected_values = []
         self.filter_applied = []
 
+        self.temp_dir = []
+
     def setup_ui(self):
         """
         Sets up the UI by defining the top level frames
@@ -453,6 +455,7 @@ class RecordingViewer:
         temp_dir = tempfile.mkdtemp()
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         temp_file = os.path.join(temp_dir, f'Temporary_All_Squares_{timestamp}.csv')
+        self.temp_dir.append(temp_dir)
 
         # Save the Squares data to a temporary file
         self.df_squares.to_csv(temp_file, index=False)
@@ -474,12 +477,12 @@ class RecordingViewer:
                 shutil.rmtree(temp_dir)
             return
 
-        # Allow some time for Excel to process the file
-        time.sleep(1)
-
-        # Clean up the temporary directory
-        if os.path.exists(temp_dir):
-            shutil.rmtree(temp_dir)
+        # # Allow some time for Excel to process the file
+        # time.sleep(1)
+        #
+        # # Clean up the temporary directory
+        # if os.path.exists(temp_dir):
+        #     shutil.rmtree(temp_dir)
 
         # Process square data statistics
         nr_total_squares = len(self.df_squares)
@@ -741,6 +744,12 @@ class RecordingViewer:
         self.recording_changed = True  # ToDo
 
     def on_exit_viewer(self):
+
+        # Clean up the temporary directory
+        for temp_dir in self.temp_dir:
+            if os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
         if self.save_on_exit or self.recording_changed:  # You need to test both!
             status = self.save_changes_on_exit()
             if status is None:
