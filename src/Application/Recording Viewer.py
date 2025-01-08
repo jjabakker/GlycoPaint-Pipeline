@@ -477,13 +477,6 @@ class RecordingViewer:
                 shutil.rmtree(temp_dir)
             return
 
-        # # Allow some time for Excel to process the file
-        # time.sleep(1)
-        #
-        # # Clean up the temporary directory
-        # if os.path.exists(temp_dir):
-        #     shutil.rmtree(temp_dir)
-
         # Process square data statistics
         nr_total_squares = len(self.df_squares)
         tau_values = self.df_squares[self.df_squares['Selected']]['Tau'].tolist()
