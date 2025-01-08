@@ -1081,8 +1081,8 @@ class RecordingViewer:
 
         dfs, dft = relabel_tracks(df_recording_squares, df_recording_tracks)
 
-        # self.df_all_tracks.update(dft, overwrite=True)
-        # self.df_all_squares.update(dfs, overwrite=True)
+        self.df_all_tracks.update(dft, overwrite=True)
+        self.df_all_squares.update(dfs, overwrite=True)
 
         self.df_all_tracks.loc[dft.index, 'Label Nr'] = dft['Label Nr']
         self.df_all_tracks.loc[dft.index, 'Square Nr'] = dft['Square Nr']
