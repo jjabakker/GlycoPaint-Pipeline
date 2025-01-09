@@ -22,11 +22,21 @@ class HeatMapDialog:
         # Set windows properties
         self.heatmap_dialog = tk.Toplevel(self.image_viewer.viewer_dialog)
         self.heatmap_dialog.title("Heatmap")
-        self.heatmap_dialog.resizable(False, False)
-        self.heatmap_dialog.geometry("370x420")
-        self.heatmap_dialog.resizable(False, False)
         self.heatmap_dialog.attributes('-topmost', True)
+        self.heatmap_dialog.resizable(False, False)
         self.heatmap_dialog.protocol("WM_DELETE_WINDOW", self.on_close)
+
+        # Get main window geometry
+        main_x = self.image_viewer.viewer_dialog.winfo_x()
+        main_y = self.image_viewer.viewer_dialog.winfo_y()
+        main_width = self.image_viewer.viewer_dialog.winfo_width()
+
+        # Calculate new position (e.g., 100 pixels to the right of the main window's right edge)
+        dialog_x = main_x + int(main_width / 2) + 50
+        dialog_y = main_y + 10  # Same vertical position as the main window
+
+        # Set HeatMapDialog geometry
+        self.heatmap_dialog.geometry(f"370x420+{dialog_x}+{dialog_y}")
 
         self.setup_userinterface()
 
@@ -34,7 +44,7 @@ class HeatMapDialog:
         self.on_heatmap_variable_change()
 
         # Set dialog focus
-        # self.heatmap_dialog.grab_set()  # Prevent interaction with the main window
+        self.heatmap_dialog.grab_set()  # Prevent interaction with the main window
         self.heatmap_dialog.focus_force()  # Bring the dialog to focus
 
     def setup_userinterface(self):
