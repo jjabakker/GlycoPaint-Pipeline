@@ -31,7 +31,6 @@ class SelectSquareDialog:
         self.select_square_dialog.title("Select Squares")
         self.select_square_dialog.attributes("-topmost", True)
         self.select_square_dialog.resizable(False, False)
-        self.select_square_dialog.attributes('-topmost', True)
         self.select_square_dialog.protocol("WM_DELETE_WINDOW", self.on_close)
 
         # Set up the user interface
