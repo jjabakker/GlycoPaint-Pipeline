@@ -183,7 +183,6 @@ class HeatMapDialog:
         """
         """
 
-        var = self.image_viewer.heatmap_option.get()
         _, min_val, max_val = get_heatmap_data(
             self.image_viewer.df_squares, self.image_viewer.df_all_squares,
             self.image_viewer.heatmap_option.get(), self.image_viewer.heatmap_global_min_max.get())
