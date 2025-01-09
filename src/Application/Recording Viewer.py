@@ -61,8 +61,12 @@ class RecordingViewer:
         self.viewer_dialog.title(f'Recording Viewer - {user_specified_directory}')
         self.viewer_dialog.resizable(False, False)
         self.viewer_dialog.protocol("WM_DELETE_WINDOW", self.on_exit_viewer)
-        self.viewer_dialog.grab_set()  # Prevent interaction with the main window
-        self.viewer_dialog.focus_force()  # Bring the dialog to focus
+
+        # Make modal and set focus
+        self.viewer_dialog.grab_set()
+        self.viewer_dialog.attributes('-topmost', True)
+        self.viewer_dialog.deiconify()
+        self.viewer_dialog.focus_force()
 
         # Save the parameters
         self.user_specified_directory = user_specified_directory
