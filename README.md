@@ -1,7 +1,5 @@
 [![DOI](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.01.24.634682-blue)](https://doi.org/10.1101/2025.01.24.634682)
 
-<span style="font-size: 72px;">GlycoPaint Pipeline</span>
-
 GlycoPaint is a research method to study interactions of glycans on lectins on live cells. The work is described in:
 
 > Steuten, K., Bakker, J., Doelman, W.  et al. Glyco-PAINT-APP: Subcellular analysis of immune cell-lectin binding enables correlation of glycan binding parameters to receptor biology.  doi: https://doi.org/10.1101/2025.01.24.634682
