@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the following work."
+authors:
+  - family-names: Steuten
+    given-names: Kas
+  - family-names: Bakker
+    given-names: Johannes
+  - family-names: Doelman
+    given-names: Ward
+  - family-names: Torres-García
+    given-names: Diana
+  - family-names: Riera
+    given-names: Roger
+  - family-names: Albertazzi
+    given-names: Lorenzo
+  - family-names: van Kasteren
+    given-names: Sander
+title: "Glyco-PAINT-APP: Subcellular analysis of immune cell-lectin binding enables correlation of glycan binding parameters to receptor biology"
+year: 2025
+doi: 10.1101/2025.01.24.634682
+url: https://doi.org/10.1101/2025.01.24.634682
+type: preprint
+publisher: bioRxiv
