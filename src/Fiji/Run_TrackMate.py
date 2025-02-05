@@ -39,6 +39,9 @@ from ConvertBrightfieldImages import convert_bf_images
 
 paint_logger_change_file_handler_name('Run Trackmate.log')
 
+# Redirect stdout and stderr to suppress output
+sys.stdout = open(os.devnull, 'w')
+sys.stderr = open(os.devnull, 'w')
 
 def run_trackmate(experiment_directory, recording_source_directory):
     # Open the experiment file to determine the columns (which should be in the paint directory)
