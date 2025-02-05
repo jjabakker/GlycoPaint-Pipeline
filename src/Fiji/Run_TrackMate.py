@@ -123,7 +123,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
                     elif status == 'NOT_FOUND':
                         nr_recording_not_found += 1
                     elif status == 'FAILED':
-                        nr_recording_not_found += 1
+                        nr_recording_failed += 1
 
                 write_row_to_temp_file(row, experiment_tm_file_path, col_names)
 
@@ -230,8 +230,8 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         # IJ.run("Set Scale...", "distance=6.2373 known=1 unit=micron")
         # IJ.run("Scale Bar...", "width=10 height=5 thickness=3 bold overlay")
 
-        if nr_spots == -1:
-            paint_logger.error("\n'Process single recording' did not manage to run 'paint_trackmate'")
+        if nr_spots == -1 or total_tracks == -1:
+            paint_logger.error("'Process single recording' did not complete running 'paint_trackmate'")
             status = 'FAILED'
         else:
             time.sleep(3)  # Display the recording for 3 seconds

@@ -56,6 +56,8 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 
     min_number_of_spots = get_paint_attribute_with_default('TrackMate', 'MIN_NR_SPOTS_IN_TRACK', 3)
 
+    max_nr_of_spots_in_image = get_paint_attribute_with_default('TrackMate', 'MAX_NR_SPOTS_IN_IMAGE', 2000000)
+
     track_colouring = get_paint_attribute_with_default('TrackMate', 'TRACK_COLOURING', 'TRACK_DURATION')
     if track_colouring != 'TRACK_DURATION' and track_colouring != 'TRACK_INDEX':
         paint_logger.error('Invalid track colouring option in TrackMate configuration,default to TRACK_DURATION')
@@ -86,6 +88,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
         paint_logger.info('MIN_NR_SPOTS_IN_TRACK:           ' + str(min_number_of_spots))
         paint_logger.info('TRACK_COLOURING:                 ' + str(track_colouring))
         paint_logger.info("")
+        paint_logger.info('MAX_NR_SPOTS_IN_IMAGE:           ' + str(max_nr_of_spots_in_image))
         paint_logger.info("")
 
     # We have to do the following to avoid errors with UTF8 chars generated in
@@ -158,12 +161,53 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     ok = trackmate.checkInput()
     if not ok:
         paint_logger.error('Routine paint_trackmate - checkInput failed')
-        return -1, -1, -1
+        return -1, -1, -1, -1, -1, -1, -1, -1
 
-    ok = trackmate.process()
+    # Run the spot detection step first
+    ok = trackmate.execDetection()
     if not ok:
+        paint_logger.error('Routine paint_trackmate - execDetection failed')
+        return -1, -1, -1, -1, -1, -1, -1, -1
+
+    nr_spots = model.getSpots().getNSpots(False)
+    if nr_spots > max_nr_of_spots_in_image:
+        paint_logger.error('Too many spots detected ({}). Limit is {}.'.format(nr_spots, max_nr_of_spots_in_image))
+        return nr_spots, -1, -1, -1, -1, -1, -1, -1  # Return early, skipping further processing
+
+    # Continue with full TrackMate processing - nr_spots is within limits
+    if not trackmate.process():
         paint_logger.error('Routine paint_trackmate - process failed')
-        return -1, -1, -1
+        return -1, -1, -1, -1, -1, -1, -1, -1
+
+    # if not trackmate.execInitialSpotFiltering():
+    #     paint_logger.error('Spot filtering failed')
+    #     return -1, -1, -1, -1, -1, -1, -1, -1
+    # else:
+    #     paint_logger.info('Spot filtering succeeded')
+    #
+    # if not trackmate.execTracking():
+    #     paint_logger.error('Tracking failed')
+    #     return -1, -1, -1, -1, -1, -1, -1, -1
+    # else:
+    #     paint_logger.info('Tracking succeeded')
+    #
+    # if not trackmate.execTrackFiltering():
+    #     paint_logger.error('Track filtering failed')
+    #     return -1, -1, -1, -1, -1, -1, -1, -1
+    # else:
+    #     paint_logger.info('Track filtering succeeded')
+    #
+    # if not trackmate.computeSpotFeatures():
+    #     paint_logger.error('Spot feature computation failed')
+    #     return -1, -1, -1, -1, -1, -1, -1, -1
+    # else:
+    #     paint_logger.info('Spot feature computation succeeded')
+    #
+    # if not trackmate.computeTrackFeatures():
+    #     paint_logger.error('Track feature computation failed')
+    #     return -1, -1, -1, -1, -1, -1, -1, -1
+    # else:
+    #     paint_logger.info('Track feature computation succeeded')
 
     # Get nr_spots data, iterate through each track to calculate the mean square displacement
 
