@@ -7,7 +7,6 @@ import time
 from java.awt import GridLayout, Dimension, FlowLayout
 from java.io import File
 from javax.swing import JFrame, JPanel, JButton, JTextField, JFileChooser, JOptionPane, BorderFactory
-from javax.swing.filechooser import FileFilter
 from java.lang.System import getProperty
 paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
 sys.path.append(paint_dir)
