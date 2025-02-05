@@ -94,7 +94,7 @@ def get_corresponding_bf(bf_dir, ext_recording_name, recording_name):
 
     if not os.path.exists(bf_dir):
         paint_logger.error(
-            "Function 'get_corresponding_bf' failed - The directory for jpg versions of BF images does not exist. Run 'Convert BF Images' first")
+            "The directory with jpg versions of BF images does not exist. Run 'Convert BF Images' first")
         sys.exit()
 
     # List of possible BF image names
