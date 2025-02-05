@@ -104,7 +104,7 @@ def prepare_experiment_info_file(image_source_directory, experiment_directory):
         paint_logger.info('No images were found. You have probably selected an incorrect directory.')
         paint_logger.info('No batch file was written.')
     else:
-        df_experiment.to_csv(os.path.join(experiment_directory, "experiment_info.csv"), index=False)
+        df_experiment.to_csv(os.path.join(experiment_directory, "Experiment Info.csv"), index=False)
         if format_problem:
             paint_logger.info('')
             paint_logger.info(
