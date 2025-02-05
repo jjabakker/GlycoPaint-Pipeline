@@ -135,11 +135,12 @@ def run_trackmate(experiment_directory, recording_source_directory):
             if nr_recording_processed == 0:
                 msg = "No recordings processed successfully. Refer to Paint log for details."
                 paint_logger.warning(msg)
-                JOptionPane.showMessageDialog(None, msg, "Warning", JOptionPane.WARNING_MESSAGE)
-            elif nr_recording_not_found:
+            elif nr_recording_not_found > 0:
                 msg = "Some recordings were not found. Refer to Paint log for details."
                 paint_logger.warning(msg)
-                JOptionPane.showMessageDialog(None, msg, "Warning", JOptionPane.WARNING_MESSAGE)
+            elif nr_recording_failed > 0:
+                msg = "Some recordings were not processed. Refer to Paint log for details."
+                paint_logger.warning(msg)
 
             # -----------------------------------------------------------------------------
             # Concatenate the Tracks file with the existing one
