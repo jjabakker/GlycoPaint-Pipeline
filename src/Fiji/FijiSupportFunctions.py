@@ -61,21 +61,18 @@ def fiji_get_file_open_append_attribute():
 
 
 def format_time_nicely(seconds):
-    hours, remainder = divmod(seconds, 3600)
+    hours, remainder = divmod(int(seconds), 3600)
     minutes, seconds = divmod(remainder, 60)
-    hours = int(hours)
-    minutes = int(minutes)
-    seconds = int(seconds)
 
     parts = []
     if hours:
-        parts.append("{0} hour{1}".format(hours, 's' if hours > 1 else ''))
+        parts.append("{} hour{}".format(hours, "s" if hours != 1 else ""))
     if minutes:
-        parts.append("{0} minute{1}".format(minutes, 's' if minutes > 1 else ''))
+        parts.append("{} minute{}".format(minutes, "s" if minutes != 1 else ""))
     if seconds:
-        parts.append("{0} second{1}".format(seconds, 's' if seconds > 1 else ''))
+        parts.append("{} second{}".format(seconds, "s" if seconds != 1 else ""))
 
-    return ', '.join(parts)
+    return ", ".join(parts) if parts else "0 seconds"
 
 
 def set_directory_timestamp(dir_path, timestamp=None):
