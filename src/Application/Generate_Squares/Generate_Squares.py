@@ -129,11 +129,14 @@ def process_experiment(
     df_squares_of_experiment = pd.DataFrame()
     df_tracks_of_experiment_with_labels = pd.DataFrame()
 
-    # Read the Tracks file and add (or reinitialise two columns for the square and label numbers)
-    df_tracks_of_experiment = read_tracks_of_experiment(experiment_path)
-
     # Read the Recordings file, check the integrity and add some columns
     df_recordings_of_experiment = read_recordings_of_experiment(experiment_path)
+    if len(df_recordings_of_experiment) == 0:
+        paint_logger.info(f"No Recordings found in {experiment_path}")
+        return
+
+    # Read the Tracks file and add (or reinitialise two columns for the square and label numbers)
+    df_tracks_of_experiment = read_tracks_of_experiment(experiment_path)
 
     # Add some parameters that the user just specified to the experiment
     df_recordings_of_experiment = add_columns_to_experiment(
