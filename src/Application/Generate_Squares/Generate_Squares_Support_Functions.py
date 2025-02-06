@@ -352,11 +352,6 @@ def read_recordings_of_experiment(experiment_path: str) -> pd.DataFrame:
             f"Function 'process_experiment' failed: Likely, {experiment_path} is not a valid  \
                 directory containing cell image information.")
         sys.exit(1)
-    if len(df_recordings_of_experiment) == 0:
-        paint_logger.error(
-            f"Function 'process_experiment' failed: 'All Recordings.csv' in {experiment_path} \
-                is empty")
-        sys.exit(1)
 
     # Confirm the experiment is in the correct format
     if not check_experiment_integrity(df_recordings_of_experiment):
