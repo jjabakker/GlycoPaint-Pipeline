@@ -74,6 +74,25 @@ def run_trackmate(experiment_directory, recording_source_directory):
             sys.exit()
 
         try:
+            # Delete the All Recordings file if it exists
+            file_path = os.path.join(experiment_directory, 'All Recordings.csv')
+            if os.path.exists(file_path):  # Check if the file exists
+                os.remove(file_path)
+            # Delete the All Tracks file if it exists
+            file_path = os.path.join(experiment_directory, 'All Tracks.csv')
+            if os.path.exists(file_path):  # Check if the file exists
+                os.remove(file_path)
+
+            # Initialise the All Recordings file with the column headers
+            col_names = csv_reader.fieldnames
+            new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp',
+                           'Max Frame Gap', 'Gap Closing Max Distance', 'Linking Max Distance', 'Median Filtering',
+                           'Nr Spots in All Tracks', ]
+            col_names += [col for col in new_columns if col not in col_names]
+
+            # And create the header row
+            experiment_tm_file_path = initialise_experiment_tm_file(experiment_directory, col_names)
+
             # Count how many recordings need to be processed
             count = 0
             nr_to_process = 0
@@ -82,7 +101,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
                     nr_to_process += 1
                 count += 1
             if nr_to_process == 0:
-                paint_logger.warning("No recordings selected for processing")
+                paint_logger.info("No recordings selected for processing")
                 return -1
 
             message = "Processing " + str(nr_to_process) + " recordings in directory " + recording_source_directory
