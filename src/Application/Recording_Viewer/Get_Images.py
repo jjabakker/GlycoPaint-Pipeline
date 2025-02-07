@@ -19,6 +19,8 @@ def get_images(self, initial=False):
     for index, experiment_row in self.df_experiment.iterrows():
         if experiment_row['Process'] in ['No', 'no', 'N', 'n']:
             continue
+        if experiment_row['Nr Tracks'] == -1:
+            continue
         ext_recording_name = experiment_row['Ext Recording Name']
         recording_name = experiment_row['Recording Name']
         experiment = str(experiment_row['Experiment Name'])
