@@ -176,9 +176,10 @@ def classify_directory_work(directory_path):
     feedback = []
 
     # Check for experiment directory
-    experiment_files = {"Experiment Info.csv", "All Recordings.csv", "All Tracks.csv"}
+    experiment_files = {"Experiment Info.csv", "All Recordings.csv"}
     required_dirs = {"Brightfield Images", "TrackMate Images"}
     optional_file = "All Squares.csv"
+    optional_files = {"All Squares.csv", "All Tracks.csv"}
     output_dir = directory / "Output"
 
     has_experiment_files = all((directory / file).is_file() for file in experiment_files)
@@ -188,12 +189,11 @@ def classify_directory_work(directory_path):
         additional_contents = [item for item in contents \
                                if item.name not in experiment_files and \
                                   item.name not in required_dirs and \
-                                  item.name != optional_file and \
+                                  item.name not in optional_files and \
                                   item != output_dir]
         if additional_contents:
             file_names = [PurePosixPath(path).name for path in additional_contents]
-            paint_logger.debug(f"Not an Experiment: directory contains unexpected files or directories: {file_names}.")
-        # if not additional_contents and (not output_dir.exists() or output_dir.is_dir()):
+            paint_logger.debug(f"Not an Experiment: directory {os.path.basename(directory_path)} contains unexpected files or directories: {file_names}.")
         if (not output_dir.exists() or output_dir.is_dir()):
             maturity = "Mature" if (directory / optional_file).is_file() else "Immature"
             return {"type": "Experiment", "maturity": maturity, "feedback": None}

@@ -72,13 +72,13 @@ def compile_project_output(
 
         tracks_file = os.path.join(experiment_dir_path, 'All Tracks.csv')
         if not os.path.exists(tracks_file):
-            paint_logger.error(f"Tracks file does not exist: {tracks_file}. You need to (re)run TrackMate.")
+            paint_logger.info(f"Tracks file does not exist in {os.path.basename(experiment_dir_path)}. You may need to (re)run TrackMate.")
             error =True
-
-        squares_file = os.path.join(experiment_dir_path, 'All Squares.csv')
-        if not os.path.exists(squares_file):
-            paint_logger.error(f"Squares file does not exist: {squares_file}. You need to (re)run Generate Squares.")
-            error = True
+        else:
+            squares_file = os.path.join(experiment_dir_path, 'All Squares.csv')
+            if not os.path.exists(squares_file):
+                paint_logger.info(f"Squares file does not exist in : {os.path.basename(experiment_dir_path)}. You need to (re)run Generate Squares.")
+                error = True
 
         recordings_file = os.path.join(experiment_dir_path, 'All Recordings.csv')
         if not os.path.exists(recordings_file):
@@ -97,7 +97,7 @@ def compile_project_output(
     # Report on experiments skipped
     paint_logger.info(f"Processing {nr_processed} experiments, skipping {nr_skipped} experiments.")
     if nr_error > 0:
-        paint_logger.info(f"Errors occurred in {nr_error} experiments.")
+        paint_logger.info(f"Warnings occurred for {nr_error} experiments.")
 
     # Report on experiments processed
     if verbose:
