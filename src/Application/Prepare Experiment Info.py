@@ -66,13 +66,15 @@ def prepare_experiment_info_file(image_source_directory, experiment_directory):
         if match is None:
             format_problem = True
             paint_logger.info(f"Image name: {recording_name} is not in the expected format")
-            condition_nr = ""
-            replicate_nr = ""
-            exp_date = ""
+            condition_nr = ''
+            replicate_nr = ''
+            exp_date = ''
+            exp_name = os.path.basename(experiment_directory)
         else:
             condition_nr = match.group('condition_nr')
             replicate_nr = match.group('replicate_nr')
             exp_date = match.group('exp_date')
+            exp_name = os.path.basename(experiment_directory)
 
         # For further processing, skip the BF file
         if recording_name.find("BF") != -1:
@@ -85,7 +87,7 @@ def prepare_experiment_info_file(image_source_directory, experiment_directory):
         row = {'Recording Sequence Nr': seq_nr,
                'Recording Name': recording_name,
                'Experiment Date': exp_date,
-               'Experiment Name': exp_date,
+               'Experiment Name': exp_name,
                'Condition Nr': condition_nr,
                'Replicate Nr': replicate_nr,
                'Probe': '',
