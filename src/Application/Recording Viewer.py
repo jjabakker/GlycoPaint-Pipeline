@@ -76,7 +76,7 @@ class RecordingViewer:
 
         self.setup_ui()
         self.load_images_and_config()
-        self.setup_exclude_button()
+        self.setup_exclude_status()
         self.setup_heatmap()
         self.setup_key_bindings()
 
@@ -369,15 +369,27 @@ class RecordingViewer:
         self.left_image_canvas.focus_set()
         self.left_image_canvas.focus_force()
 
-    def setup_exclude_button(self):
+    def setup_exclude_status(self):
         # Find the index of the row matching the image name
         row_index = self.df_experiment.index[self.df_experiment['Ext Recording Name'] == self.image_name].tolist()[0]
 
         # Check the 'Exclude' status and set properties accordingly
         is_excluded = self.df_experiment.loc[row_index, 'Exclude']
-        self.bn_exclude.config(text='Include' if is_excluded else 'Exclude')
-        self.text_for_info4.set('Excluded' if is_excluded else '')
-        self.lbl_info4.config(style="Red.Label" if is_excluded else "Black.Label")
+        if is_excluded:
+            info4_text = 'Image Excluded'
+            label_style = 'Red'
+        elif 'Manually Excluded' in self.df_squares.columns and self.df_squares['Manually Excluded'].any():
+            info4_text = 'Squares Excluded'
+            label_style = 'Red'
+        else:
+            info4_text = ''
+            label_style = 'Black'
+
+        self.text_for_info4.set(info4_text)
+        if label_style == 'Black':
+            self.lbl_info4.config(style="Black.Label")
+        else:
+            self.lbl_info4.config(style="Red.Label")
 
     # ----------------------------------------------------------------------------------------
     # Event Handlers for buttons
@@ -515,6 +527,7 @@ class RecordingViewer:
         self.key_bindings = {
             '<Right>': lambda e: self.conditional_navigation(e),
             '<Left>': lambda e: self.conditional_navigation(e),
+            'r': lambda e: self.reset_deselected_squares(),
             's': lambda e: self.toggle_show_squares(),
             'n': lambda e: self.toggle_show_square_numbers(),
             't': lambda e: self.toggle_selected_squares(),
@@ -733,10 +746,22 @@ class RecordingViewer:
         row_index = self.image_name
         is_excluded = self.df_experiment.loc[row_index, 'Exclude'] = not self.df_experiment.loc[row_index, 'Exclude']
 
+        if is_excluded:
+            info4_text = 'Image Excluded'
+            label_style = 'Red'
+        elif 'Manually Excluded' in self.df_squares.columns and self.df_squares['Manually Excluded'].any():
+            info4_text = 'Squares Excluded'
+            label_style = 'Red'
+        else:
+            info4_text = ''
+            label_style = 'Black'
         self.bn_exclude.config(text='Include' if is_excluded else 'Exclude')
-        self.text_for_info4.set('Excluded' if is_excluded else '')
-        self.lbl_info4.config(style="Red.Label" if is_excluded else "Black.Label")
-        self.lbl_info4.configure(foreground='red' if is_excluded else 'black')
+        self.text_for_info4.set(info4_text)
+        if label_style == 'Black':
+            self.lbl_info4.config(style="Red.Label")
+        else:
+            self.lbl_info4.config(style="Red.Label" if is_excluded else "Black.Label")
+        # self.lbl_info4.configure(foreground='red' if is_excluded else 'black')
 
         self.recording_changed = True  # ToDo
 
@@ -845,17 +870,47 @@ class RecordingViewer:
     def display_selected_squares(self):
         display_selected_squares(self)
 
-    def square_assigned_to_cell(self, square_nr):
+    def left_click_square(self, square_nr):
         if square_nr in self.squares_in_rectangle:
             self.squares_in_rectangle.remove(square_nr)
         else:
             self.squares_in_rectangle.append(int(square_nr))
         self.display_selected_squares()
 
-    def provide_information_on_square(self, event, label_nr, square_nr):
-        """
-        Display a popup with information about a square on right-click.
-        """
+    def deselect_square(self, event, label_nr, square_nr):
+
+        # If there was no column 'Manually Excluded' then create it both in df_squares and df_all_squarea
+        if 'Manually Excluded' not in self.df_squares.columns:
+            self.df_squares['Manually Excluded'] = False
+            self.df_all_squares['Manually Excluded'] = False
+
+        # Deselect the square
+        self.df_squares.loc[self.df_squares['Square Nr'] == square_nr, 'Manually Excluded'] = True
+        self.select_squares_for_display()
+
+        # Display the image
+        self.display_selected_squares()
+        self.setup_exclude_status()
+
+        # Make sure the change will be noted if the user exits or changes tgh image
+        self.recording_changed = True
+
+        # Recalculate the tau
+        recalc_recording_tau_and_density(self)
+
+    def reset_deselected_squares(self):
+        self.df_squares['Manually Excluded'] = False
+        self.select_squares_for_display()
+        self.display_selected_squares()
+        self.setup_exclude_status()
+
+        # Make sure the change will be noted if the user exits or changes image
+        self.recording_changed = True
+
+        # Recalculate the tau
+        recalc_recording_tau_and_density(self)
+
+    def display_square_info(self, event, label_nr, square_nr):
         # Ensure the canvas has focus
         self.left_image_canvas.focus_set()
 
@@ -912,6 +967,20 @@ class RecordingViewer:
         self.left_image_canvas.focus_set()
         self.viewer_dialog.focus_force()
         self.left_image_canvas.focus_force()
+
+    def right_click_square(self, event, label_nr, square_nr):
+        """
+        When x is pressed, deselect the square else display a popup with information about a square on right-click.
+        """
+
+        ctrl = event.state & 0x4  # Detect if Ctrl is pressed
+        shift = event.state & 0x1  # Detect if Shift is pressed
+        if ctrl:
+            self.deselect_square(event, label_nr, square_nr)
+        elif shift:
+            self.reset_deselected_squares()
+        else:
+            self.display_square_info(event, label_nr, square_nr)
 
     # --------------------------------------------------------------------------------------
     # User square selection rectangle functions
@@ -1264,6 +1333,10 @@ def recalc_recording_tau_and_density(self):
     """
 
     df_squares_for_single_tau = self.df_squares[self.df_squares['Selected']]
+
+    if 'Manually Excluded' in self.df_squares.columns:
+        df_squares_for_single_tau = df_squares_for_single_tau[df_squares_for_single_tau['Manually Excluded'] == False]
+
     df_tracks_for_recording = self.df_all_tracks[self.df_all_tracks['Ext Recording Name'] == self.image_name]
 
     df_tracks_for_tau = df_tracks_for_recording[
