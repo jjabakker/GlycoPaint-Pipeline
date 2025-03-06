@@ -1143,6 +1143,9 @@ class RecordingViewer:
         self.squares_in_rectangle = []
         self.mark_selected_squares()
 
+        # Update the exclude status
+        self.setup_exclude_status()
+
     def save_changes_on_recording_change(self, save_experiment=True, save_squares=True):
 
         # Save the changes in All Squares
@@ -1359,12 +1362,12 @@ def recalc_recording_tau_and_density(self):
         concentration=10)
 
     # Update the Tau and Density values in the Viewer
-    self.list_images[self.img_no]['Tau'] = tau
-    self.list_images[self.img_no]['Density'] = density
+    self.list_images[self.img_no]['Tau'] = round(tau, 0)
+    self.list_images[self.img_no]['Density'] = round(density, 5)
 
-    self.df_experiment.loc[self.image_name, 'Tau'] = tau
-    self.df_experiment.loc[self.image_name, 'Density'] = density
-    self.df_experiment.loc[self.image_name, 'R Squared'] = r_squared
+    self.df_experiment.loc[self.image_name, 'Tau'] = round(tau, 0)
+    self.df_experiment.loc[self.image_name, 'Density'] = round(density, 5)
+    self.df_experiment.loc[self.image_name, 'R Squared'] = round(r_squared, 3)
 
     # Update the Tau information in the Viewer
     info2 = f"Spots: {self.list_images[self.img_no]['Nr Spots']:,} - Threshold: {self.list_images[self.img_no]['Threshold']} - Tau: {int(tau)}"
