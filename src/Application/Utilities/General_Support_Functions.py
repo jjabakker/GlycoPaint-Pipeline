@@ -293,6 +293,41 @@ def concat_csv_files(output_file, csv_files):
                     writer.writerow(row)
 
 
+def concat_squares_files(output_file, csv_files):
+    """
+    Concatenate a list of CSV files into a single output file.
+    If a file does not contain the 'Manually Excluded' column, it is added with all values set to 'False'.
+    The header is written only for the first file.
+    """
+    with open(output_file, 'w', newline='') as outfile:
+        writer = None  # Initialize writer as None
+
+        for i, file in enumerate(csv_files):
+            with open(file, 'r', newline='') as infile:
+                reader = csv.reader(infile)
+                header = next(reader)  # Read the header
+
+                # Check if 'Manually Excluded' column exists
+                if 'Manually Excluded' not in header:
+                    header.append('Manually Excluded')  # Add missing column
+
+                # Initialize writer and write header for the first file
+                if i == 0:
+                    writer = csv.writer(outfile)
+                    writer.writerow(header)
+
+                # Get index of 'Manually Excluded' column
+                excluded_index = header.index('Manually Excluded')
+
+                # Process rows
+                for row in reader:
+                    # Ensure row has correct number of columns
+                    while len(row) < len(header):  # If columns are missing, extend the row
+                        row.append('False')
+
+                    writer.writerow(row)
+
+
 def set_directory_tree_timestamp(dir_to_change, timestamp=None):
     """
     Set the access and modification timestamps of a directory.

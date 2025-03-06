@@ -11,6 +11,7 @@ from src.Application.Utilities.General_Support_Functions import (
     correct_all_recordings_column_types,
     classify_directory,
     concat_csv_files,
+    concat_squares_files,
     ToolTip)
 from src.Fiji.LoggerConfig import (
     paint_logger,
@@ -106,7 +107,7 @@ def compile_project_output(
 
     # Concatenate all the files
     concat_csv_files(os.path.join(project_dir, 'All Recordings.csv'), all_recordings)
-    concat_csv_files(os.path.join(project_dir, 'All Squares.csv'), all_squares)
+    concat_squares_files(os.path.join(project_dir, 'All Squares.csv'), all_squares)
     concat_csv_files(os.path.join(project_dir, 'All Tracks.csv'), all_tracks)
 
     correct_all_recordings_column_types(os.path.join(project_dir, 'All Recordings.csv'))
