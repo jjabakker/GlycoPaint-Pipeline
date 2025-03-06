@@ -37,10 +37,10 @@ def display_selected_squares(self):
                 self.nr_of_squares_in_row,
                 self.left_image_canvas,
                 row_in_squares,
-                self.square_assigned_to_cell,
-                self.provide_information_on_square)
+                self.left_click_square,
+                self.right_click_square)
 
-    # Then draw the squares that are in the rectangle drawn by the uses(if any)
+    # Then draw the squares that are in the rectangle drawn by the user (if any)
     for square_nr in self.squares_in_rectangle:
         col_nr = square_nr % nr_of_squares_in_row
         row_nr = square_nr // nr_of_squares_in_row
@@ -63,15 +63,15 @@ def draw_single_square(
         nr_of_squares_in_row,
         canvas,
         squares_row,
-        square_assigned_to_cell,
-        provide_information_on_square):
+        left_click_square,
+        right_click_square):
     """
     :param show_squares_numbers: a boolean tos specify if a number is shown
     :param nr_of_squares_in_row: Show the square numbers in the squares
     :param canvas: the canvas to draw the square on
     :param squares_row: the record containing the information on the square
-    :param square_assigned_to_cell: A function to call when a square is assigned to a cell
-    :param provide_information_on_square: A function to call when information on a square is requested
+    :param left_click_square: A function to call when a square is assigned to a cell
+    :param right_click_square: A function to call when information on a square is requested
 :   return:
     """
 
@@ -169,6 +169,6 @@ def draw_single_square(
         outline="",
         fill="",
         tags=f"invisible-{square_nr}")
-    canvas.tag_bind(invisible_rect, '<Button-1>', lambda e: square_assigned_to_cell(square_nr))
+    canvas.tag_bind(invisible_rect, '<Button-1>', lambda e: left_click_square(square_nr))
     canvas.tag_bind(invisible_rect, '<Button-2>',
-                    lambda e: provide_information_on_square(e, squares_row['Label Nr'], square_nr))
+                    lambda e: right_click_square(e, squares_row['Label Nr'], square_nr))
