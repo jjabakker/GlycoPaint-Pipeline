@@ -120,7 +120,7 @@ The 'Run TrackMate' procedure is started from Fiji by selecting the GlycoPaint s
 
 ![](./Images/run_trackmate_dialog.png)
 
-Upon successful processing, the system generates for each recording an image. A representative example of an image is shown below.
+Upon successful processing (for the demo case, expect roughly 15 minutes runtime), the system generates for each recording an image. A representative example of an image is shown below.
 
 ![](./Images/sample_recording.png)
 

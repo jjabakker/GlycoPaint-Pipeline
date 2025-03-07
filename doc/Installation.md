@@ -1,9 +1,3 @@
----
-header-includes:
-   - \usepackage{fontspec}
-   - \setmainfont{Arial}
---- 
-
 
 # Installing the Pipeline
 
@@ -31,7 +25,6 @@ You will have to set up a Pyhon interpreter in PyCharm and install the following
 - matplotlib (3.9.2)
 - numpy (2.1.2)
 - pandas (2.2.3)
-- xattr (1.1.0)
 - pillow (10.4.0)
 - scipy (1.14.)
 - nd2reader (3.3.0)
@@ -50,6 +43,9 @@ Running the utility will create the paint.json file in the ~/Paint/Defaults dire
 
 ### R Studio
 The pipeline also uses R for the data analysis. R Studio can be downloaded from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/). You may have to install R also - instructions to do that are on the site. Examples of R scripts are available from the GitHub repository
+
+### Install Time
+With standard software as PyCharm, Fiji and TrackMate installed, the installation of the pipeline itself should take less than 10 minutes. Installing the standard R and R Studio is optional and only required if data post processing is performed with R.
 
 # Available scripts to run the pipeline
 
