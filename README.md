@@ -12,9 +12,11 @@ The Pipeline, presented here, is a research application to extract information f
 TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking pipelines. Nature Methods, 19(7),
 829–832. doi:10.1038/s41592-022-01507-1
 
+Thh software has been tested on a MacBook with MacOS 15.3, on a Windows 10 and on a Wondows 11 machine. The software is provided as is and no support is provided. The software is provided under the MIT license.
+
 To assist with installing the components of the pipeline, [Installation instructions](doc/Installation.md) are provided.
 
-An overview of the functionality of the pipeline and how to use it is provided in the [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
+An overview of the functionality of the pipeline, how to use ansd a detailed demo case with sample data it is provided in the [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
 
 
 
