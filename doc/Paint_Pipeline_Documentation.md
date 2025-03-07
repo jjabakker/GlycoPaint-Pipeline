@@ -1,15 +1,11 @@
----
-header-includes:
-   - \usepackage{fontspec}
-   - \setmainfont{Arial}
---- 
+
 
 <div style="text-align: center;"> 
   <span style="font-size: 72px;">GlycoPaint Pipeline</span><br>
   <span style="font-size: 36px;">Functional description</span>
-</div>
 
-![](./Images/paint_logo.png)
+  ![](./Images/paint_logo.png)
+</div>
 
 <br>
 <br>

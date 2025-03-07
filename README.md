@@ -1,8 +1,9 @@
-[![DOI](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.01.24.634682-blue)](https://doi.org/10.1101/2025.01.24.634682)
+## Introduction
 
-GlycoPaint is a research method to study interactions of glycans on lectins on live cells. The work is described in:
+GlycoPaint is a research method to study interactions of glycans on lectins on live cells.
 
-> Steuten, K., Bakker, J., Doelman, W.  et al. Glyco-PAINT-APP: Subcellular analysis of immune cell-lectin binding enables correlation of glycan binding parameters to receptor biology.  doi: https://doi.org/10.1101/2025.01.24.634682
+## Reference
+The software and selected research results are described in:  Steuten, K., Bakker, J., Doelman, W.  et al. Glyco-PAINT-APP: Subcellular analysis of immune cell-lectin binding enables correlation of glycan binding parameters to receptor biology.  doi: https://doi.org/10.1101/2025.01.24.634682 [![DOI](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.01.24.634682-blue)](https://doi.org/10.1101/2025.01.24.634682)
 
 The Pipeline, presented here, is a research application to extract information from the GlycoPaint recordings. The pipeline is a collection of Python and R scripts and depends heavily on the Glyco-PAINT method, Fiji and TrackMate.
 
@@ -12,11 +13,20 @@ The Pipeline, presented here, is a research application to extract information f
 TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking pipelines. Nature Methods, 19(7),
 829–832. doi:10.1038/s41592-022-01507-1
 
-Thh software has been tested on a MacBook with MacOS 15.3, on a Windows 10 and on a Wondows 11 machine. The software is provided as is and no support is provided. The software is provided under the MIT license.
+## Software environment 
+The software has been tested on a MacBook with MacOS 14 (Intel) and 15 (Arm), on a Windows 10 and 11. 
 
+## System requirements
+No special system requiremnts are identified, other than a minimum memmory of 16GB. More memory and a fast processor will reduce runtimes. 
+
+## Installation
 To assist with installing the components of the pipeline, [Installation instructions](doc/Installation.md) are provided.
 
-An overview of the functionality of the pipeline, how to use ansd a detailed demo case with sample data it is provided in the [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
+## License
+The software is provided as is under the MIT license.
 
+## Functionality
+An overview of the functionality of the pipeline, how to use it and a detailed demo case with sample data it is provided in the [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
 
-
+## Sample data 
+Sample data is provided on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14196381.svg)](https://doi.org/10.5281/zenodo.14196381)
