@@ -372,6 +372,7 @@ The operation of the Paint Pipeline can be tuned with parameters that are kept i
 
 ![](./Images/paint_json.png)
 
+The default parameters are suitable for many situations and changing is not required. Changing parameters requires a deeper understanding of the pipeline and components such as Trackmate. 
 
 ## Paint
 
@@ -398,8 +399,6 @@ In this section, parameters are stored that are used by the Generate Squares app
 ## TrackMate
 
 In this section, parameters are stored that are used by TrackMate. The [TrackMate documentation pages](https://imagej.net/software/fiji/) contain much useful information on TrackMate.
-
-In this section, TrackMate parameters that are important in GlycoPaint are explained.
 Not parameterised, but important choices for TrackMate are the 'LoG detector' model for spot detection and the 'Simple LAP tracker' model for tracking.
 
 
@@ -447,6 +446,7 @@ The MIN_NR_SPOTS_IN_TRACK parameter is specific for GlycoPaint, and with its def
 The TRACK_COLOURING parameter determines what track characteristic is used for colouring the tracks. Valid choices are specified in the TrackMate documentation. Options currently supported are TRACK_ID
 and TRACK_DURATION.
 
+The MAX_NR_SPOTS_IN_IMAGE parameter stops TrackMate from generating tracks when there are more then the specified number of spots detected. When there are many spots, the tracking will take prohibitively long and useful results are unlikely to be achieved. If this situation occurs, processing is aborted and the Nr of Tracks is recorded as -1. That recording is then excluded from further processing. The option remains to process the recording with a higher 'Threshold' parameter (specified in the Experiment Info.csv file). 
 
 # Paint directories
 
