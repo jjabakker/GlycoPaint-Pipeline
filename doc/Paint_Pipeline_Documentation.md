@@ -446,7 +446,7 @@ The MIN_NR_SPOTS_IN_TRACK parameter is specific for GlycoPaint, and with its def
 The TRACK_COLOURING parameter determines what track characteristic is used for colouring the tracks. Valid choices are specified in the TrackMate documentation. Options currently supported are TRACK_ID
 and TRACK_DURATION.
 
-The MAX_NR_SPOTS_IN_IMAGE parameter stops TrackMate from generating tracks when there are more then the specified number of spots detected. When there are many spots, the tracking will take prohibitively long and useful results are unlikely to be achieved. If this situation occurs, processing is aborted and the Nr of Tracks is recorded as -1. That recording is then excluded from further processing. The option remains to process the recording with a higher 'Threshold' parameter (specified in the Experiment Info.csv file). 
+The MAX_NR_SPOTS_IN_IMAGE parameter stops TrackMate from generating tracks when there are more then the specified number of spots detected. When there are many spots, the tracking will take prohibitively long and useful results are unlikely to be achieved. If this situation occurs, processing is aborted and the Nr of Tracks is recorded as -1 and that recording is then excluded from further processing. The option remains to process the recording with a higher 'Threshold' parameter (specified in the Experiment Info.csv file). 
 
 # Paint directories
 
