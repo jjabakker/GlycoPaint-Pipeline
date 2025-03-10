@@ -383,7 +383,7 @@ Two parameters are of interest:
 
 
 ## User Directories
-In this section,directories previously specified by the user are stored. so they can be offered as defaults in a nect compinent of the pipeline.
+In this section, directories previously specified by the user are stored. so they can be offered as defaults in a nect compinent of the pipeline.
 
 
 ## Generate Squares
@@ -408,11 +408,11 @@ The RADIUS parameter is used during the spot detection phase to specify the size
 
 The value is dependent on multiple factors, including the microscope, recoding parameters and fluorophore used. For the GlycoPaint experiments we conducted, a RADIUS of 0.5 micrometerm was found to give good results.
 
-If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint, positional accuracy is not important and the value of the parameter is set to False to avoid unncessarily increasing processing time.
+If positional accuracy is important, the DO_SUBPIXEL_LOCALIZATION parameter enables or disables the refinement of spot positions to subpixel accuracy. This feature is particularly useful for improving the precision of object tracking when working with high-resolution data or small objects that do not align perfectly with pixel boundaries. For GlycoPaint, positional accuracy is not important and the value of the parameter is set to False to avoid unnecessarily increasing processing time.
 
 The DO_MEDIAN_FILTERING parameter determines whether a median filter should be applied to the image during the spot detection phase. This preprocessing step helps reduce noise and enhance the detection of objects, especially in noisy datasets. The proposed value is True.
 
-The TARGET_CHANNEL parameter specifies which image channel is used for spot detection in multi-channel datasets. This is critical when working with datasets containing multiple channels (e.g., fluorescence microscopy) and tracking is needed in only one specific channel. For GlycoPaint the parameter defaults to 1.
+The TARGET_CHANNEL parameter specifies which image channel is used for spot detection in multichannel datasets. This is critical when working with datasets containing multiple channels (e.g., fluorescence microscopy) and tracking is needed in only one specific channel. For GlycoPaint the parameter defaults to 1.
 
 ### Building Tracks
 
@@ -430,15 +430,15 @@ Imagine the following situation. There is a clearly defined track, with spots on
 
 If ALLOW_GAP_CLOSING parameter is set to True, TrackMate will consider if gaps in what is possibly one track should be closed. If the number of consecutive frames where a spot is missing is smaller than MAX_FRAME_GAP and if the distance between the last known and new spot location is smaller than GAP_CLOSING_MAX_DISTANCE, the two tracks are interpreted to be one track with some spots missing, otherwise as separarate tracks.
 
-If we expect that a lectin can release a glycan and immeditialy bind another, a low value of  MAX_FRAME_GAP is required. 
+If we expect that a lectin can release a glycan and immediately bind another, a low value of MAX_FRAME_GAP is required. 
 
 The suggested value for MAX_FRAME_GAP is 1 frame and for GAP_CLOSING_MAX_DISTANCE 0.5 micrometerm (which is equal to the expected radius of the spots).
 
 ### Track Splitting
-Gap splitting concerns the ability for a track to split into two or more tracks during tracking. This commonly used in scenarios like Cell division: when a single cell divides into two daughter cells and branching motion (when a particle splits into multiple trajectories). For the GlycoPaint application this is not relevant and ALLOW_TRACK_SPLITTING is set to False.
+Gap splitting concerns the ability for a track to split into two or more tracks during tracking. This is commonly used in scenarios like Cell division: when a single cell divides into two daughter cells and branching motion (when a particle splits into multiple trajectories). For the GlycoPaint application this is not relevant and ALLOW_TRACK_SPLITTING is set to False.
 
 ### Track Merging
-Track mergings describes the ability for two or more tracks to merge into one during tracking. This occurs in scenarios like cell aggregation (two cells move together and become indistinguishable) or particle collision (two particles collide and continue as one). For the GlycoPaint application this is not relevant and ALLOW_TRACK_MERGING is set to False.
+Track merging describes the ability for two or more tracks to merge into one during tracking. This occurs in scenarios like cell aggregation (two cells move together and become indistinguishable) or particle collision (two particles collide and continue as one). For the GlycoPaint application this is not relevant and ALLOW_TRACK_MERGING is set to False.
 
 ### GlycoPaint
 The MIN_NR_SPOTS_IN_TRACK parameter is specific for GlycoPaint, and with its default setting of 3, ignores the shortest possible tracks, consisting of only 2 spots, as they are considered imaging noise.
@@ -454,11 +454,11 @@ The Paint pipeline creates a 'Paint' directory in the user's home directory, wit
 
 - In the 'Defaults' directory, a 'Paint.json' holds the parameters that are used by the various components of the Paint pipeline. For regular use, parameters do not need to be changed, but the option to change is provided (but requires detailed insight into the pipeline's operation). The parameters are explained in the next section.
 
-- In the 'Logger' directory, the system writes log files, that provide information about the progress of operations in the pipeline and if any difficulties encountered. The log files can be statically viewed with a regular text editor or dynamically with the MacOS Console application. 
+- In the 'Logger' directory, the system writes log files, that provide information about the progress of operations in the pipeline, and if any difficulties are encountered. The log files can be statically viewed with a regular text editor or dynamically with the MacOS Console application. 
 
 # Structure of Generate Squares
 
-The core of the data processing takes place in Generate Squares. To facilitate stuyding the cose, some high level pseudo-code is presented hers.
+The core of the data processing takes place in Generate Squares. To facilitate studying the code, some high level pseudocode is presented hers.
 
 **Generate Squares manin structure**
 
