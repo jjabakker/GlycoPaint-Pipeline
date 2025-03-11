@@ -34,7 +34,6 @@ The two datasets provide the foundation for further analysis.
 
 A lot of data is generated. For an order of magnitude, an average recording may contain around 800,000 spots, from which approximately 50,000 tracks are constructed. A 20x20 or 30x30 grid divides the image into 400 or 900 squares. One of the demo experiments, with 14 recordings and a 20x20 grid, has an All Squares table containing 5600 rows (or 12,600 rows for a 30x30 grid) and the All Tracks table contains nearly 180,000 tracks.  
 
-
 The scope of the GlycoPaint pipeline is to extract information from the Recordings and to extract the maximum amount of meaningful summary information from the images for subsequent processing.
 
 Important features of the pipeline are that the results are fully reproducible, require minimal user intervention and are efficient in terms of processing time and
@@ -70,7 +69,6 @@ For recordings metadata needs to be provided for the Paint pipeline to work. On 
 
 ## Overview
 
-
 ![](./Images/process_flow.png)
 
 The GlycoPaint process starts with a **microscopy experiment**, in which binding events are observed under a fluorescent microscope. Such an experiment leads to a set of recordings,
@@ -90,7 +88,6 @@ These tables are used in the **R Analysis** phase where the data is selected, pr
 
 The steps will be described in detail in coming sections, using demo data that can be downloaded from: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14196381.svg)](https://doi.org/10.5281/zenodo.14196381)
 
-
 ## Prepare Experiment Info
 
 The metadata of the experiment is information about the conditions under which each recording is made and recorded in an 'Experiment Info' file. The Paint processing pipeline contains a 'Prepare Experiments Info' utility to prepare this file. The user provides two parameters: the directory that contains the recordings and the location of the Paint Experiment directory where the Experiment Info file (and all subsequent data) will be written.
@@ -106,7 +103,6 @@ If the Paint file naming convention is used, columns such as Experiment Date, Ex
 ![](./Images/empty_experiments_info.png)
 
 An example of a fully specified Experiment Info file, with values for Probe, Probe Type, Cell Type, Adjuvant and Concentration provided is shown below. The Threshold parameter is necessary for TrackMate processing (refer to next section). The 'Process' flag indicates whether a recording is processed or ignored. You can download copies of these files, [240104 Experiment Info ](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/240104%20Experiment%20Info.csv) and [240116 Experiment Info ](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/240116%20Experiment%20Info.csv) and save them in their respective directories as 'Experiment Info.csv'.
-
 
 ![](./Images/experiments_info_with_metadata.png)
 
@@ -163,7 +159,9 @@ With the 'Generate Squares' function run, the directory structure is shown below
 
 ## Compile Project
 
-Typically, data to be analysed comes from more than one experiment. With the Compile project option, the data from the experiments in the project are compiled and an 'All Recordings', 'All Squares' and 'All Tracks' file on project level is generated.
+Typically, data to be analysed comes from more than one experiment. With the Compile project option, the data from the experiments in the project are compiled and an [All Recording](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Recordings.csv), [All Squares](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Squares.csv) and [All Tracks](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Tracks.csv) file on project level are generated.
+
+For reference, copies of those files are available
 
 ![](./Images/compile_project_dialog.png)
 

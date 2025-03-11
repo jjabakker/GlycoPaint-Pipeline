@@ -23,7 +23,7 @@ No special system requirements are identified, other than a minimum memory of 16
 To assist with installing the components of the pipeline, [Installation instructions](doc/Installation.md) are provided.
 
 ## License
-The software is provided as is under the MIT license.
+The software is provided as is under the [MIT license](LICENSE).
 
 ## Functionality
 An overview of the functionality of the pipeline, how to use it and a detailed demo case with sample data it is provided in the [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
