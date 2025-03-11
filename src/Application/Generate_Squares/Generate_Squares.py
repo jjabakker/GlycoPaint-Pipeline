@@ -123,7 +123,7 @@ def process_experiment(
     """
 
     # Preparations
-    plot_to_file = get_paint_attribute_with_default('Generate Squares', 'Plot to File', "")
+    plot_to_file = get_paint_attribute_with_default('Generate Squares', 'Plot to File', False)
     plot_max = get_paint_attribute_with_default('Generate Squares', 'Plot Max', 5)
     time_stamp = time.time()
     df_squares_of_experiment = pd.DataFrame()
