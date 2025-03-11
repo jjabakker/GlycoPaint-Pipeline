@@ -17,7 +17,7 @@ TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking 
 The software has been tested on a MacBook with MacOS 14 (Intel) and 15 (Arm), on a Windows 10 and 11. 
 
 ## System requirements
-No special system requiremnts are identified, other than a minimum memmory of 16GB. More memory and a fast processor will reduce runtimes. 
+No special system requirements are identified, other than a minimum memory of 16GB. More memory and a fast processor will reduce runtimes. 
 
 ## Installation
 To assist with installing the components of the pipeline, [Installation instructions](doc/Installation.md) are provided.
