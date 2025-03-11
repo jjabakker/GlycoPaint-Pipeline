@@ -1,10 +1,9 @@
 import json
 import os
-
+import sys
 
 def get_paint_defaults_file_path():  # ToDo
     return os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'Paint.json')
-
 
 # This is unusual code. One import will work in Jython, the other in Python. The other will fail, but the error will
 # be caught.
@@ -142,33 +141,38 @@ def get_paint_attribute_with_default(application, attribute_name, default_value)
         application = config.get(application)
         value = application.get(attribute_name, None)
         if value is None:
-            pass  # ToDo
-            paint_logger.error("Error: Attribute {} not found in configuration file {}.".format(attribute_name,
+            paint_logger.error("Info: Attribute {} not found in configuration file {}.".format(attribute_name,
                                                                                                 get_paint_defaults_file_path()))
             if default_value is not None:
-                value =  default_value
-
+                paint_logger.error(
+                    "Info: Default value {} applied for Attribute {}.".format(default_value, attribute_name))
+                value = default_value
+                update_paint_attribute(application, attribute_name, value)
+            else:
+                paint_logger.error(
+                    "Error: Attribute {} not found in configuration file {} and application {} and no default value.".format(
+                        attribute_name, application, get_paint_defaults_file_path()))
+                sys.exit()
         return value
 
 
 def update_paint_attribute(application, attribute_name, value):
     try:
-        config = load_paint_config(get_paint_defaults_file_path())
-
-        # Update the RADIUS value under TrackMate
+        # Load the current configuration
+        config = load_paint_config(get_paint_defaults_file_path())  # Ensure these functions are defined
         if application in config:
+            # Check if the attribute exists, if not, create it
             config[application][attribute_name] = value
         else:
-            paint_logger.error("The {} section does not exist in the JSON file.".format(application))
+            paint_logger.error("The '{}' section does not exist in the config file.".format(application))
+            return
 
-        # Save the updated data back to the JSON file
-        file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
-        with open(file_path, "w") as file:
+        # Save the updated configuration back to the file
+        with open(get_paint_defaults_file_path(), "w") as file:
             json.dump(config, file, indent=4)
 
     except Exception as e:
-        paint_logger.error("An unexpected error occurred: {}.format(e)")
-
+        paint_logger.error("An unexpected error occurred while saving the config file: {}".format(str(e)))
 
 if __name__ == '__main__':
     config = load_paint_config(os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json'))
