@@ -885,7 +885,7 @@ class RecordingViewer:
 
     def deselect_square(self, event, label_nr, square_nr):
 
-        # If there was no column 'Manually Excluded' then create it both in df_squares and df_all_squarea
+        # If there was no column 'Manually Excluded' then create it both in df_squares and df_all_squares
         if 'Manually Excluded' not in self.df_squares.columns:
             self.df_squares['Manually Excluded'] = False
             self.df_all_squares['Manually Excluded'] = False
@@ -910,7 +910,7 @@ class RecordingViewer:
         self.display_selected_squares()
         self.setup_exclude_status()
 
-        # Make sure the change will be noted if the user exits or changes image
+        # Make sure the change will be noted if the user exits or changes the image
         self.recording_changed = True
 
         # Recalculate the tau

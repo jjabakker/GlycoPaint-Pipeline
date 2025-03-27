@@ -26,7 +26,7 @@ class HeatMapDialog:
         self.heatmap_dialog.resizable(False, False)
         self.heatmap_dialog.protocol("WM_DELETE_WINDOW", self.on_close)
 
-        # Get main window geometry
+        # Get the main window geometry
         main_x = self.image_viewer.viewer_dialog.winfo_x()
         main_y = self.image_viewer.viewer_dialog.winfo_y()
         main_width = self.image_viewer.viewer_dialog.winfo_width()
@@ -168,7 +168,7 @@ class HeatMapDialog:
 
     def on_toggle(self):
         """
-        If the user presses the toggle button a message is sent to the image viewer
+        If the user presses the toggle button, a message is sent to the image viewer
         to toggle between the heatmap and the selected squares
         """
 
@@ -206,7 +206,7 @@ class HeatMapDialog:
 
     def on_key_pressed(self, event):
         """
-        If the user presses the 't' key the toggle button is pressed
+        If the user presses the 't' key, the toggle button is pressed
         """
 
         if event.char == 't':

@@ -251,7 +251,7 @@ def process_recording(
             delete_files_in_directory(plot_dir)
 
     # -----------------------------------------------------------------------------------------------------
-    # A df_squares_of_recording dataframe is generated and, if the process_square_tau flag is set, for every square the
+    # A df_squares_of_recording dataframe is generated and, if the 'process_square_tau' flag is set, for every square the
     # Tau and Density are calculated. The results are stored in 'All Squares'.
     # -----------------------------------------------------------------------------------------------------
 
@@ -285,7 +285,7 @@ def process_recording(
             row_nr,
             col_nr)
 
-        # And add it to the squares dataframe and the recorisng_tau to the tau_matrix
+        # And add it to the squares dataframe and the recording_tau to the tau_matrix
         df_squares_of_recording = pd.concat([df_squares_of_recording, pd.DataFrame.from_records([square_data])])
         tau_matrix[row_nr, col_nr] = int(square_data['Tau'])
 
