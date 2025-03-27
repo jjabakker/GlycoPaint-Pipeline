@@ -144,7 +144,7 @@ class DefineCellDialog:
         elif event.char == 'r':
             self.on_reset()
 
-    def on_provide_report_on_cell(self, event, i):
+    def on_provide_report_on_cell(self, i):
         print(f"User requested report on cell {i}")
         pass
 

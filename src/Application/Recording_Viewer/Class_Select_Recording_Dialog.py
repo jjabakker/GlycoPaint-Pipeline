@@ -167,8 +167,6 @@ class SelectRecordingDialog():
         self.filter_applied[col] = True
 
         if selected_values:
-            # Trigger filtering when the button is pressed
-            filtered_df = self.df[self.df[col].isin(selected_values)]
 
             # Update the filtered DataFrame with the current filter
             self.filtered_df = self.filtered_df[self.filtered_df[col].isin(selected_values)]

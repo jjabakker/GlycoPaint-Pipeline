@@ -115,8 +115,7 @@ def process_experiment(
         select_parameters: dict,
         nr_of_squares_in_row: int,
         min_required_r_squared: float,
-        min_tracks_for_tau: int,
-        paint_force: bool = False) -> None:
+        min_tracks_for_tau: int) -> None:
     """
     This function processes all Recordings in an Experiment.
     It reads the All Recordings file to find out which Recordings need processing
@@ -124,7 +123,7 @@ def process_experiment(
 
     # Preparations
     plot_to_file = get_paint_attribute_with_default('Generate Squares', 'Plot to File', False)
-    plot_max = get_paint_attribute_with_default('Generate Squares', 'Plot Max', 5)
+    # plot_max = get_paint_attribute_with_default('Generate Squares', 'Plot Max', 5)
     time_stamp = time.time()
     df_squares_of_experiment = pd.DataFrame()
     df_tracks_of_experiment_with_labels = pd.DataFrame()
@@ -380,8 +379,6 @@ def process_square(
         max_track_duration = df_tracks_of_square['Track Duration'].max()
 
         # Calculate the Tau and R squared for the square
-        tau = 0
-        r_squared = 0
         df_tracks_for_tau = extra_constraints_on_tracks_for_tau_calculation(df_tracks_of_square)
         tau, r_squared = calculate_tau(
             df_tracks_for_tau,

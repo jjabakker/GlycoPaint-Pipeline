@@ -36,7 +36,6 @@ def compile_project_output(
         verbose: bool = True):
     paint_logger.info("")
     paint_logger.info(f"Compiling 'All Recordings' and 'All Squares' for {project_dir}")
-    time_stamp = time.time()
 
     experiment_dirs = os.listdir(project_dir)
     experiment_dirs.sort()
@@ -67,9 +66,6 @@ def compile_project_output(
         experiment_dir_path = os.path.join(project_dir, experiment_name)
         if not os.path.isdir(experiment_dir_path):
             continue
-
-        if False:
-            paint_logger.debug(f'Processing experiment: {experiment_dir_path}')
 
         tracks_file = os.path.join(experiment_dir_path, 'All Tracks.csv')
         if not os.path.exists(tracks_file):

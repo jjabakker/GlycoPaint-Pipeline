@@ -25,7 +25,6 @@ def get_colormap_colors(cmap_name, num_colors):
 
 
 def get_color_index(value, var_max, var_min, nr_levels):
-    var = max(value, 0)
     if var_max == var_min:
         return 0
 

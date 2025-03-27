@@ -1,9 +1,6 @@
 import os
-from logging import error
 
 import pandas as pd
-from fontTools.misc.roundTools import otRound
-from matplotlib.projections import projection_registry
 
 from src.Fiji.LoggerConfig import paint_logger
 

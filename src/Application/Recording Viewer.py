@@ -883,7 +883,7 @@ class RecordingViewer:
             self.squares_in_rectangle.append(int(square_nr))
         self.display_selected_squares()
 
-    def deselect_square(self, event, label_nr, square_nr):
+    def deselect_square(self, square_nr):
 
         # If there was no column 'Manually Excluded' then create it both in df_squares and df_all_squares
         if 'Manually Excluded' not in self.df_squares.columns:
@@ -982,7 +982,7 @@ class RecordingViewer:
         ctrl = event.state & 0x4  # Detect if Ctrl is pressed
         shift = event.state & 0x1  # Detect if Shift is pressed
         if ctrl:
-            self.deselect_square(event, label_nr, square_nr)
+            self.deselect_square(square_nr)
         elif shift:
             self.reset_deselected_squares()
         else:
@@ -1050,7 +1050,7 @@ class RecordingViewer:
 
         # Save and update the Squares info
         if self.recording_changed:
-            self.save_changes_on_recording_change(self)
+            self.save_changes_on_recording_change()
             self.save_on_exit = True
             self.recording_changed = False
 
@@ -1153,7 +1153,7 @@ class RecordingViewer:
         # Update the exclude status
         self.setup_exclude_status()
 
-    def save_changes_on_recording_change(self, save_experiment=True, save_squares=True):
+    def save_changes_on_recording_change(self):
 
         # Save the changes in All Squares
         self.df_squares.set_index('Unique Key', inplace=True, drop=False)
@@ -1176,7 +1176,7 @@ class RecordingViewer:
         self.df_all_squares.loc[dfs.index, 'Square Nr'] = dfs['Square Nr']
         self.df_all_squares.loc[dfs.index, 'Selected'] = dfs['Selected']
 
-    def save_changes_on_exit(self, save_experiment=True, save_squares=True):
+    def save_changes_on_exit(self):
 
         # See if there is anything to save
         if not self.save_on_exit and not self.recording_changed:

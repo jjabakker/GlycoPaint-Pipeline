@@ -11,8 +11,7 @@ from src.Fiji.LoggerConfig import (
     paint_logger_change_file_handler_name,
     paint_logger_file_name_assigned)
 from src.Fiji.NewPaintConfig import (
-    get_paint_attribute_with_default,
-    update_paint_attribute)
+    get_paint_attribute_with_default)
 from src.Application.Utilities.General_Support_Functions import (
     ToolTip,
     classify_directory)

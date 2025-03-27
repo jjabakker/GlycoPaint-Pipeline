@@ -27,8 +27,6 @@ def display_selected_squares(self):
     if len(self.df_squares) == 0:
         return
 
-    i = 1
-
     # First draw the squares that are selected
     for index, row_in_squares in self.df_squares.iterrows():
         if row_in_squares['Selected']:
@@ -124,7 +122,6 @@ def draw_single_square(
                 )
 
     if tau < 0:  # The square is selected but does not have a valid Tau: give it a colour
-        col = colour_table[squares_row['Square Nr'] % 6 + 1][0]
         canvas.create_rectangle(
             col_nr * width,
             row_nr * width,
@@ -160,7 +157,7 @@ def draw_single_square(
                     fill='white',
                     tags=text_tag)
 
-    # Always create a transparent rectangle (clickable area) and bind events to the it
+    # Always create a transparent rectangle (clickable area) and bind events to it
     invisible_rect = canvas.create_rectangle(
         col_nr * width,
         row_nr * width,

@@ -48,7 +48,7 @@ def get_images(self, initial=False):
             'Brightfield Images' if self.user_specified_mode == 'Experiment' else os.path.join(experiment,
                                                                                                'Brightfield Images')
         )
-        right_valid, right_img = get_corresponding_bf(bf_image_dir, ext_recording_name, recording_name)
+        right_valid, right_img = get_corresponding_bf(bf_image_dir, recording_name)
 
         record = {
             "Left Image Name": experiment_row['Ext Recording Name'],
@@ -89,7 +89,7 @@ def get_images(self, initial=False):
     return list_images
 
 
-def get_corresponding_bf(bf_dir, ext_recording_name, recording_name):
+def get_corresponding_bf(bf_dir, recording_name):
     """
     Retrieve the corresponding BF image for the given image name
     """
