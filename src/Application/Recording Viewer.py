@@ -28,14 +28,17 @@ from src.Application.Recording_Viewer.Class_Select_Viewer_Data_Dialog import Sel
 from src.Application.Recording_Viewer.Display_Selected_Squares import display_selected_squares
 from src.Application.Recording_Viewer.Get_Images import get_images
 from src.Application.Recording_Viewer.Heatmap_Support import (
-    get_colormap_colors, get_color_index,
+    get_colormap_colors,
+    get_color_index,
     get_heatmap_data)
 from src.Application.Recording_Viewer.Recording_Viewer_Support_Functions import (
     test_if_square_is_in_rectangle,
     save_as_png)
 from src.Application.Recording_Viewer.Select_Squares import (
     relabel_tracks,
-    select_squares, label_selected_squares)
+    select_squares_and_label,
+    select_all_squares,
+    label_selected_squares)
 from src.Application.Utilities.General_Support_Functions import (
     read_squares_from_file,
     set_application_icon)
@@ -564,7 +567,7 @@ class RecordingViewer:
 
     def on_toggle_valid_square(self):
         self.only_valid_tau = not self.only_valid_tau
-        select_squares(self, only_valid_tau=self.only_valid_tau)
+        select_squares_and_label(self, only_valid_tau=self.only_valid_tau)
         self.display_selected_squares()
 
     def output_pictures_to_pdf(self):
@@ -844,13 +847,19 @@ class RecordingViewer:
                 image['Max Allowable Variability'] = max_allowable_variability
                 image['Neighbour Mode'] = neighbour_mode
                 image['Min Required R Squared'] = min_required_r_squared
+
+            # Apply these criteria to all squares so that the Selected column is properly updated
+            self.select_all_squares()
+
         elif setting_type == "Exit":
             self.select_square_dialog = None
         else:
             paint_logger.error(f"Unknown setting type: {setting_type}")
 
-        self.select_squares_for_display()
-        self.display_selected_squares()
+        # Update the display, unless you clicked Set for All
+        if setting_type != "Set for All":
+            self.select_squares_for_display()
+            self.display_selected_squares()
 
         # Update the Density Ratio and Variability information in the Viewer
         info3 = f"Min Req Dens Ratio: {min_required_density_ratio:,} - Max All Var: {max_allowable_variability} - Min Req R Sq: {min_required_r_squared}"
@@ -859,7 +868,10 @@ class RecordingViewer:
         recalc_recording_tau_and_density(self)
 
     def select_squares_for_display(self):
-        select_squares(self, only_valid_tau=self.only_valid_tau)  # The function is in the file 'Select_Squares.py'
+        select_squares_and_label(self, only_valid_tau=self.only_valid_tau)  # The function is in the file 'Select_Squares.py'
+
+    def select_all_squares(self):
+        select_all_squares(self, only_valid_tau=self.only_valid_tau)  # The function is in the file 'Select_Squares.py'
 
     def display_selected_squares(self):
         display_selected_squares(self)
