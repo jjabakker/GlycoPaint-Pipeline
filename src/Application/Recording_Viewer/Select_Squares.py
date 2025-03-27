@@ -70,7 +70,7 @@ def _select_squares_actual(
             (df_squares['Tau'] > 0))
     else: # If we want to include squares with invalid Tau values
         df_squares['Selected'] = (
-                # So either the R square is good (and that means that the Tau is valid
+                # So either the R squared is good (and that means that the Tau is valid
                 (
                     (df_squares['Density Ratio'] >= min_required_density_ratio) &
                     (df_squares['Variability'] <= max_allowable_variability) &

@@ -150,8 +150,7 @@ def process_experiment(
     # Determine how many names there are from Recordings and Tracks anc compare
     nr_files_tracks = df_tracks_of_experiment['Ext Recording Name'].nunique()
     nr_of_recordings_to_process = len(df_recordings_of_experiment[
-                                  df_recordings_of_experiment['Process'].isin(['Yes', 'yes', 'Y'])
-                              ])
+                                  df_recordings_of_experiment['Process'].isin(['Yes', 'yes', 'Y'])])
     if nr_of_recordings_to_process != nr_files_tracks:
         paint_logger.info(f"All Squares file is not consistent with All Recordings for {experiment_path}")
     nr_files = nr_files_tracks
