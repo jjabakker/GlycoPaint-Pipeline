@@ -6,7 +6,6 @@ import statistics
 import subprocess
 import sys
 import tempfile
-import time
 import tkinter as tk
 from datetime import datetime
 from tkinter import *
@@ -839,11 +838,6 @@ class RecordingViewer:
                 self.df_experiment.loc[index, 'Max Allowable Variability'] = max_allowable_variability
                 self.df_experiment.loc[index, 'Min Required R Squared'] = min_required_r_squared
                 self.df_experiment.loc[index, 'Neighbour Mode'] = neighbour_mode
-
-            self.df_experiment.loc[self.image_name, 'Min Required Density Ratio'] = min_required_density_ratio
-            self.df_experiment.loc[self.image_name, 'Max Allowable Variability'] = max_allowable_variability
-            self.df_experiment.loc[self.image_name, 'Min Required R Squared'] = min_required_r_squared
-            self.df_experiment.loc[self.image_name, 'Neighbour Mode'] = neighbour_mode
 
             for image in self.list_images:
                 image['Min Required Density Ratio'] = min_required_density_ratio
