@@ -330,7 +330,7 @@ class RecordingViewer:
         if self.df_all_squares is None:
             self.show_error_and_exit("No 'All Squares.csv.csv' file, Did you select an image directory?")
 
-        # Read the 'All Experiments' file
+        # Read the 'All Recordings' file
         self.df_experiment = pd.read_csv(os.path.join(self.user_specified_directory, 'All Recordings.csv'),
                                          dtype={'Max Allowable Variability': float,
                                                 'Min Required Density Ratio': float})
