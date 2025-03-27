@@ -70,7 +70,7 @@ def correct_all_recordings_column_types(file_path):
 
 def read_squares_from_file(squares_file_path):
     try:
-        df_squares = pd.read_csv(squares_file_path, header=0, dtype={3: str})
+        df_squares = pd.read_csv(squares_file_path, header=0, dtype={'Experiment Name': str})
     except IOError:
         paint_logger.error(f'Read_squares from_file: file {squares_file_path} could not be opened.')
         exit(-1)
