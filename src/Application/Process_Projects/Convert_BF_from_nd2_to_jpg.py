@@ -37,7 +37,7 @@ def convert_bf_images(image_source_directory, paint_directory, force=False):
     Convert BF images to JPEG and store them in a specified directory.
 
     Args:
-        image_source_directory (str): Directory containing the  images.
+        image_source_directory (str): Directory containing the images.
         paint_directory (str): Directory to store the converted JPEGs.
         force (bool): Force overwrite of existing JPEG files, even if up to date.
     """
