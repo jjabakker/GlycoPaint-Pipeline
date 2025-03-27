@@ -26,7 +26,7 @@ def select_squares_with_parameters(df_squares, select_parameters, nr_of_squares_
         only_valid_tau=only_valid_tau)
 
 
-def select_squares(self, only_valid_tau=True):
+def select_squares_and_label(self, only_valid_tau=True):
     """
     Wrapper function to select squares based on defined conditions for density, variability, and track duration,
     No need to pass on individual parameters.
@@ -42,7 +42,25 @@ def select_squares(self, only_valid_tau=True):
         self.neighbour_mode,
         self.nr_of_squares_in_row,
         only_valid_tau=only_valid_tau)
+    label_selected_squares(self.df_squares)
 
+def select_all_squares(self, only_valid_tau=True):
+    """
+    Wrapper function to select squares based on defined conditions for density, variability, and track duration,
+    No need to pass on individual parameters.
+    Note: This is done on All Squares (and is called as part of the Set for All sequence)
+    """
+
+    _select_squares_actual(
+        self.df_all_squares,
+        self.min_required_density_ratio,
+        self.max_allowable_variability,
+        self.min_track_duration,
+        self.max_track_duration,
+        self.min_required_r_squared,
+        self.neighbour_mode,
+        self.nr_of_squares_in_row,
+        only_valid_tau=only_valid_tau)
 
 def _select_squares_actual(
         df_squares,
@@ -105,7 +123,7 @@ def _select_squares_actual(
 
     if 'Unique Key' in df_squares.columns:
         df_squares.set_index('Unique Key', inplace=True, drop=False)
-    label_selected_squares(df_squares)
+
 
 
 def select_squares_neighbour_strict(df_squares, nr_of_squares_in_row):
