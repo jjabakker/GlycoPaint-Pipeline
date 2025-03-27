@@ -728,7 +728,7 @@ class RecordingViewer:
         self.text_for_info1.set(cell_info)
         info2 = f"Spots: {self.list_images[self.img_no]['Nr Spots']:,} - Threshold: {self.list_images[self.img_no]['Threshold']}"
         self.text_for_info2.set(info2)
-        info3 = f"Min Required Density Ratio: {self.list_images[self.img_no]['Min Required Density Ratio']:,} - Max Allowable Variability: {self.list_images[self.img_no]['Max Allowable Variability']}"
+        info3 = f"Min Req Dens Ratio: {self.list_images[self.img_no]['Min Required Density Ratio']:,} - Max All Var: {self.list_images[self.img_no]['Max Allowable Variability']} - Min Req R Sq: {self.list_images[self.img_no]['Min Required R Squared']}"
         self.text_for_info3.set(info3)
 
         self.image_name = current_image['Left Image Name']
@@ -859,7 +859,7 @@ class RecordingViewer:
         self.display_selected_squares()
 
         # Update the Density Ratio and Variability information in the Viewer
-        info3 = f"Min Required Density Ratio: {min_required_density_ratio:,} - Max Allowable Variability: {max_allowable_variability}"
+        info3 = f"Min Req Dens Ratio: {min_required_density_ratio:,} - Max All Var: {max_allowable_variability} - Min Req R Sq: {min_required_r_squared}"
         self.text_for_info3.set(info3)
 
         recalc_recording_tau_and_density(self)
@@ -1084,7 +1084,8 @@ class RecordingViewer:
             info2 = f"{info2} - Tau: {int(self.list_images[self.img_no]['Tau'])}"
         self.text_for_info2.set(info2)
         # TODO: If saved, the Tau value should be displayed
-        info3 = f"Min Required Density Ratio: {self.list_images[self.img_no]['Min Required Density Ratio']:,} - Max Allowable Variability: {self.list_images[self.img_no]['Max Allowable Variability']}"
+        info3 = f"Min Req Dens Ratio: {self.list_images[self.img_no]['Min Required Density Ratio']:,} - Max All Var: {self.list_images[self.img_no]['Max Allowable Variability']} - Min Req R Sq: {self.list_images[self.img_no]['Min Required R Squared']}"
+
         self.text_for_info3.set(info3)
 
         # Set the correct label for Exclude/Include button
