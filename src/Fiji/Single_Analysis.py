@@ -8,7 +8,10 @@ from fiji.plugin.trackmate import Model
 from fiji.util.gui import GenericDialogPlus
 from ij import IJ
 from ij.plugin.frame import RoiManager
+from java.lang.System import getProperty
 
+paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
+sys.path.append(paint_dir)
 
 from NewTrackMate import execute_trackmate_in_Fiji
 from DirectoriesAndLocations import (
