@@ -1096,8 +1096,7 @@ class RecordingViewer:
 
         # Set the correct label for Exclude/Include button
         if self.heatmap_control_dialog is None:
-            row_index = self.df_experiment.index[self.df_experiment['Ext Recording Name'] == self.image_name].tolist()[
-                0]
+            row_index = self.df_experiment.index[self.df_experiment['Ext Recording Name'] == self.image_name].tolist()[0]
             if self.df_experiment.loc[row_index, 'Exclude']:
                 self.bn_exclude.config(text='Include')
                 self.text_for_info4.set("Excluded")
