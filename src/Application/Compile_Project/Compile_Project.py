@@ -3,7 +3,8 @@ This function takes as input the directory under which the various experiments a
 It will create an Output directory with three files: All Squares, All Images, and Images Summary.
 """
 import os
-import time
+import sys
+import pandas as pd
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 
@@ -105,6 +106,18 @@ def compile_project_output(
     concat_csv_files(os.path.join(project_dir, 'All Recordings.csv'), all_recordings)
     concat_squares_files(os.path.join(project_dir, 'All Squares.csv'), all_squares)
     concat_csv_files(os.path.join(project_dir, 'All Tracks.csv'), all_tracks)
+
+    # Check for duplicates in the All Recordings file
+    df_experiment = pd.read_csv(os.path.join(project_dir, 'All Recordings.csv'),
+                                dtype={'Max Allowable Variability': float,
+                                       'Min Required Density Ratio': float})
+    if len(df_experiment)  != len(df_experiment['Recording Name'].unique()):
+        paint_logger.error("Duplicate entries found in All Recordings file.")
+        duplicate_names = set(df_experiment[df_experiment.duplicated(subset='Ext Recording Name', keep=False)]['Ext Recording Name'])
+        duplicate_list = sorted(duplicate_names)
+        paint_logger.error(f"Duplicate Recording Names: {duplicate_list}")
+        sys.exit(0)
+
 
     correct_all_recordings_column_types(os.path.join(project_dir, 'All Recordings.csv'))
     paint_logger.info(f"Processed {nr_processed} experiments, skipped {nr_skipped} experiments.")
