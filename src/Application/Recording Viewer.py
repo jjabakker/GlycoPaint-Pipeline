@@ -19,7 +19,8 @@ from src.Application.Generate_Squares.Generate_Squares_Support_Functions import 
     calculate_tau,
     extra_constraints_on_tracks_for_tau_calculation,
     calc_area_of_square,
-    calculate_density)
+    calculate_density,
+    get_square_coordinates)
 from src.Application.Recording_Viewer.Class_Define_Cell_Dialog import DefineCellDialog
 from src.Application.Recording_Viewer.Class_Heatmap_Dialog import HeatMapDialog
 from src.Application.Recording_Viewer.Class_Select_Recording_Dialog import SelectRecordingDialog
@@ -992,17 +993,60 @@ class RecordingViewer:
     # User square selection rectangle functions
     # --------------------------------------------------------------------------------------
 
+    def process_possible_new_square(self, x, y):
+        # Determine if the location is not already a square
+        for n in range(self.nr_of_squares_in_row):
+            if y < n * 512 / self.nr_of_squares_in_row:
+                break
+            row = n + 1
+            continue
+        for n in range(self.nr_of_squares_in_row):
+            if x < n * 512 / self.nr_of_squares_in_row:
+                break
+            col = n + 1
+            continue
+
+
+        already_selected = self.df_squares.loc[(self.df_squares['Col Nr'] == col) & (self.df_squares['Row Nr'] == row), 'Selected'].iloc[0]
+        print(f"Row = {row} and Col = {col}: {already_selected}")
+
+        # Set self.track_click to indicate that the user clicked on an empty space
+        self.track_click = True
+
+        if not already_selected:
+            square_nr =  (row - 1) * self.nr_of_squares_in_row + col
+            df_tracks_for_square = self.df_all_tracks[
+                (self.df_all_tracks['Square Nr'] == square_nr) & (self.df_all_tracks['Ext Recording Name'] == self.image_name)]
+            df_tracks_for_square.to_csv('~/Downloads/Tracks_for_square.csv')
+            print (df_tracks_for_square)
+        return already_selected
+
+
     def start_rectangle(self, event):
-        self.start_x = event.x
-        self.start_y = event.y
-        self.rect = self.left_image_canvas.create_rectangle(
-            self.start_x, self.start_y, self.start_x + 1, self.start_y + 1, fill="", outline='white')
+
+        if not self.process_possible_new_square(event.x, event.y):
+            self.start_x = event.x
+            self.start_y = event.y
+            self.rect = self.left_image_canvas.create_rectangle(
+                self.start_x, self.start_y, self.start_x + 1, self.start_y + 1, fill="", outline='white')
 
     def expand_rectangle_size(self, event):
+
+        # Check if the user previously clicked on an empty space
+        if self.track_click:
+            self.track_click = False
+            return
+
         # Expand rectangle as you drag the mouse
         self.left_image_canvas.coords(self.rect, self.start_x, self.start_y, event.x, event.y)
 
     def close_rectangle(self, event):
+
+        # Check if the user previously clicked on an empty space
+        if self.track_click:
+            self.track_click = False
+            return
+
         # Remove the rectangle
         self.left_image_canvas.delete(self.rect)
 
