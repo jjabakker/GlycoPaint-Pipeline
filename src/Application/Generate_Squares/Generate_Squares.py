@@ -95,7 +95,8 @@ def process_project(
             select_parameters=select_parameters,
             nr_of_squares_in_row=nr_of_squares_in_row,
             min_required_r_squared=min_required_r_squared,
-            min_tracks_for_tau=min_tracks_for_tau)
+            min_tracks_for_tau=min_tracks_for_tau,
+            paint_force=paint_force)
         nr_experiments_processed += 1
 
     return nr_experiments_processed
@@ -115,7 +116,8 @@ def process_experiment(
         select_parameters: dict,
         nr_of_squares_in_row: int,
         min_required_r_squared: float,
-        min_tracks_for_tau: int) -> None:
+        min_tracks_for_tau: int,
+        paint_force: bool = False) -> None:
     """
     This function processes all Recordings in an Experiment.
     It reads the All Recordings file to find out which Recordings need processing
