@@ -1018,7 +1018,9 @@ class RecordingViewer:
             df_tracks_for_square = self.df_all_tracks[
                 (self.df_all_tracks['Square Nr'] == square_nr) & (self.df_all_tracks['Ext Recording Name'] == self.image_name)]
             df_tracks_for_square.to_csv('~/Downloads/Tracks_for_square.csv')
-            print (df_tracks_for_square)
+            if len(df_tracks_for_square) != 0:
+                df_tracks_for_square.drop(columns=['Unique Key', 'Unique Key', 'Ext Recording Name', 'Nr Spots', 'Nr Gaps', 'Longest Gap', 'Track Total Distance', 'Label Nr'], inplace=True)
+                print (df_tracks_for_square.to_string(index=False))
         return already_selected
 
 
