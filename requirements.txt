@@ -1,0 +1,6 @@
+pandas==2.2.3
+pillow==11.1.0
+numpy==2.2.2
+matplotlib==3.10.0
+scipy==1.15.1
+nd2reader==3.3.1
