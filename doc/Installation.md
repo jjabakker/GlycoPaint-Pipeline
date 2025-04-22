@@ -18,7 +18,7 @@ TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking 
 ### Python
 The Python scripts were developed in PyCharm, and you can use Pycharm to run them, but any Python IDE should work. A free community version from PyCharm can be downloaded from [https://www.jetbrains.com/pycharm/](https://www.jetbrains.com/pycharm/).
 
-The Python scripts are available from the GitHub repository [https://github.com/jjabakker/GlycoPaint-Pipeline](https://github.com/jjabakker/GlycoPaint-Pipeline). Easiest is to clone the repository to your local machine from PyCharm. To do that, you select 'Project from version control' and enter the repository URL https://github.com/jjabakker/GlycoPaint-Pipeline. A local directory will be created and the code copied. 
+The Python scripts are available from the GitHub repository [https://github.com/Leiden-chemical-immunology/GlycoPaint.git](https://github.com/Leiden-chemical-immunology/GlycoPaint.git). Easiest is to clone the repository to your local machine from PyCharm. To do that, you select 'Project from version control' and enter the repository URL https://github.com/Leiden-chemical-immunology/GlycoPaint.git. A local directory will be created and the code copied. 
 
 You will have to set up a Pyhon interpreter in PyCharm and install the following libraries (the version numbers are not critical, but just indicate the versions used during development):
 
