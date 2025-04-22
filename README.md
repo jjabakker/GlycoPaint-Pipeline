@@ -28,5 +28,5 @@ The software is provided as is under the [MIT license](LICENSE).
 ## Functionality
 An overview of the functionality of the pipeline, how to use it and a detailed demo case with sample data it is provided in the [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
 
-## Sample data 
-Sample data is provided on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14196381.svg)](https://doi.org/10.5281/zenodo.14196381)
+## Sample image data 
+Sample imGW data is provided on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14196381.svg)](https://doi.org/10.5281/zenodo.14196381). This data can be used to run the demonstration case described in [Paint Pipeline Documentation](doc/Paint_Pipeline_Documentation.md).
