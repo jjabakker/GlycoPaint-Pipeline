@@ -185,17 +185,6 @@ def install():
             copy_file(src_dir, dest_dir, file)
 
 
-def run_bash_command(command):
-    try:
-        # Run the command
-        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
-        print("Command output:", result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("An error occurred while running the command:")
-        print("Error message:", e.stderr)
-
-
-
 if __name__ == '__main__':
     setup_logging()
     install()
