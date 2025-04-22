@@ -54,18 +54,6 @@ default_data = {
             "file": "Generate Squares.log"
         }
     },
-    "Recording Viewer": {
-        "logging": {
-            "level": "INFO",
-            "file": "Image Viewer.log"
-        }
-    },
-    "Compile Project Output": {
-        "logging": {
-            "level": "INFO",
-            "file": "Compile Project Output.log"
-        }
-    },
     "TrackMate": {
         "logging": {
             "level": "INFO",
