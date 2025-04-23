@@ -40,7 +40,7 @@ Important features of the pipeline are that the results are fully reproducible, 
 
 # Pipeline Concepts
 
-The Paint Pipeline was developed to analyse (bulk) data from Glyco-PAINT experiments. The interaction of weak-binding ligands to receptors on live cells is studied on varying cell types, ligands and adjuvants. Binding events show up as bright spots under a fluorescent microscope. Analysis of the location and duration of spots reveal information about single binding events.
+The Paint Pipeline was developed to analyse (bulk) data from GlycoPaint experiments. The interaction of weak-binding ligands to receptors on live cells is studied on varying cell types, ligands and adjuvants. Binding events show up as bright spots under a fluorescent microscope. Analysis of the location and duration of spots reveal information about single binding events.
 
 **Recording**
 
@@ -53,7 +53,7 @@ and several replicates are recorded for each condition.
 
 **Project**
 
-A project is a set of experiments that together are analysed.  Experiments in a project may be replicates of earlier conducted experiments or introduce new combinations of cell types, probes or adjuvants.
+A project is a set of experiments that together are analysed. Experiments in a project may be replicates of earlier conducted experiments or introduce new combinations of cell types, probes or adjuvants.
 
 
 **Metadata**
@@ -214,7 +214,12 @@ Metadata of the recording in view is displayed below the Squares image. To bette
 
 ### Select Recordings
 
-The 'Select Recordings' dialogue allows users to narrow down the recordings being viewed. In the example provided, recordings are available for two Cell Types and three Probes. If the user is only interested in BMDC recordings, they can select 'BMDC,' then click 'Filter' followed by 'Apply All Filters' to display only the relevant recordings. The'Reset' buttons undo a previously made selection. 'Reset All' undoes all selections previously made.
+The 'Select Recordings' dialogue allows users to narrow down the recordings being viewed.
+In the example provided, recordings are available for two Cell Types and three Probes.
+If the user is only interested in BMDC recordings, they can select 'BMDC,'
+then click 'Filter' followed by 'Apply All Filters' to display only the relevant recordings.
+The 'Reset' buttons undo a previously made selection.
+'Reset All' undoes all selections previously made.
 
 <p align="center">
 <img src="./Images/select_recordings.png"><br>
@@ -234,7 +239,7 @@ The Recording Viewer dialogue has three options 'Always Save', 'Never Save' and 
 
 ### Define Cells
 
-In the Define Cells dialogue, it is possible to assign squares to cells. The user selects squares by drawing a rectangle with the mouse, selecting a cell (colour) and pressing 'Assign'. 
+In the Define Cells dialogue, it is possible to assign squares to cells. The user selects squares by drawing a rectangle with the mouse, selecting a cell (colour) and pressing 'Assign'.
 
 Any changes made will be saved when the user exits the Recording Viewer, depending on the selected save options.
 
@@ -246,7 +251,7 @@ Any changes made will be saved when the user exits the Recording Viewer, dependi
 
 The Heatmap dialogue allows properties of squares to be viewed relative to each other. Five properties are available: Tau, Density, Average Diffusion Coefficient, Longest Track Duration and Cumulative Track Duration. A colour range of 20 steps is used to display values. The minimum and maximum value is limited to the current recording unless the 'global' option is checked and the minimum and maximum are determined for the current set of recordings. The 'Toggle' function, which can also be invoked by pressing 't', switches between the heatmap and regular display.
 
-Note that for the heatmap values are shown for all squares, i.e. without regard to the selection status.  
+Note that for the heatmap values are shown for all squares, i.e., without regard to the selection status.  
 
 Whilst the Heatmap dialogue is displayed, the user can scroll through images.
 
@@ -415,7 +420,7 @@ The operation of the Paint Pipeline can be tuned with parameters that are kept i
 <img src="./Images/paint_json.png"><br>
 </p>
 
-The default parameters are suitable for many situations and changing is not required. Changing parameters requires a deeper understanding of the pipeline and components such as Trackmate. 
+The default parameters are suitable for many situations and changing is not required. Changing parameters requires a deeper understanding of the pipeline and components such as TrackMate. 
 
 ## Paint
 
@@ -461,7 +466,9 @@ The TARGET_CHANNEL parameter specifies which image channel is used for spot dete
 
 TrackMate constructs tracks from spots in subsequent frames. The LINKING_MAX_DISTANCE parameter plays a role in the linking phase of tracking. It sets the maximum spatial distance within which two spots in consecutive frames can be linked as part of the same trajectory. If the distance is exceeded, then the two different tracks are assumed.
 
-If we expect that a lectin cannot move a considerable distance in the cellmembrane in subsequent frames (50 ms) apart, a high value is required. The proposed value for LINKING_MAX_DISTANCE: 0.5 micrometer (which is equal to the expected radius of the spots).
+If we expect that a lectin cannot move a considerable distance in the cell membrane in subsequent frames (50 ms) apart,
+a high value is required.
+The proposed value for LINKING_MAX_DISTANCE: 0.5 micrometer (which is equal to the expected radius of the spots).
 
 In the case that there are multiple spot candidates for linking to a spot. The ALTERNATIVE_LINKING_COST_FACTOR parameter modifies how TrackMate penalises alternative connections that are less ideal (e.g., farther away). For this parameter, the recommended value of 1.05 is used.
 
@@ -469,7 +476,10 @@ In the case that there are multiple spot candidates for linking to a spot. The A
 
 The MAX_FRAME_GAP parameter is part of the gap-closing step in the tracking process. It determines the maximum number of consecutive frames an object can disappear for and still be linked into the same trajectory if it reappears.  
 
-Imagine the following situation. There is a clearly defined track, with spots on proximate positions defined in subsequent frames. However, in some frames a spot is missing. Do we interpret these as  distinct tracks (binding events) or do assume that the camera just missed a spot and really this is one long track? 
+Imagine the following situation.
+There is a clearly defined track, with spots on proximate positions defined in subsequent frames.
+However, in some frames a spot is missing. Do we interpret these as distinct tracks (binding events)
+or do assume that the camera just missed a spot and really this is one long track? 
 
 If ALLOW_GAP_CLOSING parameter is set to True, TrackMate will consider if gaps in what is possibly one track should be closed. If the number of consecutive frames where a spot is missing is smaller than MAX_FRAME_GAP and if the distance between the last known and new spot location is smaller than GAP_CLOSING_MAX_DISTANCE, the two tracks are interpreted to be one track with some spots missing, otherwise as separate tracks.
 
