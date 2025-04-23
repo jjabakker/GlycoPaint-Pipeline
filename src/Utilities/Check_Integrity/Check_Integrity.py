@@ -171,6 +171,11 @@ def check_all_recordings_file(file):
     ]
 
     expected_columns_2 = [
+        'Max Frame Gap',
+        'Gap Closing Max Distance',
+        'Linking Max Distance',
+        'Median Filtering',
+        'Nr Spots in All Tracks',
         'Min Tracks for Tau',
         'Min Required R Squared',
         'Nr of Squares in Row',
@@ -267,9 +272,16 @@ def check_all_tracks_file(file):
         'Ext Recording Name',
         'Track Label',
         'Nr Spots',
+        'Nr Gaps',
+        'Longest Gap',
         'Track Duration',
         'Track X Location',
         'Track Y Location',
+        'Track Displacement',
+        'Track Total Distance',
+        'Track Max Speed',
+        'Track Median Speed',
+        'Track Mean Speed',
         'Diffusion Coefficient'
     }
 
