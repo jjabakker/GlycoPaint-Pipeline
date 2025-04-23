@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
-from src.Application.Check_Integrity.Check_Integrity import (
+from src.Utilities.Check_Integrity.Check_Integrity import (
     check_integrity_experiment,
     check_integrity_project
 )
