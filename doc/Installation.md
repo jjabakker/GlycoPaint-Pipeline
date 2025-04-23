@@ -58,5 +58,5 @@ With standard software as PyCharm, Fiji and TrackMate installed, the installatio
 With Pycharm installed, the environment set up, and the code cloned from the repository you are ready to run the pipeline. There is a collection of scripts found in the 'src' directory under 'Application'.
 
 <p align="center">
-<img src="./Images/python_scripts.png"><br>
+<img src="./Images/python_scripts.png" width="300"><br>
 </p>
