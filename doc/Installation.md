@@ -66,4 +66,4 @@ With Pycharm installed, the environment set up, and the code cloned from the rep
 - 'Compile Project' is run to collect information of various experiments into a project.
 - 'Recoding Viewer' is run to visually inspect the tracks in recordings of experiments.
 
-The use of these scripts is described in the [Paint Pipeline Documentation](https://rstudio.com/products/rstudio/download/)
+The use of these scripts is described in the [Paint Pipeline Documentation](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Paint_Pipeline_Documentation.md).

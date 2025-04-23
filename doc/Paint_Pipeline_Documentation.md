@@ -17,6 +17,10 @@ November 2024
 <br>
 <br>
 
+# Introduction
+
+This manual serves two purposes: it provides the background of the GlycoPaint pipeline and it introduces a demonstration case that can be used to gain familiarity with running the pipeline. 
+
 # Overview - The Dataflow in the GlycoPaint Pipeline
 
 Cells are observed under a microscope for 100 seconds capturing 2000 images during this interval. Bright spots, which represent fluorophores, are visible in these images. These spots may move and often disappear after a short period. Spots appear because a fluorophore has remained stationary long enough to be detected by the camera. In the GlycoPaint method, spots are interpreted as glycans (with fluorophores attached) binding to lectins on the cell surface. A key challenge is distinguishing these biologically relevant events from non-specific fluorophore sticking.
