@@ -72,10 +72,12 @@ def process_project(
     nr_experiments_processed = 0
     for experiment_dir in experiment_dirs:
 
-        # Skip if not a directory or if it is the Output directory
+        # Skip if not a directory or if it is in the skipped directories list
         if not os.path.isdir(os.path.join(project_path, experiment_dir)):
             continue
-        if 'Output' in experiment_dir:
+
+        skip_dirs = ['Output', 'Diagnostics']
+        if any(x in experiment_dir for x in skip_dirs):
             continue
 
         # Look at the time tags and decide if reprocessing is needed. Always process when the paint_force flag is set
