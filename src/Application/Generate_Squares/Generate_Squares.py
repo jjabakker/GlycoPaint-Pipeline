@@ -31,7 +31,7 @@ from src.Application.Generate_Squares.Generate_Squares_Support_Functions import 
     calculate_average_long_track
 )
 
-from src.Application.Utilities.General_Support_Functions import (
+from src.Application.Support.General_Support_Functions import (
     format_time_nicely)
 
 from src.Fiji.DirectoriesAndLocations import (

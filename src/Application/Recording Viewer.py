@@ -40,7 +40,7 @@ from src.Application.Recording_Viewer.Select_Squares import (
     select_squares_and_label,
     select_all_squares,
     label_selected_squares)
-from src.Application.Utilities.General_Support_Functions import (
+from src.Application.Support.General_Support_Functions import (
     read_squares_from_file,
     set_application_icon)
 from src.Fiji.LoggerConfig import (

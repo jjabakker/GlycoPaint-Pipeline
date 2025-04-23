@@ -3,7 +3,7 @@ import shutil
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 
-from src.Application.Utilities.General_Support_Functions import ToolTip
+from src.Application.Support.General_Support_Functions import ToolTip
 
 
 def reset_root(root_dir):

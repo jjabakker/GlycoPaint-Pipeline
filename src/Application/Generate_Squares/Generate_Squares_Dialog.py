@@ -8,7 +8,7 @@ from src.Application.Generate_Squares.Generate_Squares import (
     process_experiment)
 from src.Application.Generate_Squares.Generate_Squares_Support_Functions import (
     pack_select_parameters)
-from src.Application.Utilities.General_Support_Functions import (
+from src.Application.Support.General_Support_Functions import (
     format_time_nicely,
     classify_directory,
     ToolTip

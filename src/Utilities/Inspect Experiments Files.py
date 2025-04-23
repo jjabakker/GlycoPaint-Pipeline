@@ -5,7 +5,7 @@ from tkinter import ttk, filedialog, messagebox
 
 import pandas as pd
 
-from src.Application.Utilities.General_Support_Functions import (
+from src.Application.Support.General_Support_Functions import (
     read_experiment_file,
     classify_directory,
     set_application_icon

@@ -8,7 +8,7 @@ import pandas as pd
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 
-from src.Application.Utilities.General_Support_Functions import (
+from src.Application.Support.General_Support_Functions import (
     correct_all_recordings_column_types,
     classify_directory,
     concat_csv_files,

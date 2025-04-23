@@ -3,7 +3,7 @@ from tkinter import filedialog, messagebox
 from tkinter import ttk
 
 from src.Application.Process_Projects.Convert_BF_from_nd2_to_jpg import convert_bf_images
-from src.Application.Utilities.General_Support_Functions import set_application_icon
+from src.Application.Support.General_Support_Functions import set_application_icon
 
 
 class ConvertDialog:

@@ -6,7 +6,7 @@ from tkinter import ttk
 from src.Application.Recording_Viewer.Recording_Viewer_Support_Functions import (
     only_one_nr_of_squares_in_row,
     nr_recordings)
-from src.Application.Utilities.General_Support_Functions import (
+from src.Application.Support.General_Support_Functions import (
     classify_directory,
     ToolTip
 )
