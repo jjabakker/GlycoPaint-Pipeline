@@ -34,12 +34,12 @@ With the Python interpreter set up, you can install the required libraries. The 
 The resulting environment, displayed below, should be able to run the pipeline.
 
 <p align="center">
-<img src="./Images/pycharm_environment.png" width="500"><br>
+<img src="./Images/pycharm_environment.png" width="600"><br>
 </p>
 
 ### Installing the TrackMate plugin
 
-Fiji has been installed in an earlier step, and per default the TrackMate plugin is available. The GlycoPaint plugin, however, needs to be installed manually. This is done by copying a selection of files to the Fiji/Scripts/GlycoPaint directory. In the Python code hierarchy, in the 'src/Utilities Application' directory, there is a utility that does that: 'Install Paint TrackMate.py'.
+Fiji has been installed in an earlier step, and per default the TrackMate plugin is available. The GlycoPaint plugin, however, needs to be installed manually. This is done by copying a selection of files to the Fiji/Scripts/GlycoPaint directory. In the Python code hierarchy, in the 'src/Utilities' directory, there is a utility that does that: 'Install Paint TrackMate'.
 
 Running the utility will create the paint.json file in the ~/Paint/Defaults directory if it does not already exist. The utility will then try to establish the path of the Fiji app and copy the necessary files to the plugin directory. If the Fiji path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
 
@@ -55,8 +55,15 @@ With standard software as PyCharm, Fiji and TrackMate installed, the installatio
 
 # Available scripts to run the pipeline
 
-With Pycharm installed, the environment set up, and the code cloned from the repository you are ready to run the pipeline. There is a collection of scripts found in the 'src' directory under 'Application'.
+With Pycharm installed, the environment set up, and the code cloned from the repository you are ready to run the pipeline. There is a collection of four scripts found in the 'src' directory under 'Application'.
 
 <p align="center">
 <img src="./Images/python_scripts.png" width="300"><br>
 </p>
+
+- 'Prepare Experiment Info' is run to generate the Experiment Info file.
+- 'Generate Squares' is run to do the square processing for individual experiments.
+- 'Compile Project' is run to collect information of various experiments into a project.
+- 'Recoding Viewer' is run to visually inspect the tracks in recordings of experiments.
+
+The use of these scripts is described in the [Paint Pipeline Documentation](https://rstudio.com/products/rstudio/download/)
