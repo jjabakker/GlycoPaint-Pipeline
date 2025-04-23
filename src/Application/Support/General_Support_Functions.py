@@ -254,7 +254,7 @@ def classify_directory(directory_path):
 
 def set_application_icon(root):
 
-    icon_file = "../images/paint1.png"
+    icon_file = "../images/paint.png"
     # For macOS Load the icon using Pillow
     try:
         img = Image.open(icon_file)
