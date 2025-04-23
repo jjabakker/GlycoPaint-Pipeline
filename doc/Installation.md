@@ -34,7 +34,7 @@ With the Python interpreter set up, you can install the required libraries. The 
 The resulting environment, displayed below, should be able to run the pipeline.
 
 <p align="center">
-<img src="./Images/pycharm_environment.png"><br>
+<img src="./Images/pycharm_environment.png" width="500"><br>
 </p>
 
 ### Installing the TrackMate plugin
