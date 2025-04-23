@@ -44,7 +44,7 @@ Fiji has been installed in an earlier step, and per default the TrackMate plugin
 Running the utility will create the paint.json file in the ~/Paint/Defaults directory if it does not already exist. The utility will then try to establish the path of the Fiji app and copy the necessary files to the plugin directory. If the Fiji path cannot be found, the user can manually supply the correct path in the paint.json file. Rerunning the utility would then cause the files to be copied in the second attempt.  
 
 <p align="center">
-<img src="./Images/install_glycopaint.png"><br>
+<img src="./Images/install_glycopaint.png" width="300"><br>
 </p>
 
 ### R Studio
