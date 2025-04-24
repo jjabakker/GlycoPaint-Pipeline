@@ -51,11 +51,11 @@ Running the utility will create the paint.json file in the ~/Paint/Defaults dire
 The pipeline also uses R for the data analysis. R Studio can be downloaded from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/). You may have to install R also - instructions to do that are on the site. Examples of R scripts are available from the GitHub repository.
 
 ### Install Time
-With standard software as PyCharm, Fiji and TrackMate installed, the installation of the pipeline itself should take less than 10 minutes. Installing the standard R language and R Studio is optional and only required if data post-processing is performed with R.
+With standard software such as PyCharm, Fiji, and TrackMate installed, the pipeline installation should take less than 10 minutes. Installing the standard R language and R Studio is optional and only required if data post-processing is performed with R.
 
 # Available scripts to run the pipeline
 
-With Pycharm installed, the environment set up, and the code cloned from the repository you are ready to run the pipeline. There is a collection of four scripts found in the 'src' directory under 'Application'.
+With PyCharm installed, the environment set up, and the code cloned from the repository, you are ready to run the pipeline. There is a collection of four scripts found in the 'src' directory under 'Application'.
 
 <p align="center">
 <img src="./Images/python_scripts.png" width="300"><br>

@@ -19,7 +19,11 @@ November 2024
 
 # Introduction
 
-This manual serves two purposes: it provides the background of the GlycoPaint pipeline and it introduces a demonstration case that can be used to gain familiarity with running the pipeline. 
+This manual serves two purposes:
+it provides the background of the GlycoPaint pipeline
+and it introduces a demonstration case that can be used to familiarise oneself with running the pipeline.
+Detailed instructions
+for taking the example are provided in [Running the Example](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Running_the_example.md).
 
 # Overview - The Dataflow in the GlycoPaint Pipeline
 
