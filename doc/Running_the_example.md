@@ -27,4 +27,4 @@ A file 'images.zip' (22 GB) will be created in your default download location. I
 
 ## Inspect the results
 
-- To see how the squares are overlaid over the recordings, you can run the 'Recording Viewer' from PyCharm (GlycoPaint -> src -> Application -> Recording Viewer). You can specify either individual Experiment directories or the Project directory to view recordings of all experiments. 
+- To see how the squares are overlaid over the recordings, you can run the 'Recording Viewer' from PyCharm (GlycoPaint -> src -> Application -> Recording Viewer). You can specify either individual Experiment directories or the Project directory to view recordings of all experiments.

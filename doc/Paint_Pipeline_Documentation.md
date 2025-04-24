@@ -19,17 +19,14 @@ November 2024
 
 # Introduction
 
-This manual serves two purposes:
-it provides the background of the GlycoPaint pipeline
-and it introduces a demonstration case that can be used to familiarise oneself with running the pipeline.
-Detailed instructions
-for taking the example are provided in [Running the Example](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Running_the_example.md).
+This manual serves two purposes: it provides the background of the GlycoPaint pipeline and it introduces a demonstration case that can be used to familiarise oneself with running the pipeline.
+Detailed instructions for running the example are provided in [Running the Example](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Running_the_example.md).
 
 # Overview - The Dataflow in the GlycoPaint Pipeline
 
-Cells are observed under a microscope for 100 seconds capturing 2000 images during this interval. Bright spots, fluorophores, are visible in these images. These spots may move and often disappear after a short period. Spots appear because a fluorophore has remained stationary long enough to be detected by the camera. In the GlycoPaint method, spots are interpreted as glycans binding to lectins on the cell surface. A key challenge is distinguishing these biologically relevant events from non-specific fluorophore sticking.
+Cells are observed under a microscope for 100 seconds, capturing 2000 images during this interval. Bright spots, fluorophores, are visible in these images. These spots may move and often disappear after a short period. Spots appear because a fluorophore has remained stationary long enough to be detected by the camera. In the GlycoPaint method, spots are interpreted as glycans binding to lectins on the cell surface. A key challenge is distinguishing these biologically relevant events from non-specific fluorophore sticking.
 
-With the Fiji plugin TrackMate, spots are detected in each frame, and their positions registered. Tracks are created by connecting spots across consecutive frames. Each track is characterised by features such as its duration, average x and y positions, and distance travelled. If a lectin-glycan pair were completely stationary, there would be a series of spots in the same location, with no movement. However, lectin-glycan pairs typically move slightly within the cell membrane, resulting in tracks that resemble small 'wriggles'. These tracks are not evenly distributed across the image but are typically concentrated on the cell surface and show heterogeneous patterns within a cell.  
+With the Fiji plugin TrackMate, spots are detected in each frame, and their positions are registered. Tracks are created by connecting spots across consecutive frames. Each track is characterised by features such as its duration, average x and y positions, and distance travelled. If a lectin-glycan pair were completely stationary, there would be a series of spots in the same location, with no movement. However, lectin-glycan pairs typically move slightly within the cell membrane, resulting in tracks that resemble small 'wriggles'. These tracks are not evenly distributed across the image but are typically concentrated on the cell surface and show heterogeneous patterns within a cell.  
 
 A grid is overlaid on the recording, commonly a 20x20 or 30x30 grid, dividing the image into 400 or 900 squares. Dividing the image into squares allows for the investigation of differences between cells or between regions within a cell.
 

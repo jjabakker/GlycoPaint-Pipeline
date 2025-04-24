@@ -184,7 +184,7 @@ def main():
     paint_logger.info(f"The Paint Data directory is             : {paint_data}")
     paint_logger.info(f"The Version is                          : {data_version}")
     paint_logger.info(f"The R Output directory is               : {r_dest}")
-    paint_logger.info(f"The number of projectd to process is    : {nr_to_process}")
+    paint_logger.info(f"The number of projects to process is    : {nr_to_process}")
     paint_logger.info(f"Paint force is                          : {paint_force}")
 
     nr_to_process = sum(1 for entry in config if entry['flag'])
