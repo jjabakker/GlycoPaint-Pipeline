@@ -324,6 +324,22 @@ def calculate_average_long_track(df_tracks):
     return average_long_track
 
 
+def calculate_average_short_track(df_tracks):
+    """
+    Calculate the average of the long tracks for the square
+    The long tracks are defined as the longest 10% of the tracks
+    """
+    nr_of_tracks = len(df_tracks)
+    if nr_of_tracks == 0:
+        average_long_track = 0
+    else:
+        df_tracks.sort_values(by=['Track Duration'], inplace=True)
+        fraction = get_paint_attribute_with_default('Generate Squares',
+                                       'Fraction of Squares to Determine Background', 0.1)
+        nr_tracks_to_average = max(round(fraction * nr_of_tracks),  1)
+        average_long_track = df_tracks.head(nr_tracks_to_average)['Track Duration'].mean()
+    return average_long_track
+
 def read_tracks_of_experiment(experiment_path: str) -> pd.DataFrame:
     """
     Read the All Tracks file for an Experiment
