@@ -307,38 +307,38 @@ def calculate_tau(
     return tau, r_squared
 
 
-def calculate_average_long_track(df_tracks):
+def calculate_median_long_track(df_tracks):
     """
     Calculate the average of the long tracks for the square
     The long tracks are defined as the longest 10% of the tracks
     """
     nr_of_tracks = len(df_tracks)
     if nr_of_tracks == 0:
-        average_long_track = 0
+        median_long_track = 0
     else:
         df_tracks.sort_values(by=['Track Duration'], inplace=True)
         fraction = get_paint_attribute_with_default('Generate Squares',
                                        'Fraction of Squares to Determine Background', 0.1)
         nr_tracks_to_average = max(round(fraction * nr_of_tracks),  1)
-        average_long_track = df_tracks.tail(nr_tracks_to_average)['Track Duration'].mean()
-    return average_long_track
+        median_long_track = df_tracks.tail(nr_tracks_to_average)['Track Duration'].median()
+    return median_long_track
 
 
-def calculate_average_short_track(df_tracks):
+def calculate_median_short_track(df_tracks):
     """
     Calculate the average of the long tracks for the square
     The long tracks are defined as the longest 10% of the tracks
     """
     nr_of_tracks = len(df_tracks)
     if nr_of_tracks == 0:
-        average_long_track = 0
+        median_short_track = 0
     else:
         df_tracks.sort_values(by=['Track Duration'], inplace=True)
         fraction = get_paint_attribute_with_default('Generate Squares',
                                        'Fraction of Squares to Determine Background', 0.1)
         nr_tracks_to_average = max(round(fraction * nr_of_tracks),  1)
-        average_long_track = df_tracks.head(nr_tracks_to_average)['Track Duration'].mean()
-    return average_long_track
+        median_short_track_track = df_tracks.head(nr_tracks_to_average)['Track Duration'].median()
+    return median_short_track
 
 def read_tracks_of_experiment(experiment_path: str) -> pd.DataFrame:
     """
