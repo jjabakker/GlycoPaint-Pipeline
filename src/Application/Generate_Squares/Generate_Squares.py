@@ -28,7 +28,8 @@ from src.Application.Generate_Squares.Generate_Squares_Support_Functions import 
     read_tracks_of_experiment,
     get_row_and_column,
     calculate_tau,
-    calculate_average_long_track
+    calculate_median_long_track,
+    calculate_median_short_track
 )
 
 from src.Application.Support.General_Support_Functions import (
@@ -349,6 +350,7 @@ def process_square(
         square_seq_nr: int,
         row_nr: int,
         col_nr: int) -> pd.Series:
+
     # Determine which tracks fall within the square defined by boundaries x0, y0, x1, y1
     x0, y0, x1, y1 = get_square_coordinates(nr_of_squares_in_row, square_seq_nr)
     mask = ((df_tracks_of_recording['Track X Location'] >= x0) &
@@ -361,26 +363,11 @@ def process_square(
     # Provide reasonable values for squares not containing any tracks
     nr_of_tracks_in_square = len(df_tracks_of_square)
     if nr_of_tracks_in_square == 0:
-        total_track_duration = 0
-        average_long_track = 0
-        max_track_duration = 0
         r_squared = 0
         tau = -1
         density = 0
         variability = 0
-        dc_mean = 0
-
     else:
-
-        # Calculate the sum of track durations for the square
-        total_track_duration = sum(df_tracks_of_square['Track Duration'])
-
-        # Calculate the average of the long tracks for the square
-        average_long_track = calculate_average_long_track(df_tracks_of_square)
-
-        # Calculate the maximum track duration
-        max_track_duration = df_tracks_of_square['Track Duration'].max()
-
         # Calculate the Tau and R squared for the square
         df_tracks_for_tau = extra_constraints_on_tracks_for_tau_calculation(df_tracks_of_square)
         tau, r_squared = calculate_tau(
@@ -394,9 +381,6 @@ def process_square(
 
         # Calculate the variability for the square
         variability = calc_variability(df_tracks_of_square, square_seq_nr, nr_of_squares_in_row, 10)
-
-        # Calculate the diffusion coefficient for the square
-        dc_mean = round(df_tracks_of_square['Diffusion Coefficient'].mean(), 4)
 
     # Create the new squares record to add all the data for this square
     square_data = {
@@ -429,10 +413,25 @@ def process_square(
         'Density Ratio': 0.0,
         'Tau': round(tau, 0),
         'R Squared': round(r_squared, 2),
-        'Diffusion Coefficient': dc_mean,
-        'Average Long Track Duration': round(average_long_track, 1),
-        'Max Track Duration': round(max_track_duration, 1),
-        'Total Track Duration': round(total_track_duration, 1),
+
+        'Diffusion Coefficient': round(df_tracks_of_square['Diffusion Coefficient'].median(), 4),
+
+        'Median Long Track Duration': round(calculate_median_long_track(df_tracks_of_square), 3),
+        'Median Short Track Duration': round(calculate_median_short_track(df_tracks_of_square), 3),
+
+        'Median Displacement': round(df_tracks_of_square['Track Displacement'].median(), 3),
+        'Max Displacement': round(df_tracks_of_square['Track Displacement'].max(), 3),
+        'Total Displacement': round(df_tracks_of_square['Track Displacement'].sum(), 3),
+
+        'Median Max Speed': round(df_tracks_of_square['Track Max Speed'].median(), 3),
+        'Max Max Speed':  round(df_tracks_of_square['Track Max Speed'].max(), 3),
+
+        'Median Mean Speed': round(df_tracks_of_square['Track Mean Speed'].median(), 3),
+        'Max Mean Speed': round(df_tracks_of_square['Track Mean Speed'].max(), 3),
+
+        'Max Track Duration': round(df_tracks_of_square['Track Duration'].max(), 3),
+        'Total Track Duration': round(df_tracks_of_square['Track Duration'].sum(), 3),
+        'Median Track Duration': round(df_tracks_of_square['Track Duration'].median(), 3)
     }
 
     return square_data
