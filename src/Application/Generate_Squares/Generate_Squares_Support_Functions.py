@@ -337,7 +337,7 @@ def calculate_median_short_track(df_tracks):
         fraction = get_paint_attribute_with_default('Generate Squares',
                                        'Fraction of Squares to Determine Background', 0.1)
         nr_tracks_to_average = max(round(fraction * nr_of_tracks),  1)
-        median_short_track_track = df_tracks.head(nr_tracks_to_average)['Track Duration'].median()
+        median_short_track = df_tracks.head(nr_tracks_to_average)['Track Duration'].median()
     return median_short_track
 
 def read_tracks_of_experiment(experiment_path: str) -> pd.DataFrame:
