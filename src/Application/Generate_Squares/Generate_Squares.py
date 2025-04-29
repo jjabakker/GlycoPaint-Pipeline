@@ -414,7 +414,8 @@ def process_square(
         'Tau': round(tau, 0),
         'R Squared': round(r_squared, 2),
 
-        'Diffusion Coefficient': round(df_tracks_of_square['Diffusion Coefficient'].median(), 4),
+        'Median Diffusion Coefficient': round(df_tracks_of_square['Diffusion Coefficient'].median(), 4),
+        'Mean Diffusion Coefficient': round(df_tracks_of_square['Diffusion Coefficient'].mean(), 4),
 
         'Median Long Track Duration': round(calculate_median_long_track(df_tracks_of_square), 3),
         'Median Short Track Duration': round(calculate_median_short_track(df_tracks_of_square), 3),
