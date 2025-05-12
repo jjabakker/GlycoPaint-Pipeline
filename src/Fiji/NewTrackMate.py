@@ -127,7 +127,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     # Get the currently selected image
     imp = WindowManager.getCurrentImage()
 
-    # Prepare Settings object
+    # Prepare the Settings object
     settings = Settings(imp)
 
     # Configure detector - all important parameters
@@ -276,14 +276,14 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     capture = CaptureOverlayAction.capture(image, -1, 1, tm_logger)
     FileSaver(capture).saveAsTiff(image_filename)
 
-    # The feature model, that stores edge and track features.
+    # The feature model that stores edge and track features.
     feature_model = model.getFeatureModel()
 
     # ----------------
     # Write the Tracks file
     # ----------------
 
-    fields = ['Ext Recording Name', 'Track Label', 'Nr Spots', 'Nr Gaps', 'Longest Gap',
+    fields = ['Ext Recording Name', 'Track Id', 'Track Label', 'Nr Spots', 'Nr Gaps', 'Longest Gap',
               'Track Duration',
               'Track X Location', 'Track Y Location', 'Track Displacement',
               'Track Max Speed', 'Track Median Speed', 'Track Mean Speed',
@@ -302,7 +302,11 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
         track_index = 0
         for track_id in model.getTrackModel().trackIDs(True):
             # Fetch the track feature from the feature model.
-            label = 'Track_' + str(track_id)
+            track_id_from_tm = feature_model.getTrackFeature(track_id, 'TRACK_ID')
+            track_label = feature_model.getTrackFeature(track_id, 'NAME')
+            if track_label is None:
+                track_label = 'Track-' + str(track_id)
+                track_label = 'Track-' + str(track_id_from_tm)
             duration = round(feature_model.getTrackFeature(track_id, 'TRACK_DURATION'), 3)
             nr_spots = round(feature_model.getTrackFeature(track_id, 'NUMBER_SPOTS'), 0)
             x = round(feature_model.getTrackFeature(track_id, 'TRACK_X_LOCATION'), 2)
@@ -341,7 +345,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
                 displacement = round(displacement, 2)
 
             # Write the record for each track
-            csvwriter.writerow([recording_name, label, nr_spots, nr_gaps, longest_gap,
+            csvwriter.writerow([recording_name, track_id, track_label, nr_spots, nr_gaps, longest_gap,
                                 duration,
                                 x, y, displacement,
                                 max_speed, med_speed, mean_speed,
