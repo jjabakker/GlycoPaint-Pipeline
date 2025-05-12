@@ -64,6 +64,9 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
         track_colouring = 'TRACK_DURATION'
 
     if first:
+        # paint_logger.info('')
+        # paint_logger.info('Code Version for TrackMate - 1')
+        # paint_logger.info('')
         paint_logger.info('')
         paint_logger.info('TrackMate Parameters')
         paint_logger.info("")
@@ -107,7 +110,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     model = Model()
     model.setLogger(Logger.IJ_LOGGER)
 
-    # Get currently selected image
+    # Get the currently selected image
     imp = WindowManager.getCurrentImage()
 
     # Prepare Settings object
@@ -127,7 +130,7 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     filter1 = FeatureFilter('QUALITY', 0, True)
     settings.addSpotFilter(filter1)
 
-    # Configure tracker, first set the default, but then override parameters that we know are important
+    # Configure the tracker, first set the default, but then override parameters that we know are important
     settings.trackerFactory = SparseLAPTrackerFactory()
     settings.trackerSettings = settings.trackerFactory.getDefaultSettings()
 
@@ -179,36 +182,6 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
         paint_logger.error('Routine paint_trackmate - process failed')
         return -1, -1, -1, -1, -1, -1, -1, -1
 
-    # if not trackmate.execInitialSpotFiltering():
-    #     paint_logger.error('Spot filtering failed')
-    #     return -1, -1, -1, -1, -1, -1, -1, -1
-    # else:
-    #     paint_logger.info('Spot filtering succeeded')
-    #
-    # if not trackmate.execTracking():
-    #     paint_logger.error('Tracking failed')
-    #     return -1, -1, -1, -1, -1, -1, -1, -1
-    # else:
-    #     paint_logger.info('Tracking succeeded')
-    #
-    # if not trackmate.execTrackFiltering():
-    #     paint_logger.error('Track filtering failed')
-    #     return -1, -1, -1, -1, -1, -1, -1, -1
-    # else:
-    #     paint_logger.info('Track filtering succeeded')
-    #
-    # if not trackmate.computeSpotFeatures():
-    #     paint_logger.error('Spot feature computation failed')
-    #     return -1, -1, -1, -1, -1, -1, -1, -1
-    # else:
-    #     paint_logger.info('Spot feature computation succeeded')
-    #
-    # if not trackmate.computeTrackFeatures():
-    #     paint_logger.error('Track feature computation failed')
-    #     return -1, -1, -1, -1, -1, -1, -1, -1
-    # else:
-    #     paint_logger.info('Track feature computation succeeded')
-
     # Get nr_spots data, iterate through each track to calculate the mean square displacement
 
     track_ids = model.getTrackModel().trackIDs(True)  # True means only return visible tracks
@@ -242,10 +215,10 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     # Display results
     # ----------------
 
-    if kas_special:
-        rm = RoiManager.getInstance()
-        rm.runCommand("Open", os.path.expanduser("~/paint.roi"))
-        rm.runCommand("Show All")
+    # if kas_special:
+    #     rm = RoiManager.getInstance()
+    #     rm.runCommand("Open", os.path.expanduser("~/paint.roi"))
+    #     rm.runCommand("Show All")
 
     # A selection.
     selection_model = SelectionModel(model)
