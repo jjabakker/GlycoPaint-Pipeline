@@ -8,6 +8,7 @@
 import csv
 import os
 import sys
+import math
 
 from java.lang.System import getProperty
 
@@ -35,6 +36,19 @@ from ij.plugin.frame import RoiManager
 from FijiSupportFunctions import fiji_get_file_open_write_attribute
 from LoggerConfig import paint_logger
 from NewPaintConfig import get_paint_attribute_with_default
+
+
+def own_median(data):
+    """Return the median of a list of numbers."""
+    sorted_data = sorted(data)
+    n = len(sorted_data)
+    if n == 0:
+        raise ValueError("median() arg is an empty list")
+    mid = n // 2
+    if n % 2 == 1:
+        return sorted_data[mid]
+    else:
+        return (sorted_data[mid - 1] + sorted_data[mid]) / 2.0  # ensure float division
 
 
 def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_filename, first, kas_special ):
@@ -186,30 +200,51 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
 
     track_ids = model.getTrackModel().trackIDs(True)  # True means only return visible tracks
     diffusion_coefficient_list = []
+    total_distance_list = []
+    max_speed_calculated_list = []
+    median_speed_calculated_list = []
+    mean_speed_calculated_list = []
+
     nr_spots_in_all_tracks = 0
     for track_id in track_ids:
+
+        speed_list = []
 
         # Get the set of nr_spots in this track
         track_spots = model.getTrackModel().trackSpots(track_id)
 
         first_spot = True
         cum_msd = 0
+        total_distance = 0
+
         # Iterate through the nr_spots in this track, retrieve values for x and y (in micron)
         for spot in track_spots:
             nr_spots_in_all_tracks += 1
+            x = spot.getFeature('POSITION_X')
+            y = spot.getFeature('POSITION_Y')
             if first_spot:
-                x0 = spot.getFeature('POSITION_X')
-                y0 = spot.getFeature('POSITION_Y')
+                x0 = x
+                y0 = y
+                x_prev = x
+                y_prev = y
                 first_spot = False
             else:
-                x = spot.getFeature('POSITION_X')
-                y = spot.getFeature('POSITION_Y')
                 cum_msd += (x - x0) ** 2 + (y - y0) ** 2
+                incremental_distance = math.sqrt((x - x_prev) ** 2 + (y - y_prev) ** 2)
+                total_distance += incremental_distance
+                speed = incremental_distance / 0.05
+                speed_list.append(speed)
+                x_prev = x
+                y_prev = y
         msd = cum_msd / (len(track_spots) - 1)
         diffusion_coefficient = msd / (2 * 2 * 0.05)
 
-        nice_diffusion_coefficient = round(diffusion_coefficient, 4)
-        diffusion_coefficient_list.append(nice_diffusion_coefficient)
+        diffusion_coefficient_list.append(round(diffusion_coefficient, 4))
+        total_distance_list.append(round(total_distance, 1))
+
+        max_speed_calculated_list.append(round(max(speed_list), 2))
+        median_speed_calculated_list.append(round(own_median(speed_list), 2))
+        mean_speed_calculated_list.append(round(sum(speed_list) / float(len(speed_list)), 2))
 
     # ----------------
     # Display results
@@ -248,11 +283,12 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
     # Write the Tracks file
     # ----------------
 
-    fields = ["Ext Recording Name", "Track Label", "Nr Spots", "Nr Gaps", "Longest Gap",
-              "Track Duration",
-              'Track X Location', 'Track Y Location', 'Track Displacement', 'Track Total Distance',
+    fields = ['Ext Recording Name', 'Track Label', 'Nr Spots', 'Nr Gaps', 'Longest Gap',
+              'Track Duration',
+              'Track X Location', 'Track Y Location', 'Track Displacement',
               'Track Max Speed', 'Track Median Speed', 'Track Mean Speed',
-              'Diffusion Coefficient']
+              'Track Max Speed Calc', 'Track Median Speed Calc', 'Track Mean Speed Calc',
+              'Diffusion Coefficient', 'Total Distance']
 
     # Determine write attributes
     open_attribute = fiji_get_file_open_write_attribute()
@@ -268,12 +304,9 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
             # Fetch the track feature from the feature model.
             label = 'Track_' + str(track_id)
             duration = round(feature_model.getTrackFeature(track_id, 'TRACK_DURATION'), 3)
-            nr_spots = feature_model.getTrackFeature(track_id, 'NUMBER_SPOTS')
+            nr_spots = round(feature_model.getTrackFeature(track_id, 'NUMBER_SPOTS'), 0)
             x = round(feature_model.getTrackFeature(track_id, 'TRACK_X_LOCATION'), 2)
             y = round(feature_model.getTrackFeature(track_id, 'TRACK_Y_LOCATION'), 2)
-
-            med_speed = 2
-            total_distance = 3
 
             max_speed = feature_model.getTrackFeature(track_id, 'TRACK_MAX_SPEED')
             if max_speed is None:
@@ -293,12 +326,6 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
             else:
                 mean_speed = round(mean_speed, 2)
 
-            total_distance = feature_model.getTrackFeature(track_id, 'TRACK_TOTAL_DISTANCE_TRAVELED')
-            if total_distance is None:
-                total_distance = -2
-            else:
-                total_distance = round(total_distance, 2)
-
             nr_gaps = feature_model.getTrackFeature(track_id, 'NUMBER_GAPS')
             if nr_gaps is None:
                 nr_gaps = -1
@@ -316,9 +343,10 @@ def execute_trackmate_in_Fiji(recording_name, threshold, tracks_filename, image_
             # Write the record for each track
             csvwriter.writerow([recording_name, label, nr_spots, nr_gaps, longest_gap,
                                 duration,
-                                x, y, displacement, total_distance,
+                                x, y, displacement,
                                 max_speed, med_speed, mean_speed,
-                                diffusion_coefficient_list[track_index]])
+                                max_speed_calculated_list[track_index], median_speed_calculated_list[track_index], mean_speed_calculated_list[track_index],
+                                diffusion_coefficient_list[track_index], total_distance_list[track_index]])
             track_index += 1
 
     model.getLogger().log('Found ' + str(model.getTrackModel().nTracks(True)) + ' tracks.')
