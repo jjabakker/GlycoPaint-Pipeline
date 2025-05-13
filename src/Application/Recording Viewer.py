@@ -747,7 +747,11 @@ class RecordingViewer:
         # This was complex code, but the index is already the image name
 
         row_index = self.image_name
-        is_excluded = self.df_experiment.loc[row_index, 'Exclude'] = not self.df_experiment.loc[row_index, 'Exclude']
+
+        current_value = self.df_experiment.loc[row_index, 'Exclude']
+        new_value = not current_value
+        self.df_experiment.loc[row_index, 'Exclude'] = new_value
+        is_excluded = new_value
 
         if is_excluded:
             info4_text = 'Image Excluded'
