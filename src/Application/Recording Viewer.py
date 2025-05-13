@@ -749,11 +749,19 @@ class RecordingViewer:
 
         row_index = self.image_name
 
-        # Toggle the exclude value of the image
+        # Toggle the exclude value of the image in df_experiment
         current_value = self.df_experiment.loc[row_index, 'Exclude']
         new_value = not current_value
         self.df_experiment.loc[row_index, 'Exclude'] = new_value
         is_excluded = new_value
+
+        # Update the df_squares info
+        self.df_squares.loc[self.df_squares['Ext Recording Name'] == self.image_name, 'Image Excluded'] = new_value
+        self.df_all_squares.loc[self.df_all_squares['Ext Recording Name'] == self.image_name, 'Image  Excluded'] = new_value
+
+        # Flag that something has changed
+        self.recording_changed = True
+        self.save_on_exit = True
 
         if is_excluded:
             info4_text = 'Image Excluded'
@@ -906,6 +914,7 @@ class RecordingViewer:
 
         # Make sure the change will be noted if the user exits or changes the image
         self.recording_changed = True
+        self.save_on_exit = True
 
         # Recalculate the tau
         recalc_recording_tau_and_density(self)
