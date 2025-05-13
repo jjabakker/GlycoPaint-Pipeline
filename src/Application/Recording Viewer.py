@@ -19,8 +19,7 @@ from src.Application.Generate_Squares.Generate_Squares_Support_Functions import 
     calculate_tau,
     extra_constraints_on_tracks_for_tau_calculation,
     calc_area_of_square,
-    calculate_density,
-    get_square_coordinates)
+    calculate_density)
 from src.Application.Recording_Viewer.Class_Define_Cell_Dialog import DefineCellDialog
 from src.Application.Recording_Viewer.Class_Heatmap_Dialog import HeatMapDialog
 from src.Application.Recording_Viewer.Class_Select_Recording_Dialog import SelectRecordingDialog
@@ -687,7 +686,7 @@ class RecordingViewer:
     def callback_to_assign_squares_to_cell_id(self, cell_id):
         """
         This function is called by the DefineCellsDialog when a cell id has been selected to is assigned to a square
-        See if there are any squares selected and if so update the cell id, then update the display
+        See if there are any squares selected and if so, update the cell id, then update the display
         """
 
         # Update 'Cell Id' for all squares in the rectangle
@@ -1043,7 +1042,7 @@ class RecordingViewer:
             self.track_click = False
             return
 
-        # Expand rectangle as you drag the mouse
+        # Expand the rectangle as you drag the mouse
         self.left_image_canvas.coords(self.rect, self.start_x, self.start_y, event.x, event.y)
 
     def close_rectangle(self, event):
@@ -1082,7 +1081,7 @@ class RecordingViewer:
 
         # ----------------------------------------------------------------------------
         # Determine what the next image is, depending on the direction
-        # Be sure not move beyond the boundaries (could happen when the left and right keys are used)
+        # Be sure to not move beyond the boundaries (could happen when the left and right keys are used)
         # Disable the forward and backward buttons when the boundaries are reached
         # ----------------------------------------------------------------------------
 
@@ -1123,7 +1122,7 @@ class RecordingViewer:
         # and the labels can be updated
         # ----------------------------------------------------------------------------
 
-        # Place new image_bf
+        # Place the new image_bf
         self.right_image_canvas.create_image(0, 0, anchor=NW, image=self.list_images[self.img_no]['Right Image'])
         self.lbl_image_bf_name.set(str(self.img_no + 1) + ":  " + self.list_images[self.img_no]['Right Image Name'])
 
@@ -1144,7 +1143,7 @@ class RecordingViewer:
 
         self.text_for_info3.set(info3)
 
-        # Set the correct label for Exclude/Include button
+        # Set the correct label for the Exclude/Include button
         if self.heatmap_control_dialog is None:
             row_index = self.df_experiment.index[self.df_experiment['Ext Recording Name'] == self.image_name].tolist()[0]
             if self.df_experiment.loc[row_index, 'Exclude']:
@@ -1154,7 +1153,7 @@ class RecordingViewer:
                 self.bn_exclude.config(text='Exclude')
                 self.text_for_info4.set("")
 
-        # If the heatmap control dialog is up display the heatmap
+        # If the heatmap control dialog is up, display the heatmap
         if self.heatmap_control_dialog:
             # Make sure that the correct squares are selected
             self.select_squares_for_display()
@@ -1204,17 +1203,32 @@ class RecordingViewer:
 
     def save_changes_on_recording_change(self):
 
-        # Save the changes in All Squares
+        """
+        This function is called when the user changes the image.
+
+        The user may have made changes in the image, such as:
+            Manually selecting or deselecting squares.
+            Assigning squares to cells
+            Changing the filter parameters
+        If there are changes in the number of squares, the labels change too and need to be updated in ALl Squares and All Tracks
+
+        :return:
+        """
+
+        # Set the index to the Unique Key
         self.df_squares.set_index('Unique Key', inplace=True, drop=False)
 
-        # Update the labels in All Tracks
+        # Determine which squares are selected and tracks are of interest
         df_recording_squares = self.df_squares
         df_recording_tracks = self.df_all_tracks[self.df_all_tracks['Ext Recording Name'] == self.image_name]
 
+        # Assign proper label numbers to the squares
         label_selected_squares(df_recording_squares)
 
+        # Update the label information in the tracks and squares data corresponding to the image
         dfs, dft = relabel_tracks(df_recording_squares, df_recording_tracks)
 
+        # Update the label information in the All Squares and All Tracks dataframes
         self.df_all_tracks.update(dft, overwrite=True)
         self.df_all_squares.update(dfs, overwrite=True)
 
@@ -1224,6 +1238,7 @@ class RecordingViewer:
         self.df_all_squares.loc[dfs.index, 'Label Nr'] = dfs['Label Nr']
         self.df_all_squares.loc[dfs.index, 'Square Nr'] = dfs['Square Nr']
         self.df_all_squares.loc[dfs.index, 'Selected'] = dfs['Selected']
+
 
     def save_changes_on_exit(self):
 
