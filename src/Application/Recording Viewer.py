@@ -45,6 +45,9 @@ from src.Application.Support.General_Support_Functions import (
 from src.Fiji.LoggerConfig import (
     paint_logger,
     paint_logger_change_file_handler_name)
+from src.Fiji.NewPaintConfig import (
+    get_paint_attribute_with_default,
+    update_paint_attribute)
 
 # Log to an appropriately named file
 paint_logger_change_file_handler_name('Recording Viewer.log')
@@ -305,7 +308,9 @@ class RecordingViewer:
 
     def setup_frame_save_commands(self):
         # Create a StringVar for save state
-        self.save_state_var = tk.StringVar(value="Ask")
+
+        save_state = get_paint_attribute_with_default('Recording Viewer', 'Save Mode', 'Ask')
+        self.save_state_var = tk.StringVar(value=save_state)
 
         # Define options for the radio buttons
         options = [("Always Save", "Always"), ("Never Save", "Never"), ("Ask to Save", "Ask")]
@@ -772,6 +777,8 @@ class RecordingViewer:
         self.recording_changed = True  # ToDo
 
     def on_exit_viewer(self):
+
+        update_paint_attribute('Recording Viewer', 'Save Mode', self.save_state_var.get())
 
         # Clean up the temporary directory
         for temp_dir in self.temp_dir:

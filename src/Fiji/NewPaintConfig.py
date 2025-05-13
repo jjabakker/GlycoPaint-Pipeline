@@ -82,6 +82,13 @@ default_data = {
         "TRACK_COLOURING": "TRACK_DURATION",  # Old value: "TRACK_DURATION"
 
         "MAX_NR_SPOTS_IN_IMAGE": 2000000
+    },
+    "Recording Viewer": {
+        "logging": {
+            "level": "INFO",
+            "file": "Image Viewer.log"
+        },
+        "Save Mode": "Ask"
     }
 }
 
