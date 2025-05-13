@@ -767,13 +767,7 @@ class RecordingViewer:
 
         self.bn_exclude.config(text='Include' if is_excluded else 'Exclude')
         self.text_for_info4.set(info4_text)
-        if label_style == 'Black':
-            self.lbl_info4.config(style="Red.Label")
-        else:
-            self.lbl_info4.config(style="Red.Label" if is_excluded else "Black.Label")
-        # self.lbl_info4.configure(foreground='red' if is_excluded else 'black')
-
-        self.recording_changed = True  # ToDo
+        self.lbl_info4.config(style="Red.Label" if label_style == 'Red' else "Black.Label")
 
     def on_exit_viewer(self):
 
