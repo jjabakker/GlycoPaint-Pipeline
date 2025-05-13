@@ -747,11 +747,9 @@ class RecordingViewer:
         :return:
         """
 
-        # row_index = self.df_experiment.index[self.df_experiment['Ext Recording Name'] == self.image_name].tolist()[0]
-        # This was complex code, but the index is already the image name
-
         row_index = self.image_name
 
+        # Toggle the exclude value of the image
         current_value = self.df_experiment.loc[row_index, 'Exclude']
         new_value = not current_value
         self.df_experiment.loc[row_index, 'Exclude'] = new_value
@@ -766,6 +764,7 @@ class RecordingViewer:
         else:
             info4_text = ''
             label_style = 'Black'
+
         self.bn_exclude.config(text='Include' if is_excluded else 'Exclude')
         self.text_for_info4.set(info4_text)
         if label_style == 'Black':
@@ -778,6 +777,7 @@ class RecordingViewer:
 
     def on_exit_viewer(self):
 
+        # The user may have changed the 'Save Mode'. Save it to the paint.json file to be certain
         update_paint_attribute('Recording Viewer', 'Save Mode', self.save_state_var.get())
 
         # Clean up the temporary directory
@@ -815,8 +815,10 @@ class RecordingViewer:
         This function is called from the SelectSquareDialog when a control has changed or when the control exists. This
         gives an opportunity to update the settings for the current image
         """
+
         self.recording_changed = True
         self.save_on_exit = True
+
         if setting_type == "Min Required Density Ratio":
             self.min_required_density_ratio = min_required_density_ratio
             self.list_images[self.img_no]['Min Required Density Ratio'] = min_required_density_ratio
@@ -861,7 +863,6 @@ class RecordingViewer:
 
             # Apply these criteria to all squares so that the Selected column is properly updated
             self.select_all_squares()
-
         elif setting_type == "Exit":
             self.select_square_dialog = None
         else:
@@ -909,7 +910,7 @@ class RecordingViewer:
         self.display_selected_squares()
         self.setup_exclude_status()
 
-        # Make sure the change will be noted if the user exits or changes tgh image
+        # Make sure the change will be noted if the user exits or changes the image
         self.recording_changed = True
 
         # Recalculate the tau
@@ -1110,6 +1111,7 @@ class RecordingViewer:
             self.save_on_exit = True
             self.recording_changed = False
 
+        # Retrieve the new image name and the squares for this image
         self.image_name = self.list_images[self.img_no]['Left Image Name']
         self.df_squares = self.df_all_squares[self.df_all_squares['Ext Recording Name'] == self.image_name]
 
@@ -1121,11 +1123,10 @@ class RecordingViewer:
         else:
             self.set_forward_backward_buttons('allow_both')
 
-        # image_name = self.list_images[self.img_no]['Left Image Name']
         self.cb_image_names.set(self.image_name)
 
         # ----------------------------------------------------------------------------
-        # Irrespective up heatmap or normal image update the BF image, the bright field
+        # Irrespective of heatmap or normal image update the BF image, the bright field
         # and the labels can be updated
         # ----------------------------------------------------------------------------
 
@@ -1217,7 +1218,9 @@ class RecordingViewer:
             Manually selecting or deselecting squares.
             Assigning squares to cells
             Changing the filter parameters
-        If there are changes in the number of squares, the labels change too and need to be updated in ALl Squares and All Tracks
+
+        If there are changes in the number of squares, the labels change too and need to be updated in ALl Squares
+        and All Tracks
 
         :return:
         """
@@ -1263,7 +1266,7 @@ class RecordingViewer:
         else:  # Then must be 'Always'
             save = True
         if save:
-            # Save the Squares data
+            # Save the data
             self.df_all_squares.to_csv(os.path.join(self.user_specified_directory, 'All Squares.csv'), index=False)
             self.df_all_tracks.to_csv(os.path.join(self.user_specified_directory, 'All Tracks.csv'), index=False)
             self.df_experiment.to_csv(os.path.join(self.user_specified_directory, 'All Recordings.csv'), index=False)
