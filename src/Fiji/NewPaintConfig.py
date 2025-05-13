@@ -81,7 +81,7 @@ default_data = {
         "MIN_NR_SPOTS_IN_TRACK": 3,  # Old value: 3
         "TRACK_COLOURING": "TRACK_DURATION",  # Old value: "TRACK_DURATION"
 
-        "MAX_NR_SPOTS_IN_IMAGE": 2000000
+        "MAX_NR_SPOTS_IN_IMAGE": 4000000
     },
     "Recording Viewer": {
         "logging": {
