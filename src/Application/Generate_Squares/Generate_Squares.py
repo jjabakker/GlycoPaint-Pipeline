@@ -432,7 +432,10 @@ def process_square(
 
         'Max Track Duration': round(df_tracks_of_square['Track Duration'].max(), 3),
         'Total Track Duration': round(df_tracks_of_square['Track Duration'].sum(), 3),
-        'Median Track Duration': round(df_tracks_of_square['Track Duration'].median(), 3)
+        'Median Track Duration': round(df_tracks_of_square['Track Duration'].median(), 3),
+
+        'Square Manually Excluded': False,
+        'Image Excluded': False
     }
 
     return square_data
