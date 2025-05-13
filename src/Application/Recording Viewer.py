@@ -381,7 +381,7 @@ class RecordingViewer:
         if is_excluded:
             info4_text = 'Image Excluded'
             label_style = 'Red'
-        elif 'Manually Excluded' in self.df_squares.columns and self.df_squares['Manually Excluded'].any():
+        elif 'Square Manually Excluded' in self.df_squares.columns and self.df_squares['Square Manually Excluded'].any():
             info4_text = 'Squares Excluded'
             label_style = 'Red'
         else:
@@ -752,7 +752,7 @@ class RecordingViewer:
         if is_excluded:
             info4_text = 'Image Excluded'
             label_style = 'Red'
-        elif 'Manually Excluded' in self.df_squares.columns and self.df_squares['Manually Excluded'].any():
+        elif 'Square Manually Excluded' in self.df_squares.columns and self.df_squares['Square Manually Excluded'].any():
             info4_text = 'Squares Excluded'
             label_style = 'Red'
         else:
@@ -886,13 +886,13 @@ class RecordingViewer:
 
     def deselect_square(self, square_nr):
 
-        # If there was no column 'Manually Excluded' then create it both in df_squares and df_all_squares
-        if 'Manually Excluded' not in self.df_squares.columns:
-            self.df_squares['Manually Excluded'] = False
-            self.df_all_squares['Manually Excluded'] = False
+        # If there was no column 'Square Manually Excluded', then create it both in df_squares and df_all_squares
+        if 'Square Manually Excluded' not in self.df_squares.columns:
+            self.df_squares['Square Manually Excluded'] = False
+            self.df_all_squares['Square Manually Excluded'] = False
 
         # Deselect the square
-        self.df_squares.loc[self.df_squares['Square Nr'] == square_nr, 'Manually Excluded'] = True
+        self.df_squares.loc[self.df_squares['Square Nr'] == square_nr, 'Square Manually Excluded'] = True
         self.select_squares_for_display()
 
         # Display the image
@@ -906,7 +906,7 @@ class RecordingViewer:
         recalc_recording_tau_and_density(self)
 
     def reset_deselected_squares(self):
-        self.df_squares['Manually Excluded'] = False
+        self.df_squares['Square Manually Excluded'] = False
         self.select_squares_for_display()
         self.display_selected_squares()
         self.setup_exclude_status()
@@ -1389,8 +1389,8 @@ def recalc_recording_tau_and_density(self):
 
     df_squares_for_single_tau = self.df_squares[self.df_squares['Selected']]
 
-    if 'Manually Excluded' in self.df_squares.columns:
-        df_squares_for_single_tau = df_squares_for_single_tau[df_squares_for_single_tau['Manually Excluded'] == False]
+    if 'Square Manually Excluded' in self.df_squares.columns:
+        df_squares_for_single_tau = df_squares_for_single_tau[df_squares_for_single_tau['Square Manually Excluded'] == False]
 
     df_tracks_for_recording = self.df_all_tracks[self.df_all_tracks['Ext Recording Name'] == self.image_name]
 

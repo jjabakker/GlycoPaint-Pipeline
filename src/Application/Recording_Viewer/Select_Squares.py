@@ -117,9 +117,9 @@ def _select_squares_actual(
     else:
         raise ValueError(f"Neighbour mode '{neighbour_mode}' not recognized.")
 
-    # Ensure 'Selected' is False for rows where 'Manually Excluded' is True
-    if 'Manually Excluded' in df_squares.columns:
-        df_squares.loc[df_squares['Manually Excluded'] == True, 'Selected'] = False
+    # Ensure 'Selected' is False for rows where 'Square Manually Excluded' is True
+    if 'Square Manually Excluded' in df_squares.columns:
+        df_squares.loc[df_squares['Square Manually Excluded'] == True, 'Selected'] = False
 
     if 'Unique Key' in df_squares.columns:
         df_squares.set_index('Unique Key', inplace=True, drop=False)

@@ -296,7 +296,7 @@ def concat_csv_files(output_file, csv_files):
 def concat_squares_files(output_file, csv_files):
     """
     Concatenate a list of CSV files into a single output file.
-    If a file does not contain the 'Manually Excluded' column, it is added with all values set to 'False'.
+    If a file does not contain the 'Square Manually Excluded' column, it is added with all values set to 'False'.
     The header is written only for the first file.
     """
     with open(output_file, 'w', newline='') as outfile:
@@ -307,17 +307,17 @@ def concat_squares_files(output_file, csv_files):
                 reader = csv.reader(infile)
                 header = next(reader)  # Read the header
 
-                # Check if 'Manually Excluded' column exists
-                if 'Manually Excluded' not in header:
-                    header.append('Manually Excluded')  # Add missing column
+                # Check if 'Square Manually Excluded' column exists
+                if 'Square Manually Excluded' not in header:
+                    header.append('Square Manually Excluded')  # Add missing column
 
                 # Initialize writer and write header for the first file
                 if i == 0:
                     writer = csv.writer(outfile)
                     writer.writerow(header)
 
-                # Get index of 'Manually Excluded' column
-                excluded_index = header.index('Manually Excluded')
+                # Get index of 'Square Manually Excluded' column
+                excluded_index = header.index('Square Manually Excluded')
 
                 # Process rows
                 for row in reader:
