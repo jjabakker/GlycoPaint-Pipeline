@@ -55,12 +55,11 @@ def get_track_attributes(track_model, track_id):
 
     spots = list(track_model.trackSpots(track_id))
     if len(spots) < 2:
-        return 0.0
+        return 0.0 # Not enough spots to calculate distance, but this cannot happen
 
     # Sort by frame to get the correct order
     spots.sort(key=lambda s: s.getFeature('FRAME'))
 
-    first_spot = True
     total_distance = 0.0
     cum_msd = 0.0
     speed_list = []
@@ -72,15 +71,15 @@ def get_track_attributes(track_model, track_id):
         x2 = spots[i].getFeature('POSITION_X')
         y2 = spots[i].getFeature('POSITION_Y')
 
-        if first_spot:
+        # Keep a reference to the first point
+        if i == 1:
             x0 = x1
             y0 = y1
-            first_spot = False
 
         dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         total_distance += dist
 
-        cum_msd += (x1 - x0) ** 2 + (y1 - y0) ** 2
+        cum_msd += (x2 - x0) ** 2 + (y2 - y0) ** 2
 
         speed = dist / 0.05  # Assuming time between frames is 0.05 seconds
         speed_list.append(speed)
