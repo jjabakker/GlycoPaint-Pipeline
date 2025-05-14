@@ -123,8 +123,7 @@ def main():
         sys.exit(1)
 
     process_project_params = process_project_params_list[0]
-
-    conf_file = '../Config/Paint Data Generation.json'
+    conf_file = process_project_params['Config File']
     try:
         with open(conf_file, 'r') as file:
             config = json.load(file)
