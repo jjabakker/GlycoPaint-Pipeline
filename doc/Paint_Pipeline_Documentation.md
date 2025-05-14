@@ -413,7 +413,7 @@ The background 'density' represents the average track count of the lowest 10% of
 
 The diffusion coefficient is calculated for each track in the recording that contains three or more spots, using the following formula. Here, *n* represents the dimensionality (2), and *t* is the time interval over which displacement is measured (0.05 s).
 
-$$MSD = \sum_{i = 1}^{nr\ spots}{{(x_{i} - x_{0})}^{2} + \ {(y_{i} - y_{0})}^{2}}$$
+$$MSD = \frac{1}{nr\ spots} \sum_{i = 1}^{nr\ spots}{{(x_{i} - x_{0})}^{2} + \ {(y_{i} - y_{0})}^{2}}$$
 
 $$Diffusion\ Coefficient = \frac{MSD}{(2\ *n*t)}$$
 
