@@ -9,7 +9,7 @@
     "min_tracks_for_tau": 20,
     "max_allowable_variability": 10
   },
-    {
+  {
     "flag": true,
     "probe": "Regular Probes",
     "project_name": "Paint Regular Probes - 20 Squares",
