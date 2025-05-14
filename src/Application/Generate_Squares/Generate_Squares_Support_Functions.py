@@ -340,22 +340,37 @@ def calculate_median_short_track(df_tracks):
         median_short_track = df_tracks.head(nr_tracks_to_average)['Track Duration'].median()
     return median_short_track
 
+
 def read_tracks_of_experiment(experiment_path: str) -> pd.DataFrame:
     """
     Read the All Tracks file for an Experiment
+    Returns an empty DataFrame with required columns if file is empty
     """
+    file_path = os.path.join(experiment_path, 'All Tracks.csv')
 
-    df_tracks_of_experiment = pd.read_csv(os.path.join(experiment_path, 'All Tracks.csv'))
-    if df_tracks_of_experiment is None:
-        paint_logger.error(f"Could not read the 'All Tracks.csv' file in {experiment_path}")
-        sys.exit(1)
-    df_tracks_of_experiment = create_unique_key_for_tracks(df_tracks_of_experiment)
-    if df_tracks_of_experiment is None:
-        paint_logger.error(f"Could not read the 'All Tracks.csv' file in {experiment_path}")
-        sys.exit(1)
-    df_tracks_of_experiment['Square Nr'] = None
-    df_tracks_of_experiment['Label Nr'] = None
-    return df_tracks_of_experiment
+    try:
+        # Check if the file exists and has content
+        if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
+            paint_logger.warning(f"'All Tracks.csv' file in {experiment_path} is empty or doesn't exist")
+            # Return empty DataFrame with required columns
+            return pd.DataFrame(columns=['Square Nr', 'Label Nr'])
+
+        df_tracks_of_experiment = pd.read_csv(file_path)
+
+        if df_tracks_of_experiment.empty:
+            paint_logger.warning(f"No tracks found in {file_path}")
+            return pd.DataFrame(columns=['Square Nr', 'Label Nr'])
+
+        df_tracks_of_experiment = create_unique_key_for_tracks(df_tracks_of_experiment)
+        df_tracks_of_experiment['Square Nr'] = None
+        df_tracks_of_experiment['Label Nr'] = None
+        return df_tracks_of_experiment
+
+    except Exception as e:
+        paint_logger.error(f"Error reading 'All Tracks.csv' in {experiment_path}: {str(e)}")
+        # Return empty DataFrame instead of exiting
+        return pd.DataFrame(columns=['Square Nr', 'Label Nr'])
+
 
 
 def read_recordings_of_experiment(experiment_path: str) -> pd.DataFrame:
