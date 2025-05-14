@@ -31,7 +31,6 @@ PAINT_FORCE = False
 def process_json_configuration_block(paint_source_dir,
                                      project_name: str,
                                      project_path: str,
-                                     r_dest_dir: str,
                                      select_parameters: dict,
                                      probe: str,
                                      nr_of_squares_in_row: int,
@@ -76,9 +75,6 @@ def process_json_configuration_block(paint_source_dir,
     # Copy the data from Paint Source to the appropriate directory in Paint Data
     copy_tm_data_from_paint_source_with_images(paint_source_dir, project_path)
 
-    # if not os.path.exists(r_dest_dir):
-    #     os.makedirs(r_dest_dir)
-
     nr_experiments_processed = process_project(
         project_path=project_path,
         select_parameters=select_parameters,
@@ -94,20 +90,8 @@ def process_json_configuration_block(paint_source_dir,
         paint_logger.info(f"No experiments processed in {project_path}")
         paint_logger.info(f"No All Recordings, All Squares, All Tracks compiled for {project_path}")
 
-    # Now copy the data from the Paint Data directory to the R space
-    if False:
-        output_source = project_path
-        output_destination = os.path.join(r_dest_dir, 'Output')
-        os.makedirs(output_destination, exist_ok=True)
-        try:
-            shutil.copy(os.path.join(output_source, 'Squares.csv'), output_destination)
-            shutil.copy(os.path.join(output_source, 'Tracks.csv'), output_destination)
-            shutil.copy(os.path.join(output_source, 'Recordings.csv'), output_destination)
-            paint_logger.info(f"Copied output to {output_destination}")
-        except Exception:
-            paint_logger.error(f"Failed to copy output to {output_destination}")
 
-    # Set the timestamp for the R data destination directory
+    # Set the timestamp
 
     if time_string != '':
         specific_time = get_timestamp_from_string(time_string)
@@ -115,7 +99,6 @@ def process_json_configuration_block(paint_source_dir,
             paint_logger.error(f"Time string '{time_stamp}' is not a valid date string.")
     else:
         specific_time = None
-    # set_directory_tree_timestamp(r_dest_dir, specific_time)
     set_directory_tree_timestamp(project_path, specific_time)
 
     paint_logger.info("")
@@ -158,12 +141,10 @@ def main():
     paint_data = process_project_params['Paint Data']
     paint_source = process_project_params['Paint Source']
     data_version = process_project_params['Version']
-    r_dest = process_project_params['R Destination']
     time_string = process_project_params['Time String']
     paint_force = process_project_params['Force']
 
     paint_data = paint_data + ' - v' + data_version
-    r_dest = r_dest + ' - v' + data_version
 
     if time_string == '':
         current_time = datetime.now()
@@ -183,7 +164,6 @@ def main():
     paint_logger.info(f"The Paint Source directory is           : {paint_source}")
     paint_logger.info(f"The Paint Data directory is             : {paint_data}")
     paint_logger.info(f"The Version is                          : {data_version}")
-    paint_logger.info(f"The R Output directory is               : {r_dest}")
     paint_logger.info(f"The number of projects to process is    : {nr_to_process}")
     paint_logger.info(f"Paint force is                          : {paint_force}")
 
@@ -196,7 +176,6 @@ def main():
         if entry['flag']:
             paint_source_dir = os.path.join(paint_source, entry['probe'])
             paint_data_dir = os.path.join(paint_data, entry['probe'], entry['project_name'])
-            r_dest_dir = os.path.join(r_dest, entry['project_name'])
             current_process_seq_nr += 1
 
             select_parameters = pack_select_parameters(
@@ -211,7 +190,6 @@ def main():
                     paint_source_dir=paint_source_dir,
                     project_name=entry['project_name'],
                     project_path=paint_data_dir,
-                    r_dest_dir=r_dest_dir,
                     probe=entry['probe'],
                     nr_of_squares_in_row=entry['nr_of_squares'],
                     nr_to_process=nr_to_process,
