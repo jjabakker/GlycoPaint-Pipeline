@@ -6,9 +6,9 @@
 # --------------------------------------------------------
 
 import csv
+import math
 import os
 import sys
-import math
 
 from java.lang.System import getProperty
 
@@ -52,21 +52,21 @@ def own_median(data):
 
 
 def get_track_attributes(track_model, track_id):
-
     spots = list(track_model.trackSpots(track_id))
     if len(spots) < 2:
-        return 0.0 # Not enough spots to calculate distance, but this cannot happen
+        return 0.0  # Not enough spots to calculate distance, but this cannot happen
 
     # Sort by frame to get the correct order
     spots.sort(key=lambda s: s.getFeature('FRAME'))
 
     total_distance = 0.0
     cum_msd = 0.0
+    cum_msd_ext = 0.0
     speed_list = []
 
     for i in range(1, len(spots)):
-        x1 = spots[i-1].getFeature('POSITION_X')
-        y1 = spots[i-1].getFeature('POSITION_Y')
+        x1 = spots[i - 1].getFeature('POSITION_X')
+        y1 = spots[i - 1].getFeature('POSITION_Y')
 
         x2 = spots[i].getFeature('POSITION_X')
         y2 = spots[i].getFeature('POSITION_Y')
@@ -76,10 +76,11 @@ def get_track_attributes(track_model, track_id):
             x0 = x1
             y0 = y1
 
-        dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
         total_distance += dist
 
         cum_msd += (x2 - x0) ** 2 + (y2 - y0) ** 2
+        cum_msd_ext += (x2 - x1) ** 2 + (y2 - y1) ** 2
 
         speed = dist / 0.05  # Assuming time between frames is 0.05 seconds
         speed_list.append(speed)
@@ -92,7 +93,10 @@ def get_track_attributes(track_model, track_id):
     msd = cum_msd / (len(spots) - 1)
     diffusion_coefficient = round(msd / (2 * 2 * 0.05), 2)
 
-    return total_distance, max_speed, median_speed, mean_speed, diffusion_coefficient
+    msd_ext = cum_msd_ext / (len(spots) - 1)
+    diffusion_coefficient_ext = round(msd_ext / (2 * 2 * 0.05), 2)
+
+    return total_distance, max_speed, median_speed, mean_speed, diffusion_coefficient, diffusion_coefficient_ext
 
 
 def execute_trackmate_in_Fiji(
@@ -101,13 +105,13 @@ def execute_trackmate_in_Fiji(
         tracks_filename,
         image_filename,
         first,
-        kas_special ):
-
+        kas_special):
     max_frame_gap = get_paint_attribute_with_default('TrackMate', 'MAX_FRAME_GAP', 0.5)
     linking_max_distance = get_paint_attribute_with_default('TrackMate', 'LINKING_MAX_DISTANCE', 0.5)
     gap_closing_max_distance = get_paint_attribute_with_default('TrackMate', 'GAP_CLOSING_MAX_DISTANCE', 0.5)
 
-    alternative_linking_cost_factor = get_paint_attribute_with_default('TrackMate', 'ALTERNATIVE_LINKING_COST_FACTOR', 1.05)
+    alternative_linking_cost_factor = get_paint_attribute_with_default('TrackMate', 'ALTERNATIVE_LINKING_COST_FACTOR',
+                                                                       1.05)
     splitting_max_distance = get_paint_attribute_with_default('TrackMate', 'SPLITTING_MAX_DISTANCE', 13.0)
     allow_gap_closing = get_paint_attribute_with_default('TrackMate', 'ALLOW_GAP_CLOSING', False)
     allow_track_merging = get_paint_attribute_with_default('TrackMate', 'ALLOW_TRACK_MERGING', False)
@@ -282,7 +286,8 @@ def execute_trackmate_in_Fiji(
               'Track X Location', 'Track Y Location', 'Track Displacement',
               'Track Max Speed', 'Track Median Speed', 'Track Mean Speed',
               'Track Max Speed Calc', 'Track Median Speed Calc', 'Track Mean Speed Calc',
-              'Diffusion Coefficient', 'Total Distance', 'Confinement Ratio']
+              'Diffusion Coefficient', 'Diffusion Coefficient Ext',
+              'Total Distance', 'Confinement Ratio']
 
     # Determine write attributes
     open_attribute = fiji_get_file_open_write_attribute()
@@ -297,7 +302,7 @@ def execute_trackmate_in_Fiji(
 
         for track_id in track_model.trackIDs(True):
 
-            total_distance_c, max_speed_c, median_speed_c, mean_speed_c, diffusion_coefficient_c = get_track_attributes(track_model, track_id)
+            total_distance_c, max_speed_c, median_speed_c, mean_speed_c, diffusion_coefficient_c, diffusion_coefficient_ext_c = get_track_attributes(track_model, track_id)
 
             nr_spots_in_all_tracks += len(track_model.trackSpots(track_id))
 
@@ -371,7 +376,8 @@ def execute_trackmate_in_Fiji(
                                 x, y, displacement,
                                 max_speed, med_speed, mean_speed,
                                 max_speed_c, median_speed_c, mean_speed_c,
-                                diffusion_coefficient_c, total_distance_c, confinement_ratio])
+                                diffusion_coefficient_c, diffusion_coefficient_ext_c,
+                                total_distance_c, confinement_ratio])
 
     model.getLogger().log('Found ' + str(model.getTrackModel().nTracks(True)) + ' tracks.')
 
