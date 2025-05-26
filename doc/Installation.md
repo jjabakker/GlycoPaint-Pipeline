@@ -1,7 +1,7 @@
 
 # Installing the Pipeline
 
-The GlycoPaint pipeline is a research application and not developed for a large audience. Installing and running the pipeline is not as easy as for commercial software, and this section provides some support.
+The GlycoPaint pipeline is a research application and not developed for a large audience. Installing and running the pipeline is more complex than commercial software, and this section offers support
 
 ### Fiji and TrackMate
 The pipeline depends heavily on the image processing software Fiji and the Fiji plug-in TrackMate. To install Fiji, refer to the following website: [https://imagej.net/software/fiji/](https://imagej.net/software/fiji/).
@@ -51,7 +51,7 @@ Running the utility will create the paint.json file in the ~/Paint/Defaults dire
 The pipeline also uses R for the data analysis. R Studio can be downloaded from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/). You may have to install R also - instructions to do that are on the site. Examples of R scripts are available from the GitHub repository.
 
 ### Install Time
-With standard software such as PyCharm, Fiji, and TrackMate installed, the pipeline installation should take less than 10 minutes. Installing the standard R language and R Studio is optional and only required if data post-processing is performed with R.
+With standard software like PyCharm, Fiji, and TrackMate installed, the pipeline installation should take less than 10 minutes. Installing the standard R language and R Studio is optional and only required if data post-processing is performed with R.
 
 # Available scripts to run the pipeline
 

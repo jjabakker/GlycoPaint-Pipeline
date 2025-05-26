@@ -4,11 +4,11 @@
 
 - Download the demo data from: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14196381.svg)](https://doi.org/10.5281/zenodo.14196381).
 A file 'images.zip' (22 GB) will be created in your default download location. It may take an hour or so for the download to complete.
-- The zip file may be unpacked automatically (and an 'Images' directory created), but if not, unpack manually and move the images directory to a suitable location. In the example the images are stored in c:/Users/Hans/Paint Demo Set/Images. There are two experiments: 240104 and 240116.
+- The zip file may be unpacked automatically (and an 'Images' directory created), but if not, unpack manually and move the images directory to a suitable location. In the example, the images are stored in c:/Users/Hans/Paint Demo Set/Images. There are two experiments: 240104 and 240116.
 
-## Create the Experiment Info file amd provide metadata
+## Create the Experiment Info file and provide metadata
 
-- In PyCharm, run the 'Prepare Experiments Info' script for each of the two experiments (you'll find it under GlycoPaint -> src -> Application -> Prepare Experiment Info). Set the 'Image Source Directory' to the directory where you just stored the images and specify the first experiment directory, i.e., 240104. For the 'Experiment Directory' select a new empty directory (which you will have created already). Do this for both Experiment (i.e., 240104 and 240116). In the example the Experiment directories are created in c:/Users/Hans/Paint Demo Set/Paint Demo. There are two experiment directories, 240104 and 240116.
+- In PyCharm, run the 'Prepare Experiments Info' script for each of the two experiments (you'll find it under GlycoPaint -> src -> Application -> Prepare Experiment Info). Set the 'Image Source Directory' to the directory where you just stored the images and specify the first experiment directory, i.e., 240104. For the 'Experiment Directory' select a new empty directory (which you will have created already). Do this for both Experiments (i.e., 240104 and 240116). In the example the Experiment directories are created in c:/Users/Hans/Paint Demo Set/Paint Demo. There are two experiment directories, 240104 and 240116.
 - Open the two Experiment Info files in Excel and provide the metadata (e.g., Probe, Probe Type, Cell Type Adjuvant, Concentration). Repeat the process for the other Experiment Directory. You can download already filled-in versions of these files, [240104 Experiment Info](https://raw.githubusercontent.com/Leiden-chemical-immunology/GlycoPaint/refs/heads/main/Demo/240104%20Experiment%20Info.csv) and [240116 Experiment Info ](https://raw.githubusercontent.com/Leiden-chemical-immunology/GlycoPaint/refs/heads/main/Demo/240116%20Experiment%20Info.csv) and save them in their respective directories as 'Experiment Info.csv'.
 
 ## Run TrackMate

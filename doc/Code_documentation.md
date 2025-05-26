@@ -54,8 +54,8 @@ When the user manually selects or deselects squares, the following changes need 
 ## The mechanism
 
 When the user makes changes to the data, the `recording_changed` flag is set in the software to indicate that data needs to be saved.
-The value of this flag is inspected when the user either selects a new recording or exists the Viewer.
-If saving actually takes place, depends on the state of the `Save` flag: `Always Save`
+The value of this flag is inspected when the user either selects a new recording or exits the Viewer.
+If saving takes place, depends on the state of the `Save` flag: `Always Save`
 (to be certain that no changes get lost), `Never Save` (if the user just wants to inspect data), `Ask to Save` (default).
 
 ### Saving when changing recording
@@ -66,6 +66,6 @@ When the `recording_changed` flag is set, the `All Squares` and `All Tracks` dat
 The `save_on_exit` flag is set to `True`,
 to ensure that the `All Recordings`, `All Squares` and `All Tracks` data is saved when the Viewer exits.
 
-### Saving when exciting the Viewer
+### Saving when exiting the Viewer
 
 If the `save_on_exit` is set, and if the `save_mode` is set, `All Recordings`, `All Squares` and `All Tracks` data is saved.

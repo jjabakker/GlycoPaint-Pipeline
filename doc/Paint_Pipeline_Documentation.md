@@ -19,7 +19,7 @@ November 2024
 
 # Introduction
 
-This manual serves two purposes: it provides the background of the GlycoPaint pipeline and it introduces a demonstration case that can be used to familiarise oneself with running the pipeline.
+This manual serves two purposes: it provides the background of the GlycoPaint pipeline, and it introduces a demonstration case that can be used to familiarise oneself with running the pipeline.
 Detailed instructions for running the example are provided in [Running the Example](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Running_the_example.md).
 
 # Overview - The Dataflow in the GlycoPaint Pipeline
@@ -49,7 +49,7 @@ The Paint Pipeline was developed to analyse (bulk) data from GlycoPaint experime
 
 **Recording**
 
-The central concept in PAINT is the recording of binding events. A recording consists of a brightfield image to identify the position of cells and a multi-frame image in which the spots, indicative of binding events, are recorded. In our experiments, we observe cells for 100 seconds, with 2,000 frames at 50 millisecond intervals.
+The central concept in PAINT is the recording of binding events. A recording consists of a bright-field image to identify the position of cells and a multi-frame image in which the spots, indicative of binding events, are recorded. In our experiments, we observe cells for 100 seconds, with 2,000 frames at 50 millisecond intervals.
 
 **Experiment**
 
@@ -78,7 +78,7 @@ For recordings metadata needs to be provided for the Paint pipeline to work. On 
 </p>
 
 The GlycoPaint process starts with a **microscopy experiment**, in which binding events are observed under a fluorescent microscope. Such an experiment leads to a set of recordings,
-each consisting of a bright field image and a multi-frame image.
+each consisting of a bright-field image and a multi-frame image.
 
 The user subsequently prepares the **Experiment Info** by providing metadata for the recordings. The metadata specifies properties such as Cell Type, Probe Type, Concentration and Adjuvant and provides some necessary processing parameters.
 
@@ -96,7 +96,7 @@ The steps will be described in detail in coming sections, using demo data that c
 
 ## Prepare Experiment Info
 
-The metadata of the experiment is information about the conditions under which each recording is made and recorded in an 'Experiment Info' file. The Paint processing pipeline contains a 'Prepare Experiments Info' utility to prepare this file. The user provides two parameters: the directory that contains the recordings and the location of the Paint Experiment directory where the Experiment Info file (and all subsequent data) will be written.
+The metadata of the experiment is information about the conditions under which each recording is made and recorded in an 'Experiment Info' file. The Paint processing pipeline contains a 'Prepare Experiment Info' utility to prepare this file. The user provides two parameters: the directory that contains the recordings and the location of the Paint Experiment directory where the Experiment Info file (and all subsequent data) will be written.
 
 <p align="center">
 <img src="./Images/prepare_experiments_info_dialog.png"><br>
@@ -124,7 +124,13 @@ An example of a fully specified Experiment Info file, with values for Probe, Pro
 
 The TrackMate plugin in the Fiji environment is used to analyse the recordings, detect spots and connect spots to tracks where possible.
 
-The Experiment Info 'Threshold' parameter determines the spot detection sensitivity. With a low threshold value, even not very well-defined spots are detected. With a high threshold value, poorly defined spots are ignored. Experience indicates that with 1,000,000 plus spots, processing takes very long and does not lead to usable results. The user chooses for each recording a threshold value in an iterative process. The threshold should be set so that the number of spots preferably is in the 300,000 to 800,000 range. A good starting value for the Threshold is 20.
+The Experiment Info 'Threshold' parameter determines the spot detection sensitivity.
+With a low threshold value, even not very well-defined spots are detected.
+With a high threshold value, poorly defined spots are ignored.
+Experience indicates that with 1,000,000 plus spots, processing takes very long and does not lead to usable results.
+The user chooses for each recording a threshold value in an iterative process.
+The threshold should be set so that the number of spots preferably is in the 300,000 to 800,000 range.
+A good starting value for the Threshold is 20.
 
 The 'Run TrackMate' procedure is started from Fiji by selecting the GlycoPaint section from the top level menu and from there 'Run TrackMate'. A dialog box to select the Recordings Directory and Experiment Directory (previously created) is displayed.
 
@@ -138,13 +144,13 @@ Upon successful processing (for the demo case, expect roughly 15 minutes runtime
 <img src="./Images/sample_recording.png"><br>
 </p>
 
-For the set of recordings in the experiment, the system generates one 'All Tracks' and one 'All Recordings' file with attributes such as Nr Spots, Nr Tracks, Run Time and a Time Stamp. The 'All Tracks' file contains, for every track, the average x and y position, and the number of spots and track duration. In addition, the diffusion coefficient (a measure of the displacement from the origin) has been calculated. An example of aan All Tracks file is shown below.
+For the set of recordings in the experiment, the system generates one 'All Tracks' and one 'All Recordings' file with attributes such as Nr Spots, Nr Tracks, Run Time and a Time Stamp. The 'All Tracks' file contains, for every track, the average x and y position, and the number of spots and track duration. In addition, the diffusion coefficient (a measure of the displacement from the origin) has been calculated. An example of an All Tracks file is shown below.
 
 <p align="center">
 <img src="./Images/experiments_info_after_generate_squares.png"><br>
 </p>
 
-The Project directory contents just after TrackMate has been run for both the 240104 and 241116 experiment is shown below.
+The Project directory contents just after TrackMate has been run for both the 240104 and 241116 experiments is shown below.
 
 <p align="center">
 <img src="./Images/demo_project_after_trackmate.png"><br>
@@ -187,7 +193,12 @@ With the 'Generate Squares' function run, the directory structure is shown below
 
 ## Compile Project
 
-Typically, data to be analysed comes from more than one experiment. With the Compile project option, the data from the experiments in the project are compiled and an [All Recording](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Recordings.csv), [All Squares](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Squares.csv) and [All Tracks](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Tracks.csv) file on project level are generated. Any experiment of which the name starts with a '-' is not included.
+Typically, data to be analysed comes from more than one experiment.
+With the Compile project option,
+the data from the experiments in the project are compiled and an [All Recordings](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Recordings.csv),
+[All Squares](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Squares.csv)
+and [All Tracks](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Tracks.csv) file on project level are generated.
+Any experiment of which the name starts with a '-' is not included.
 
 For reference, copies of those files are available
 
@@ -201,13 +212,13 @@ For reference, copies of those files are available
 
 ## Visual Inspection
 
-Once the squares are generated, the results can be reviewed in the Image Viewer. A straightforward dialogue enables the selection of the Project or Experiment directory.
+Once the squares are generated, the results can be reviewed in the Image Viewer. A straightforward dialog enables the selection of the Project or Experiment directory.
 
 <p align="center">
 <img src="./Images/select_viewer_dialog.png"><br>
 </p>
 
-The Viewer dialogue appears, showing on the left the image with tracks and squares, and on the right the corresponding bright field image. Through scroll buttons at the bottom (or the combo box immediately under the 'Squares' window), different recordings can be selected.
+The Viewer dialog appears, showing on the left the image with tracks and squares, and on the right the corresponding bright-field image. Through scroll buttons at the bottom (or the combo box immediately under the 'Squares' window), different recordings can be selected.
 
 Squares are only shown when they meet certain selection criteria (density ratio exceeding a minimum, variability less than a maximum, the maximum track duration between a minimum and maximum and when a valid Tau exists for the square). By pressing the 'v' key also squares are shown that meet the selection criteria, but for which no valid Tau exists. 
 
@@ -219,7 +230,7 @@ Metadata of the recording in view is displayed below the Squares image. To bette
 
 ### Select Recordings
 
-The 'Select Recordings' dialogue allows users to narrow down the recordings being viewed.
+The 'Select Recordings' dialog allows users to narrow down the recordings being viewed.
 In the example provided, recordings are available for two Cell Types and three Probes.
 If the user is only interested in BMDC recordings, they can select 'BMDC,'
 then click 'Filter' followed by 'Apply All Filters' to display only the relevant recordings.
@@ -232,11 +243,11 @@ The 'Reset' buttons undo a previously made selection.
 
 ### Select Squares
 
-The selection of squares of interest for each recording can be adjusted using the Select Squares dialogue. Sliders enable you to set the values for Max Allowable Variability, Min Required Density, and Min and Max Longest Track Duration. Squares that no longer meet the selection criteria will disappear, while those that meet them will be visible.
+The selection of squares of interest for each recording can be adjusted using the Select Squares dialog. Sliders enable you to set the values for Max Allowable Variability, Min Required Density, and Min and Max Longest Track Duration. Squares that no longer meet the selection criteria will disappear, while those that meet them will be visible.
 
 The 'Neighbour' mode defines limitations in the spatial distribution of squares. There are no restrictions in 'Free' mode; in 'Relaxed' mode, squares must touch at least at the corners; and in 'Restricted' mode, they must be adjacent along the edges. The 'Set All' button applies the current selection criteria to all recordings in the set.
 
-The Recording Viewer dialogue has three options 'Always Save', 'Never Save' and 'Ask to Save' that determine if the changes are saved or not when the user closes the Recording Viewer.
+The Recording Viewer dialog has three options 'Always Save', 'Never Save' and 'Ask to Save' that determine if the changes are saved or not when the user closes the Recording Viewer.
 
 <p align="center">
 <img src="./Images/select_squares_dialog.png"><br>
@@ -244,7 +255,7 @@ The Recording Viewer dialogue has three options 'Always Save', 'Never Save' and 
 
 ### Define Cells
 
-In the Define Cells dialogue, it is possible to assign squares to cells. The user selects squares by drawing a rectangle with the mouse, selecting a cell (colour) and pressing 'Assign'.
+In the Define Cells dialog, it is possible to assign squares to cells. The user selects squares by drawing a rectangle with the mouse, selecting a cell (colour) and pressing 'Assign'.
 
 Any changes made will be saved when the user exits the Recording Viewer, depending on the selected save options.
 
@@ -254,11 +265,11 @@ Any changes made will be saved when the user exits the Recording Viewer, dependi
 
 ### Show Heatmap
 
-The Heatmap dialogue allows properties of squares to be viewed relative to each other. Five properties are available: Tau, Density, Average Diffusion Coefficient, Longest Track Duration and Cumulative Track Duration. A colour range of 20 steps is used to display values. The minimum and maximum value is limited to the current recording unless the 'global' option is checked and the minimum and maximum are determined for the current set of recordings. The 'Toggle' function, which can also be invoked by pressing 't', switches between the heatmap and regular display.
+The Heatmap dialog allows properties of squares to be viewed relative to each other. Five properties are available: Tau, Density, Average Diffusion Coefficient, Longest Track Duration and Cumulative Track Duration. A colour range of 20 steps is used to display values. The minimum and maximum value is limited to the current recording unless the 'global' option is checked and the minimum and maximum are determined for the current set of recordings. The 'Toggle' function, which can also be invoked by pressing 't', switches between the heatmap and regular display.
 
 Note that for the heatmap values are shown for all squares, i.e., without regard to the selection status.  
 
-Whilst the Heatmap dialogue is displayed, the user can scroll through images.
+Whilst the Heatmap dialog is displayed, the user can scroll through images.
 
 <p align="center">
 <img src="./Images/heatmap_dialog.png"><br>
@@ -516,9 +527,10 @@ The Paint pipeline creates a 'Paint' directory in the user's home directory, wit
 
 # Structure of Generate Squares
 
-The core of the data processing takes place in Generate Squares. To facilitate studying the code, some high level pseudocode is presented hers.
+The core of the data processing takes place in Generate Squares.
+To facilitate studying the code, some high-level pseudocode is presented here.
 
-**Generate Squares manin structure**
+**Generate Squares main structure**
 
     For all the Experiments in the Project (Process Project)
         For all the Recordings in the Experiment (Process Experiment)
