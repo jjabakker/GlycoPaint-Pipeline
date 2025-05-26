@@ -170,6 +170,7 @@ def install():
         source_directories["fiji_source"]: [
             "Run_TrackMate.py",
             "Run_TrackMate_Batch.py",
+            "Run_TrackMate_Sweep.py",
             "Single_Analysis.py",
             "FijiSupportFunctions.py",
             "NewTrackMate.py",
