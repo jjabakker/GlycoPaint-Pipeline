@@ -96,8 +96,6 @@ default_data = {
 def load_paint_config(file_path):
     global paint_configuration
 
-    if paint_configuration is not None:
-        return paint_configuration
 
     if file_path is None:
         file_path = os.path.join(os.path.expanduser('~'), 'Paint', 'Defaults', 'paint.json')
