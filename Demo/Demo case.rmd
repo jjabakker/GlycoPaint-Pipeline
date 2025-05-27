@@ -1,0 +1,478 @@
+
+---
+title: "Figures for demo set"
+subtitle: 'Quantification of single molecule glycan-mannose receptor binding kinetics on myeloid cells reveals high subcellular binding heterogeneity'
+fontfamily: sans
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+  html_document: default
+  word_document: default
+---
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+library(tidyverse)
+library(readxl)
+library(knitr)
+library(ggsignif)
+library(gridExtra)
+library(kableExtra)
+library(ggpmisc)
+library(ggtext)
+
+options(digits=2)
+
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+##############################################################################################
+# Define here the location of the root directory for the demo set
+##############################################################################################
+
+root_directory <- '/Users/hans/Paint Demo Set/Paint Demo'
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# A function to read the data from the demo set.
+# It is more complex than needed for the demo set, as it is used for a broader data set as well.
+# It returns cleaned up versions of squares_master, recordings_master and tracks_master
+
+read_data <- function(root_directory, perc_tracks = 0.1) {
+  
+  # Read the files
+  squares_master <- read_csv(paste0(root_directory, '/', 'All Squares.csv'), show_col_types = FALSE)
+  recordings_master <- read_csv(paste0(root_directory, '/', 'All Recordings.csv'), show_col_types = FALSE)
+  tracks_master <- read_csv(paste0(root_directory, '/', 'All Tracks.csv'), show_col_types = FALSE)
+  
+  # Remove spaces from column names
+  names(squares_master) <- str_replace_all(names(squares_master), c(" " = "_" ))
+  names(recordings_master)<- str_replace_all(names(recordings_master), c(" " = "_" ))
+  names(tracks_master) <- str_replace_all(names(tracks_master), c(" " = "_" ))
+  
+  # Multiply density and diffusion coefficient such that units are correct. Density is evts/µm2/ms and diffusion coefficient is in nm2/ms (or µm2/s)
+  squares_master$Density <- squares_master$Density * 1000
+  squares_master$Mean_Diffusion_Coefficient <- squares_master$Mean_Diffusion_Coefficient * 1000
+  squares_master$Median_Diffusion_Coefficient <- squares_master$Median_Diffusion_Coefficient * 1000
+  
+  # Only consider recordings:
+  #   that have been processed because the process flag was  set 
+  #   that did not contain too many spot 
+  #   that have expected lengths (2000 frames)
+  
+  recordings_master <- recordings_master %>%
+    filter(Process == 'Yes', 
+           Nr_Tracks != -1,
+           Recording_Size >= 1058000896 * 0.95 & Recording_Size <=  1058000896 * 1.20) 
+  
+  # Join tracks_master with recordings_master to retrieve probe, cell type and adjuvant information
+  tracks_master <- left_join(tracks_master, squares_master %>% select(Ext_Recording_Name, Experiment_Date, Square_Nr, Cell_Type, Probe, Probe_Type, 
+                                                                      Total_Track_Duration, Density_Ratio,Density, Tau, Adjuvant), 
+                             by = c("Ext_Recording_Name", "Square_Nr"))
+  
+  # Only leave data in All Squares and All Tracks that corresponds with what is in All Recordings
+  squares_master <- squares_master %>%
+    filter(Ext_Recording_Name %in% recordings_master$Ext_Recording_Name)
+  tracks_master <- tracks_master %>%
+    filter(Ext_Recording_Name %in% recordings_master$Ext_Recording_Name)
+  
+  # Create Valency and Structure in squares master. This only works for Regular probes
+  if (!('Valency' %in% names(squares_master))) {
+    
+    # Suppressing both messages and warnings within the code block
+    squares_master <- suppressMessages(suppressWarnings (
+      squares_master %>%
+        separate(Probe, into = c('Valency', 'Structure'), sep = ' ', remove = FALSE) %>%
+        mutate(
+          Structure = replace_na(Structure, 'Not specified'),
+          Valency = if_else(Structure == "Not specified", "Not specified", Valency)
+        )
+    ))
+  }
+  
+  # Set Structure to Control when Probe is Control
+  squares_master$Structure[squares_master$Probe == 'Control'] <- 'Control'
+  squares_master$Valency[squares_master$Probe == 'Control']   <- 'Control'
+  
+  # Remove the threshold part of the image name and store in column Recording_Name
+  squares_master <- squares_master %>%
+    mutate(Ori_Recording_Name = Ext_Recording_Name) %>% 
+    separate_wider_regex(Ext_Recording_Name, c(Recording_Name = ".*", "-threshold-\\d+")) %>% 
+    mutate(Ext_Recording_Name = Ori_Recording_Name)
+  
+  # Remove the '-' from CHO-MR, because that name is used later as a column name (and that give sproblems)
+  squares_master$Cell_Type[squares_master$Cell_Type == 'CHO-MR']  <- 'CHOMR'
+  recordings_master$Cell_Type[recordings_master$Cell_Type == 'CHO-MR']  <- 'CHOMR'
+  
+  # Change Adjuvant name from No to None 
+  squares_master$Adjuvant[squares_master$Adjuvant == 'No'] <- 'None'
+  recordings_master$Adjuvant[recordings_master$Adjuvant == 'No'] <- 'None'
+  
+  # Correct concentrations (irrelevant accuracy)
+  squares_master$Concentration[squares_master$Concentration == 4.9] <- 5
+  squares_master$Concentration[squares_master$Concentration == 14.6] <- 15
+  
+  recordings_master$Concentration[recordings_master$Concentration == 4.9] <- 5
+  recordings_master$Concentration[recordings_master$Concentration == 14.6] <- 15
+  
+  # Remove suspect Concentration (question is whether we really used it)
+  squares_master <- squares_master %>%
+    filter(squares_master$Concentration != 0.1)
+  recordings_master <- recordings_master %>%
+    filter(recordings_master$Concentration != 0.1)
+  
+  # Make Concentration integer
+  squares_master$Concentration <- as.numeric(squares_master$Concentration)
+  
+  # Make columns factor where necessary
+  probe_factor = c('1 Mono', '2 Mono', '6 Mono', '1 Bi', '2 Bi', '6 Bi', '1 Tri', '2 Tri', '6 Tri', 'Control')
+  probe_type_factor = c('Simple', 'Epitope')
+  cell_type_factor = c('BMDC', 'CHOMR', 'MR -/-', 'iCD103', 'spDC', 'BMDM')
+  adjuvant_factor = c('CytD', 'None', 'LPS', 'LPS+CytD', 'MPLA', 'M1', 'M2', 'M1 + SI', 'M2pep')
+  valency_factor = c('1', '2', '6', 'Control')
+  structure_factor = c('Mono', 'Bi', 'Tri', 'Control')
+  
+  squares_master$Probe      <- factor(squares_master$Probe,       levels = probe_factor)
+  squares_master$Probe_Type <- factor(squares_master$Probe_Type,  levels = probe_type_factor)
+  squares_master$Cell_Type  <- factor(squares_master$Cell_Type,   levels = cell_type_factor)
+  squares_master$Adjuvant   <- factor(squares_master$Adjuvant,    levels = adjuvant_factor)
+  squares_master$Valency    <- factor(squares_master$Valency,     levels = valency_factor)
+  squares_master$Structure  <- factor(squares_master$Structure,   levels = structure_factor)
+  
+  # Make columns factor where necessary
+  recordings_master$Probe      <- factor(recordings_master$Probe,       levels = probe_factor)
+  recordings_master$Probe_Type <- factor(recordings_master$Probe_Type,  levels = probe_type_factor)
+  recordings_master$Cell_Type  <- factor(recordings_master$Cell_Type,   levels = cell_type_factor)
+  recordings_master$Adjuvant   <- factor(recordings_master$Adjuvant,    levels = adjuvant_factor)
+  
+  # Ensure Median Filtering is Boolean
+  recordings_master$Median_Filtering <- as.logical(recordings_master$Median_Filtering)
+  
+  write_csv(squares_master, '~/Downloads/squares_master_processed.csv')
+  
+  return (list(squares_master=squares_master, recordings_master=recordings_master, tracks_master=tracks_master))
+}
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# code to set the theme and colors for the plots
+
+theme_set(theme_light())
+green_mono    <- "#a4fc9e"
+green_tri     <- '#0FAE26'
+green_control <- "grey"
+
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# A set of functions to generate information for the signifivance bars
+
+create_significance_table <- function(data_to_analyse, parameter, group_factor) {
+  
+  # Validate parameter and group_factor presence in data
+  if (!parameter %in% names(data_to_analyse)) {
+    stop(paste("Parameter", parameter, "not found in data"))
+  }
+  if (!group_factor %in% names(data_to_analyse)) {
+    stop(paste("Group factor", group_factor, "not found in data"))
+  }
+  
+  probe_types <- unique(data_to_analyse[[group_factor]])
+  significance_table <- data.frame()
+
+  significance_table <- calculate_significance_record(data_to_analyse, parameter, group_factor)
+  
+  return(significance_table)
+}
+
+
+calculate_significance_record <- function(data_to_analyse, parameter, group_factor) {
+  
+  # Validate parameter and group_factor presence in data
+  if (!parameter %in% names(data_to_analyse)) {
+    stop(paste("Parameter", parameter, "not found in data"))
+  }
+  if (!group_factor %in% names(data_to_analyse)) {
+    stop(paste("Group factor", group_factor, "not found in data"))
+  }
+  
+  # Dynamically build the formula for ANOVA
+  formula <- as.formula(paste(parameter, "~", group_factor))
+  aov_result <- aov(formula, data = data_to_analyse)
+  
+  # Tukey's HSD test
+  tukey_results <- TukeyHSD(aov_result, which = group_factor)[[group_factor]]
+  results <- as.data.frame(tukey_results)
+  
+  # Extract group names and significance levels
+  results$Groups <- rownames(results)
+  results[c("Group1", "Group2")] <- str_split_fixed(results$Groups, "-", 2)
+  results <- results %>% select(-Groups)
+  
+  # Define significance based on adjusted p-values
+  results$Significance <- " "
+  results$Significance[results$'p adj' > 0.05] <- "ns"
+  results$Significance[results$'p adj' <= 0.05] <- "*"
+  results$Significance[results$'p adj' <= 0.01] <- "**"
+  results$Significance[results$'p adj' <= 0.001] <- "***"
+  results$Significance[results$'p adj' <= 0.0001] <- "****"
+  
+  # Format p_adj with 3 decimal places
+  results$p_adj <- formatC(results$'p adj', format = "f", digits = 3)
+  
+  # Select relevant columns
+  results <- results[c("Group1", "Group2", "p_adj", "Significance")]
+  
+  return(results)
+}
+
+
+get_significance <- function(significance_table, group1, group2) {
+  
+  condition1 <- significance_table$Group1 == group1 & significance_table$Group2 == group2
+  condition2 <- significance_table$Group1 == group2 & significance_table$Group2 == group1
+  
+  if (sum(condition1) == 1) {
+    p <- significance_table[condition1, "p_adj"]
+  } else if (sum(condition2) == 1) {
+    p <- significance_table[condition2, "p_adj"]
+  } else {
+    p <- ifelse(sum(condition1) + sum(condition2) == 0, -1, -2)
+  }
+  
+  return(p)
+}
+
+```
+
+
+```{r , echo=FALSE}
+
+# Here read in the data, using the root_directory you have previouslkuy defined
+
+data <- read_data(root_directory)
+
+squares_master <- data$squares_master
+recordings_master <- data$recordings_master
+tracks_master <- data$tracks_master
+
+```
+
+
+```{r echo=FALSE}
+
+# A function to generate labels for the x-axis of the plots
+# A number, that is used in the paper, is addeed to the probe names
+
+generate_labels <- function(label_names, label_numbers) {
+  # Check that label_names and label_numbers are of the same length
+  if (length(label_names) != length(label_numbers)) {
+    stop("label_names and label_numbers must have the same length.")
+  }
+  
+  # Create formatted labels with bold numbers
+  formatted_labels <- paste0(label_names, "(<b>", label_numbers, "</b>)")
+  
+  return(formatted_labels)
+}
+
+# Define the label names and corresponding numbers
+label_names <- c('1 Mono', '6 Mono', '1 Tri', '6 Tri')
+label_numbers <- c(8, 10, 11, 13)
+
+# Generate the labels
+formatted_labels <- generate_labels(label_names, label_numbers)
+
+```
+
+
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.height=10, fig.width=12}
+
+# A function to generate the plot for Tau with significance bars
+# It is set uo so that it effcieintky cabn be called for different data combinations
+
+generate_tau_significance <- function(plot_data, y_limit, grid) {
+
+  significance_tau <- create_significance_table(plot_data, "Tau", "Probe")
+  
+  # Specify which pairs of probes you want to compare
+   signif <- list(
+    c('6 Mono', '1 Tri'))
+  
+  # Retrieve significance values for each pair
+  signif_value <- c(
+    get_significance(significance_tau, '6 Mono', '1 Tri')
+  )
+  
+  signif_num = as.numeric(signif_value)
+  for (i in 1:length(signif_value)) {
+    if (signif_num[i] > 0.05) {
+      signif_value[i] = 'ns'
+    }
+    else if (signif_num[i] > 0.01) {
+      signif_value[i] = '*'
+    }
+    else if (signif_num[i] > 0.001) {
+      signif_value[i] = '**'
+    }
+    else if (signif_num[i] > 0.0001) {
+      signif_value[i] = '***'
+    }
+    else {
+      signif_value[i] = '****'
+    }  }
+
+  size = 10
+  
+  meds <- plot_data %>% 
+    group_by(Probe, Cell_Type, Probe_Type, Structure) %>%
+    summarize(med = round(median(Tau), 0), .groups = 'keep')
+  
+  plot <- plot_data %>%
+    ggplot(aes(x=Probe, y = Tau, fill = Structure)) + 
+      geom_violin(width = 0.9, show.legend = FALSE, trim = F, scale='width', linewidth = 0.15) +
+      geom_signif(comparisons = signif, annotations = signif_value, y_position = 500, size = 0.3) +
+      geom_text(data = meds, aes(y = med, label = round(med, 2)), size = 5, vjust = -0.5, color = "black") +
+      geom_text(aes(label=paste0("n = ", after_stat(count))), y = 600, stat = 'count', colour = "black", size = 5) +  
+      labs(x = '', 
+           y = expression(1/k[off] * " (ms)"),
+           caption = '') +
+      scale_y_continuous(limits = c(0, y_limit), breaks=seq(0, y_limit, 200)) +
+      scale_fill_manual(values=c(green_mono,
+                                 green_tri,
+                                 green_control)) +
+      theme_light(base_size = size) +
+      theme(panel.border = element_blank(), 
+            strip.text = element_blank(), 
+            panel.grid.major = element_blank(), 
+            panel.grid.minor = element_blank(), 
+            axis.line = element_line(linewidth = 0.25, colour = "black")) +
+      if (grid == TRUE) {
+        facet_grid(~ Cell_Type , drop = TRUE)
+      }
+      else {
+        facet_wrap( ~ Cell_Type, drop = TRUE)
+      }
+   return (plot)
+}
+
+```
+
+
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.height=10, fig.width=12, warning=FALSE}
+
+# Filter the data including threshold and concentration
+
+td <- squares_master %>%
+  filter(Probe %in% c('1 Mono', '6 Mono', '1 Tri',  '6 Tri'),
+         Density_Ratio > 2,
+         R_Squared > 0.8,
+         Tau > 0,
+         Adjuvant == 'None')
+
+# Function to generate and customize the plot
+generate_and_customize_plot <- function(cell_type, probe_type, y_limit, customize_y_axis = FALSE) {
+  plot_data <- 
+    td %>% filter(Cell_Type == cell_type, Probe_Type == probe_type)
+  
+  plot <- generate_tau_significance(plot_data, y_limit, customize_y_axis)
+
+  return(plot)
+}
+
+
+generate_and_customize_plot('BMDC', 'Simple', 600, FALSE) + 
+  scale_x_discrete(labels = formatted_labels) + 
+  theme(axis.text.x = element_markdown(size = 10))
+
+
+```
+
+
+
+
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.height=10, fig.width=12, warning=FALSE}
+
+# A function to generate the plot for Density with significance bars
+# It is set uo so that it effcieintky cabn be called for different data combinations
+
+y_limit    <- 30
+
+density_data <- squares_master %>% 
+  filter(Cell_Type   == 'BMDC') %>% 
+  filter(Probe_Type  == 'Simple') %>% 
+  filter(Adjuvant    == 'None') %>%
+  filter(Threshold    == 5) %>%
+  filter(Concentration == 10) %>%
+  filter(Density_Ratio > 2) %>%
+  filter(R_Squared > 0.8)
+
+# Prepare significance info
+
+significance_density <- create_significance_table(density_data, "Density", "Probe")
+signif               <- list(c('6 Mono', '1 Tri'))
+signif_value         <- c(get_significance(significance_density, '6 Mono', '1 Tri'))
+                      
+signif_num = as.numeric(signif_value)
+  for (i in 1:length(signif_value)) {
+    if (signif_num[i] > 0.05) {
+      signif_value[i] = 'ns'
+    }
+    else if (signif_num[i] > 0.01) {
+      signif_value[i] = '*'
+    }
+    else if (signif_num[i] > 0.001) {
+      signif_value[i] = '**'
+    }
+    else if (signif_num[i] > 0.0001) {
+      signif_value[i] = '***'
+    }
+    else {
+      signif_value[i] = '****'
+    }  }
+
+meds <- density_data %>% 
+  group_by(Probe, Adjuvant, Structure) %>%
+  summarize(med = round(median(Density), 0), .groups = 'keep')
+size = 10
+
+density_data %>%
+  ggplot(aes(x=Probe, y = Density, fill = Structure)) + 
+    geom_violin(width = 0.9, show.legend = FALSE, trim = TRUE, scale='width', linewidth = 0.15) +
+    geom_signif(comparisons = signif, annotations = signif_value, y_position = 20, size = 0.2) +
+    geom_text(data = meds, aes(y = med, label = round(med, 2)), size = 4, vjust = -0.5, face = "bold", color = "black") +
+    geom_text(aes(label=paste0("n = ", ..count..)), y = 25, stat = 'count', colour = "black", size = 4) +  
+    labs(x = '', 
+         y = expression( k[on] * " (evts/µm"^2 * "/sec)"),
+         caption = '') +
+    scale_y_continuous(limits = c(0, y_limit), breaks=seq(0, y_limit, 5)) +
+    scale_fill_manual(values=c(green_mono,
+                               green_tri,
+                               green_control)) +
+    theme_light(base_size = size) +
+    facet_wrap( ~ Cell_Type, drop = TRUE) +
+    scale_x_discrete(labels = formatted_labels) +
+    theme(strip.text = element_blank(), 
+          axis.text.x = element_markdown(size = 10)) +
+    theme(
+      panel.border = element_blank(), 
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(), 
+      axis.line = element_line(size = 0.25, colour = 'black')) 
+    
+
+```
+
