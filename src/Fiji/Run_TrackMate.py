@@ -242,7 +242,7 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         recording_file_path = os.path.join(experiment_directory, 'TrackMate Images', ext_recording_name + '.jpg')
 
         (nr_spots, total_tracks, long_tracks, max_frame_gap, linking_max_distance, gap_closing_max_distance,
-         nr_spots_in_all_tracks, do_median_filtering)  = execute_trackmate_in_Fiji(
+         nr_spots_in_all_tracks, do_median_filtering, min_nr_spots_in_track)  = execute_trackmate_in_Fiji(
             ext_recording_name, threshold, tracks_file_path, recording_file_path, first, False )
 
         # IJ.run("Set Scale...", "distance=6.2373 known=1 unit=micron")
