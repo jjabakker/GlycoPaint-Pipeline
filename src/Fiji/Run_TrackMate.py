@@ -204,8 +204,8 @@ def run_trackmate(experiment_directory, recording_source_directory, convert=True
             paint_logger.error("Run_TrackMate could not process recording. Error {}".format(e))
             suppress_fiji_output()
             sys.exit(0)
-
-    convert_bf_images(recording_source_directory, experiment_directory, force=True)
+    if convert:
+        convert_bf_images(recording_source_directory, experiment_directory, force=True)
 
 
 def process_recording_trackmate(row, recording_source_directory, experiment_directory, first, case_text):
