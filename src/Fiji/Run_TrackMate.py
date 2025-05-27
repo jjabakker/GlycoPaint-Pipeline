@@ -42,7 +42,7 @@ paint_logger_change_file_handler_name('Run Trackmate.log')
 sys.stdout = open(os.devnull, 'w')
 sys.stderr = open(os.devnull, 'w')
 
-def run_trackmate(experiment_directory, recording_source_directory):
+def run_trackmate(experiment_directory, recording_source_directory, convert=True, case_text=''):
     # Open the experiment file to determine the columns (which should be in the paint directory)
 
     experiment_info_path = get_experiment_info_file_path(experiment_directory)
@@ -87,7 +87,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
             col_names = csv_reader.fieldnames
             new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp',
                            'Max Frame Gap', 'Gap Closing Max Distance', 'Linking Max Distance', 'Median Filtering',
-                           'Nr Spots in All Tracks', ]
+                           'Nr Spots in All Tracks', 'Min Spots in Track', 'Case']
             col_names += [col for col in new_columns if col not in col_names]
 
             # And create the header row
@@ -111,7 +111,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
             col_names = csv_reader.fieldnames
             new_columns = ['Nr Spots', 'Nr Tracks', 'Run Time', 'Ext Recording Name', 'Recording Size', 'Time Stamp',
                            'Max Frame Gap', 'Gap Closing Max Distance', 'Linking Max Distance', 'Median Filtering',
-                           'Nr Spots in All Tracks', ]
+                           'Nr Spots in All Tracks', 'Min Spots in Track', 'Case']
             col_names += [col for col in new_columns if col not in col_names]
 
             # And create the header row
@@ -132,7 +132,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
 
                     recording_process_time = time.time()
                     status, row = process_recording_trackmate(row, recording_source_directory,
-                                                              experiment_directory, file_count==1)
+                                                              experiment_directory, file_count==1, case_text)
                     paint_logger.info("Processed file nr " + str(file_count).rjust(2) + " of " + str(nr_to_process).rjust(2) + ": " +
                                       row['Recording Name'] + " in " +
                                       format_time_nicely(time.time() - recording_process_time))
@@ -208,7 +208,7 @@ def run_trackmate(experiment_directory, recording_source_directory):
     convert_bf_images(recording_source_directory, experiment_directory, force=True)
 
 
-def process_recording_trackmate(row, recording_source_directory, experiment_directory, first):
+def process_recording_trackmate(row, recording_source_directory, experiment_directory, first, case_text):
     status = 'OK'
     recording_name = row['Recording Name']
     threshold = float(row['Threshold'])
@@ -269,6 +269,8 @@ def process_recording_trackmate(row, recording_source_directory, experiment_dire
         row['Gap Closing Max Distance'] = gap_closing_max_distance
         row['Median Filtering'] = do_median_filtering
         row['Nr Spots in All Tracks'] = nr_spots_in_all_tracks
+        row['Min Spots in Track'] = min_nr_spots_in_track
+        row['Case'] = case_text
 
     return status, row
 
