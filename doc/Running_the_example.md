@@ -8,7 +8,7 @@ A file 'images.zip' (22 GB) will be created in your default download location. I
 
 ## Create the Experiment Info file and provide metadata
 
-- In PyCharm, run the 'Prepare Experiments Info' script for each of the two experiments (you'll find it under GlycoPaint -> src -> Application -> Prepare Experiment Info). Set the 'Image Source Directory' to the directory where you just stored the images and specify the first experiment directory, i.e., 240104. For the 'Experiment Directory' select a new empty directory (which you will have created already). Do this for both Experiments (i.e., 240104 and 240116). In the example the Experiment directories are created in c:/Users/Hans/Paint Demo Set/Paint Demo. There are two experiment directories, 240104 and 240116.
+- In PyCharm, run the 'Prepare Experiments Info' script for each of the two experiments (you'll find it under GlycoPaint -> src -> Application -> Prepare Experiment Info). Set the 'Image Source Directory' to the directory where you just stored the images and specify the first experiment directory, i.e., 240104. For the 'Experiment Directory' select a new empty directory (which you will have created already). Do this for both Experiments (i.e., 240104 and 240116). In the example, the Experiment directories are created in c:/Users/Hans/Paint Demo Set/Paint Demo. There are two experiment directories, 240104 and 240116.
 - Open the two Experiment Info files in Excel and provide the metadata (e.g., Probe, Probe Type, Cell Type Adjuvant, Concentration). Repeat the process for the other Experiment Directory. You can download already filled-in versions of these files, [240104 Experiment Info](https://raw.githubusercontent.com/Leiden-chemical-immunology/GlycoPaint/refs/heads/main/Demo/240104%20Experiment%20Info.csv) and [240116 Experiment Info ](https://raw.githubusercontent.com/Leiden-chemical-immunology/GlycoPaint/refs/heads/main/Demo/240116%20Experiment%20Info.csv) and save them in their respective directories as 'Experiment Info.csv'.
 
 ## Run TrackMate
@@ -28,3 +28,7 @@ A file 'images.zip' (22 GB) will be created in your default download location. I
 ## Inspect the results
 
 - To see how the squares are overlaid over the recordings, you can run the 'Recording Viewer' from PyCharm (GlycoPaint -> src -> Application -> Recording Viewer). You can specify either individual Experiment directories or the Project directory to view recordings of all experiments.
+
+## Generate Figures
+
+- Three files have been generated: 'All Recordings', 'All Squares' and 'All Tracks'. An example Rmd script called 'Demo Case.Rmd' is included in the Demo directory. You can run that script in RStudio to generate some example figures. Note that you will have to edit the root_directory to make it point to the directory where the three files are stored. 

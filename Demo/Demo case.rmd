@@ -19,7 +19,6 @@ library(readxl)
 library(knitr)
 library(ggsignif)
 library(gridExtra)
-library(kableExtra)
 library(ggpmisc)
 library(ggtext)
 
@@ -44,7 +43,7 @@ root_directory <- '/Users/hans/Paint Demo Set/Paint Demo'
 # It is more complex than needed for the demo set, as it is used for a broader data set as well.
 # It returns cleaned up versions of squares_master, recordings_master and tracks_master
 
-read_data <- function(root_directory, perc_tracks = 0.1) {
+read_data <- function(root_directory) {
   
   # Read the files
   squares_master <- read_csv(paste0(root_directory, '/', 'All Squares.csv'), show_col_types = FALSE)
@@ -370,33 +369,20 @@ generate_tau_significance <- function(plot_data, y_limit, grid) {
 ```
 
 
-
 ```{r echo=FALSE, fig.fullwidth=TRUE, fig.height=10, fig.width=12, warning=FALSE}
 
 # Filter the data including threshold and concentration
 
-td <- squares_master %>%
-  filter(Probe %in% c('1 Mono', '6 Mono', '1 Tri',  '6 Tri'),
+plot_data <- squares_master %>%
+  filter(Cell_Type == 'BMDC',
+         Probe_Type == 'Simple',
+         Probe %in% c('1 Mono', '6 Mono', '1 Tri',  '6 Tri'),
          Density_Ratio > 2,
          R_Squared > 0.8,
          Tau > 0,
          Adjuvant == 'None')
-
-# Function to generate and customize the plot
-generate_and_customize_plot <- function(cell_type, probe_type, y_limit, customize_y_axis = FALSE) {
-  plot_data <- 
-    td %>% filter(Cell_Type == cell_type, Probe_Type == probe_type)
   
-  plot <- generate_tau_significance(plot_data, y_limit, customize_y_axis)
-
-  return(plot)
-}
-
-
-generate_and_customize_plot('BMDC', 'Simple', 600, FALSE) + 
-  scale_x_discrete(labels = formatted_labels) + 
-  theme(axis.text.x = element_markdown(size = 10))
-
+generate_tau_significance(plot_data, 600, FALSE)
 
 ```
 
@@ -412,13 +398,13 @@ generate_and_customize_plot('BMDC', 'Simple', 600, FALSE) +
 y_limit    <- 30
 
 density_data <- squares_master %>% 
-  filter(Cell_Type   == 'BMDC') %>% 
-  filter(Probe_Type  == 'Simple') %>% 
-  filter(Adjuvant    == 'None') %>%
-  filter(Threshold    == 5) %>%
-  filter(Concentration == 10) %>%
-  filter(Density_Ratio > 2) %>%
-  filter(R_Squared > 0.8)
+  filter(Cell_Type   == 'BMDC',
+         Probe_Type  == 'Simple',
+         Adjuvant    == 'None',
+         Threshold    == 5,
+         Concentration == 10,
+         Density_Ratio > 2,
+         R_Squared > 0.8)
 
 # Prepare significance info
 
