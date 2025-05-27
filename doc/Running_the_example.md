@@ -31,4 +31,4 @@ A file 'images.zip' (22 GB) will be created in your default download location. I
 
 ## Generate Figures
 
-- Three files have been generated: 'All Recordings', 'All Squares' and 'All Tracks'. An example Rmd script called 'Demo Case.Rmd' is included in the Demo directory. You can run that script in RStudio to generate some example figures. Note that you will have to edit the root_directory to make it point to the directory where the three files are stored. 
+- Three files have been generated: 'All Recordings', 'All Squares' and 'All Tracks'. An example Rmd script called   [Demo case.rmd](https://raw.githubusercontent.com/Leiden-chemical-immunology/GlycoPaint/refs/heads/main/Demo/Demo%20case.rmd) is included in the Demo directory. You can run that script in RStudio to generate some example figures. Note that you will have to edit the root_directory to make it point to the directory where the three files are stored. 
