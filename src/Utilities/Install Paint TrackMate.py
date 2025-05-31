@@ -143,10 +143,14 @@ def install():
         logging.critical("Please make sure that Fiji is installed and specify the path to the Fiji application in the paint.json file.")
         return
 
-    # Clean and create directory
+    # Clean and create the directory
     dest_root = os.path.join(fiji_app, 'Scripts', 'GlycoPaint')
     if os.path.exists(dest_root):
         shutil.rmtree(dest_root)
+    dest_root = os.path.join(fiji_app, 'Scripts', 'Glyco-PAINT')
+    if os.path.exists(dest_root):
+        shutil.rmtree(dest_root)
+
     os.makedirs(dest_root, exist_ok=True)
 
     # Remove the __pycache__ directory if it exists
