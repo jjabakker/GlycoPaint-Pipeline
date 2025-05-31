@@ -13,6 +13,7 @@ src/Demo/
 ../.venv/
 *.pdf
 *.docx
+doc/*.docx
 
 
 # PyInstaller
