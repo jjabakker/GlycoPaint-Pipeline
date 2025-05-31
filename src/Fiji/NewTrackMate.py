@@ -352,11 +352,11 @@ def execute_trackmate_in_Fiji(
             else:
                 mean_speed = round(mean_speed, 2)
 
-            nr_gaps = feature_model.getTrackFeature(track_id, 'TRACK_NUMBER_GAPS')
+            nr_gaps = feature_model.getTrackFeature(track_id, 'NUMBER_GAPS')
             if nr_gaps is None:
                 nr_gaps = -1
 
-            longest_gap = feature_model.getTrackFeature(track_id, 'TRACK_LONGEST_GAP')
+            longest_gap = feature_model.getTrackFeature(track_id, 'LONGEST_GAP')
             if longest_gap is None:
                 longest_gap = -1
 
