@@ -179,7 +179,7 @@ def classify_directory_work(directory_path):
     experiment_files = {"Experiment Info.csv", "All Recordings.csv"}
     required_dirs = {"Brightfield Images", "TrackMate Images"}
     optional_file = "All Squares.csv"
-    optional_files = {"All Squares.csv", "All Tracks.csv"}
+    optional_files = {"All Squares.csv", "All Tracks.csv", "Paint.json"}
     output_dir = directory / "Output"
 
     has_experiment_files = all((directory / file).is_file() for file in experiment_files)
