@@ -103,24 +103,25 @@ def compile_project_output(
             paint_logger.info(f"Processed experiment: {experiment}")
 
     # Concatenate all the files
-    concat_csv_files(os.path.join(project_dir, 'All Recordings.csv'), all_recordings)
-    concat_squares_files(os.path.join(project_dir, 'All Squares.csv'), all_squares)
-    concat_csv_files(os.path.join(project_dir, 'All Tracks.csv'), all_tracks)
+    if nr_error == 0:
+        concat_csv_files(os.path.join(project_dir, 'All Recordings.csv'), all_recordings)
+        concat_squares_files(os.path.join(project_dir, 'All Squares.csv'), all_squares)
+        concat_csv_files(os.path.join(project_dir, 'All Tracks.csv'), all_tracks)
 
-    # Check for duplicates in the All Recordings file
-    df_experiment = pd.read_csv(os.path.join(project_dir, 'All Recordings.csv'),
-                                dtype={'Max Allowable Variability': float,
-                                       'Min Required Density Ratio': float})
-    if len(df_experiment)  != len(df_experiment['Recording Name'].unique()):
-        paint_logger.error("Duplicate entries found in All Recordings file.")
-        duplicate_names = set(df_experiment[df_experiment.duplicated(subset='Ext Recording Name', keep=False)]['Ext Recording Name'])
-        duplicate_list = sorted(duplicate_names)
-        paint_logger.error(f"Duplicate Recording Names: {duplicate_list}")
-        sys.exit(0)
+        # Check for duplicates in the All Recordings file
+        df_experiment = pd.read_csv(os.path.join(project_dir, 'All Recordings.csv'),
+                                    dtype={'Max Allowable Variability': float,
+                                           'Min Required Density Ratio': float})
+        if len(df_experiment)  != len(df_experiment['Recording Name'].unique()):
+            paint_logger.error("Duplicate entries found in All Recordings file.")
+            duplicate_names = set(df_experiment[df_experiment.duplicated(subset='Ext Recording Name', keep=False)]['Ext Recording Name'])
+            duplicate_list = sorted(duplicate_names)
+            paint_logger.error(f"Duplicate Recording Names: {duplicate_list}")
+            sys.exit(0)
 
 
-    correct_all_recordings_column_types(os.path.join(project_dir, 'All Recordings.csv'))
-    paint_logger.info(f"Processed {nr_processed} experiments, skipped {nr_skipped} experiments.")
+        correct_all_recordings_column_types(os.path.join(project_dir, 'All Recordings.csv'))
+        paint_logger.info(f"Processed {nr_processed} experiments, skipped {nr_skipped} experiments.")
 
 
 
