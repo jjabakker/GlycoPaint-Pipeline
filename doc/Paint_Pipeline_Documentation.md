@@ -490,7 +490,6 @@ $$
 Square\ \text{Area} = \left( \frac{0.1602804 \cdot 512}{\text{Nr of Squares in Row}} \right)^2
 $$
 
-$Square\ \text{Area} = \left( \frac{0.1602804 \cdot 512}{\text{Nr of Squares in Row}} \right)^2$
 
 
 ## Background Density
