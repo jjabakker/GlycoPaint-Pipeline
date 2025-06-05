@@ -475,9 +475,21 @@ The variability of a square calculation begins with overlaying a finer grid over
 
 ## Density
 
-The Square Density is normalised to duration and concentration and is calculated with the following formula:$Square\ Density = \frac{Track\ Cont}{Area*Duration*Concentration}$
+The Square Density is normalised to duration and concentration and is calculated with the following formula:
 
-The area of a square is calculated with the following data: 0.1602804 micrometre per pixel, 512 pixels in a row (or column). $Square\ Area = \left( \frac{0.1602804*512}{Nr\ of\ Squares\ in\ Row} \right)^{2}$
+
+$$
+Square\ \text{Density} = \frac{\text{Track Cont}}{\text{Area} \cdot \text{Duration} \cdot \text{Concentration}}
+$$
+
+
+The area of a square is calculated with the following data:
+
+
+$$
+Square\ \text{Area} = \left( \frac{0.1602804 \cdot 512}{\text{Nr of Squares in Row}} \right)^2
+$$
+The area of a square is calculated with the following data: 0.1602804 micrometre per pixel, 512 pixels in a row (or column). 
 
 
 
@@ -499,9 +511,13 @@ Squares that have a 'Density Ratio' higher than the specified 'Min Required Dens
 
 The 'Diffusion Coefficient' is calculated for each track in the recording that contains three or more spots, using the following formula. Here, *n* represents the dimensionality (2), and *t* is the time interval over which displacement is measured (0.05 s).
 
-$$MSD = \frac{1}{nr\ spots}\sum_{i = 1}^{nr\ spots}{\left( x_{i} - x_{0} \right)^{2} + \ \left( y_{i} - y_{0} \right)^{2}}$$
+$$
+MSD = \frac{1}{nr\ spots} \sum_{i=1}^{nr\ spots} \left( (x_i - x_0)^2 + (y_i - y_0)^2 \right)
+$$
 
-$$Diffusion\ Coefficient = \frac{MSD}{(2\ *n*t)}$$
+$$
+\text{Diffusion Coefficient} = \frac{MSD}{2nt}
+$$
 
 The 'Median Diffusion Coefficient' and 'Mean Diffusion Coefficient' values are square attributes and describe, respectively, the median and mean of the 'Diffusion Coefficient Ext' values of all tracks in the square.
 
@@ -511,9 +527,13 @@ The 'Median Diffusion Coefficient' and 'Mean Diffusion Coefficient' values are s
 
 The 'Diffusion Coefficient Ext' is a variation on the 'Diffusion Coefficient'. Here, the x and y coordinates of spot (i) are not compared to the first spot (0), but to the previous spot (i-1).
 
-$$MSD = \frac{1}{nr\ spots}\sum_{i = 1}^{nr\ spots}{\left( x_{i} - x_{i - 1} \right)^{2} + \ \left( y_{i} - y_{i - 1} \right)^{2}}$$
+$$
+MSD = \frac{1}{nr\ spots} \sum_{i = 1}^{nr\ spots} \left( (x_i - x_{i-1})^2 + (y_i - y_{i-1})^2 \right)
+$$
 
-$$Diffusion\ Coefficient\ Ext = \frac{MSD}{(2\ *n*t)}$$
+$$
+\text{Diffusion Coefficient Ext} = \frac{MSD}{2nt}
+$$
 
 The 'Median Diffusion Coefficient Ext' and 'Mean Diffusion Coefficient Ext' values are square attributes and describe, respectively, the median and mean of the 'Diffusion Coefficient' values of all tracks in the square.
 
