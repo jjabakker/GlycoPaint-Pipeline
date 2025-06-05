@@ -489,8 +489,8 @@ The area of a square is calculated with the following data:
 $$
 Square\ \text{Area} = \left( \frac{0.1602804 \cdot 512}{\text{Nr of Squares in Row}} \right)^2
 $$
-The area of a square is calculated with the following data: 0.1602804 micrometre per pixel, 512 pixels in a row (or column). 
 
+$Square\ \text{Area} = \left( \frac{0.1602804 \cdot 512}{\text{Nr of Squares in Row}} \right)^2$
 
 
 ## Background Density
