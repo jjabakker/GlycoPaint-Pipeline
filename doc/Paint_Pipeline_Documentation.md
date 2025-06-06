@@ -8,9 +8,7 @@
 <br>
 <br>
 
-<div style="text-align: center;"> 
-June  2025
-</div>
+<center>June 2025</center>
 
 <br>
 <br>
