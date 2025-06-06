@@ -1,7 +1,7 @@
 
 # Installing the Pipeline
 
-The GlycoPaint pipeline is a research application and not developed for a large audience. Installing and running the pipeline is more complex than commercial software, and this section offers support
+The GlycoPaint pipeline is a research application and is not designed for a broad audience. Installing and running the pipeline is more complex than commercial software, but this section provides support.
 
 ### Fiji and TrackMate
 The pipeline depends heavily on the image processing software Fiji and the Fiji plug-in TrackMate. To install Fiji, refer to the following website: [https://imagej.net/software/fiji/](https://imagej.net/software/fiji/).
@@ -16,11 +16,11 @@ TrackMate 7: integrating state-of-the-art segmentation algorithms into tracking 
 829–832. doi:10.1038/s41592-022-01507-1
 
 ### Python
-The Python scripts were developed in PyCharm, and you can use Pycharm to run them, but any other Python IDE will also work. A free community version from PyCharm can be downloaded from [https://www.jetbrains.com/pycharm/](https://www.jetbrains.com/pycharm/).
+The Python scripts were developed in PyCharm, and you can use PyCharm to run them, but any other Python IDE will also work. A free community version of PyCharm can be downloaded from [https://www.jetbrains.com/pycharm/](https://www.jetbrains.com/pycharm/).
 
-The Python scripts are available from the GitHub repository [https://github.com/Leiden-chemical-immunology/GlycoPaint.git](https://github.com/Leiden-chemical-immunology/GlycoPaint.git). Easiest is to clone the repository to your local machine from PyCharm. To do that, you create a new project in PyCharm by selecting 'Project from version control' and entering the repository URL https://github.com/Leiden-chemical-immunology/GlycoPaint.git. A local directory will be created and the code copied. 
+The Python scripts are available from the GitHub repository [https://github.com/Leiden-chemical-immunology/GlycoPaint.git](https://github.com/Leiden-chemical-immunology/GlycoPaint.git). The easiest is to clone the repository to your local machine from PyCharm. To do that, you create a new project in PyCharm by selecting 'Project from version control' and entering the repository URL https://github.com/Leiden-chemical-immunology/GlycoPaint.git. A local directory will be created, and the code copied. 
 
-You will have to set up a Python interpreter in PyCharm and install some libraries. For setting up the Python interpreter in PyCharm, go to Settings → Project → Python Interpreter. In the top right corner, you can select the interpreter. If you have not set up a virtual environment yet, you can do that here. Select 'Add' and then 'New environment'. Select the base interpreter (e.g., Python 3.13) and select the location of the new environment. The default location is fine. For more instructions, refer to the PyCharm documentation: [Creating a virtual environment](https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html).
+You must set up a Python interpreter in PyCharm and install some libraries. To set up the Python interpreter in PyCharm, navigate to Settings → Project → Python Interpreter. In the top right corner, you can select the interpreter. If you have not created a virtual environment yet, you can do that here. Select 'Add' and then 'New environment'. Choose the base interpreter (e.g., Python 3.13) and select the location of the new environment. The default location is acceptable. For further instructions, refer to the PyCharm documentation [Configure a virtualenv environment](https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html).
 
 With the Python interpreter set up, you can install the required libraries. The 'requirements.txt' file contains the necessary libraries, which will be installed automatically. Manual installation is possible too. In the top right corner of the Python interpreter window, select the '+' icon to add a new library. You can search for the libraries and install them one by one. The version numbers of the libraries are not critical, and different versions are expected to work, but indicate the versions used during development:
 
@@ -64,6 +64,6 @@ With PyCharm installed, the environment set up, and the code cloned from the rep
 - 'Prepare Experiment Info' is run to generate the Experiment Info file.
 - 'Generate Squares' is run to do the square processing for individual experiments.
 - 'Compile Project' is run to collect information of various experiments into a project.
-- 'Recoding Viewer' is run to visually inspect the tracks in recordings of experiments.
+- 'Recording Viewer' is run to visually inspect the tracks in recordings of experiments.
 
 The use of these scripts is described in the [Paint Pipeline Documentation](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Paint_Pipeline_Documentation.md).
