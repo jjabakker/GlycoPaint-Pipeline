@@ -157,6 +157,7 @@ read_data <- function(root_directory) {
   
   return (list(squares_master=squares_master, recordings_master=recordings_master, tracks_master=tracks_master))
 }
+
 ```
 
 
@@ -295,7 +296,6 @@ formatted_labels <- generate_labels(label_names, label_numbers)
 ```
 
 
-
 ```{r echo=FALSE, fig.fullwidth=TRUE, fig.height=10, fig.width=12}
 
 # A function to generate the plot for Tau with significance bars
@@ -385,9 +385,6 @@ plot_data <- squares_master %>%
 generate_tau_significance(plot_data, 600, FALSE)
 
 ```
-
-
-
 
 
 ```{r echo=FALSE, fig.fullwidth=TRUE, fig.height=10, fig.width=12, warning=FALSE}
