@@ -18,7 +18,7 @@
 
 The Glyco-PAINT method and the software are described in: Steuten, K.,  Bakker, J., Doelman, W. et al. Glyco-PAINT-APP: Subcellular analysis of immune cell-lectin binding enables correlation of glycan binding parameters to receptor biology  (doi:https://www.biorxiv.org/content/10.1101/2025.01.24.634682v2 and in [xxxxx].
 
-This manual serves two distinct purposes. Firstly, it provides a comprehensive background on the Glyco-PAINT-Automated Processing Pipeline. Secondly, it introduces a demonstration case to help users familiarise themselves with the pipeline's functionality. Detailed instructions for running the example are provided in [Running the Example](https://github.com/Leiden-chemical-immunology/GlycoPaint/blob/main/doc/Running_the_example.md).
+This manual serves two distinct purposes. Firstly, it provides a comprehensive background on the Glyco-PAINT-Automated Processing Pipeline. Secondly, it introduces a demonstration case to help users familiarise themselves with the pipeline's functionality. Detailed instructions for running the example are provided in [Running the Example](https://github.com/Leiden-chemical-immunology/Glyco-PAINT/blob/main/doc/Running_the_example.md).
 
 In the Glyco-PAINT method, cells incubated with a fluorescent ligand are imaged using a specialised microscope for 100 seconds, during which 2000 frames are captured. Bright spots - corresponding to stationary (i.e., bound) fluorophores - appear in these frames. These spots represent ligands that have remained immobilised long enough to be detected by the camera and are interpreted as glycans (or other ligands) binding to receptors on the cell surface. Fluorophores may move or disappear shortly after appearing, reflecting unbinding or photobleaching events. A key challenge in this method is distinguishing true biologically relevant binding events from non-specific sticking of fluorophores to the cell surface or coverslip.
 
@@ -140,7 +140,7 @@ If the file naming convention (as specified above) is used, columns such as Expe
 <img src="./Images/empty_experiments_info.png"><br>
 </p>
 
-Below is an example of a fully specified Experiment Info file, containing values for Probe, Probe Type, Cell Type, Adjuvant, and Concentration. The Threshold parameter is required for TrackMate  processing (refer to the next section). The 'Process' flag indicates whether a recording is processed or ignored. You can download copies of these files, [240104 Experiment Info ](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/240104%20Experiment%20Info.csv) and [240116 Experiment Info ](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/240116%20Experiment%20Info.csv) and save them in their respective directories as 'Experiment Info.csv'.
+Below is an example of a fully specified Experiment Info file, containing values for Probe, Probe Type, Cell Type, Adjuvant, and Concentration. The Threshold parameter is required for TrackMate  processing (refer to the next section). The 'Process' flag indicates whether a recording is processed or ignored. You can download copies of these files, [240104 Experiment Info ](https://raw.githubusercontent.com/Leiden-chemical-immunology/Glyco-PAINT/refs/heads/main/Demo/240104%20Experiment%20Info.csv) and [240116 Experiment Info ](https://raw.githubusercontent.com/Leiden-chemical-immunology/Glyco-PAINT/refs/heads/main/Demo/240116%20Experiment%20Info.csv) and save them in their respective directories as 'Experiment Info.csv'.
 
 <p align="center">
 <img src="./Images/experiments_info_with_metadata.png"><br>
@@ -227,7 +227,7 @@ With the 'Generate Squares' function run, the directory structure is shown below
 
 ## Compile Project
 
-Typically, data to be analysed comes from more than one experiment. With the Compile project option, the data from the experiments in the project are compiled and an [All Recordings](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Recordings.csv), [All Squares](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Squares.csv) and [All Tracks](https://raw.githubusercontent.com/jjabakker/GlycoPaint-Pipeline/refs/heads/main/Demo/All%20Tracks.csv) file, which then comprises all data of the project. Any experiment that starts with a '-' is not included, e.g. '-240116'.
+Typically, data to be analysed comes from more than one experiment. With the Compile project option, the data from the experiments in the project are compiled and an [All Recordings](https://raw.githubusercontent.com/Leiden-chemical-immunology/Glyco-PAINT/refs/heads/main/Demo/All%20Recordings.csv), [All Squares](https://raw.githubusercontent.com/Leiden-chemical-immunology/Glyco-PAINT/refs/heads/main/Demo/All%20Squares.csv) and [All Tracks](https://raw.githubusercontent.com/Leiden-chemical-immunology/Glyco-PAINT/refs/heads/main/Demo/All%20Tracks.csv) file, which then comprises all data of the project. Any experiment that starts with a '-' is not included, e.g. '-240116'.
 
 <p align="center">
 <img src="./Images/compile_project_dialog.png"><br>
