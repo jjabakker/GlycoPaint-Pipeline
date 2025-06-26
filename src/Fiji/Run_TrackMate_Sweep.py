@@ -11,7 +11,7 @@ import shutil
 from javax.swing import JFrame, JPanel, JButton, JTextField, JFileChooser, JOptionPane, BorderFactory
 from java.lang.System import getProperty
 
-paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
+paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "Glyco-PAINT")
 sys.path.append(paint_dir)
 
 from LoggerConfig import (

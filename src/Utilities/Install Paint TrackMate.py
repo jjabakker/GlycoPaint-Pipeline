@@ -144,7 +144,7 @@ def install():
         return
 
     # Clean and create the directory
-    dest_root = os.path.join(fiji_app, 'Scripts', 'GlycoPaint')
+    dest_root = os.path.join(fiji_app, 'Scripts', 'Glyco-PAINT')
     if os.path.exists(dest_root):
         shutil.rmtree(dest_root)
     dest_root = os.path.join(fiji_app, 'Scripts', 'Glyco-PAINT')

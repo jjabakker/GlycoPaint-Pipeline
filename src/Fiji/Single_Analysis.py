@@ -10,7 +10,7 @@ from ij import IJ
 from ij.plugin.frame import RoiManager
 from java.lang.System import getProperty
 
-paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
+paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "Glyco-PAINT")
 sys.path.append(paint_dir)
 
 from NewTrackMate import execute_trackmate_in_Fiji

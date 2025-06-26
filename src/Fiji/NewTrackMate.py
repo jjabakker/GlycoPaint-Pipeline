@@ -12,7 +12,7 @@ import sys
 
 from java.lang.System import getProperty
 
-paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "GlycoPaint")
+paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "Glyco-PAINT")
 sys.path.append(paint_dir)
 
 import fiji.plugin.trackmate.features.FeatureFilter as FeatureFilter
