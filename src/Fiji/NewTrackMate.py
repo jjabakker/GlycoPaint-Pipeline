@@ -230,23 +230,23 @@ def execute_trackmate_in_Fiji(
     ok = trackmate.checkInput()
     if not ok:
         paint_logger.error('Routine paint_trackmate - checkInput failed')
-        return -1, -1, -1, -1, -1, -1, -1, -1, -1
+        return -1, -1, -1, -1, -1, -1, -1, False, -1
 
     # Run the spot detection step first
     ok = trackmate.execDetection()
     if not ok:
         paint_logger.error('Routine paint_trackmate - execDetection failed')
-        return -1, -1, -1, -1, -1, -1, -1, -1, -1
+        return -1, -1, -1, -1, -1, -1, -1, False, -1
 
     nr_spots = model.getSpots().getNSpots(False)
     if nr_spots > max_nr_of_spots_in_image:
         paint_logger.error('Too many spots detected ({}). Limit is {}.'.format(nr_spots, max_nr_of_spots_in_image))
-        return nr_spots, -1, -1, -1, -1, -1, -1, -1 , -1 # Return early, skipping further processing
+        return nr_spots, -1, -1, -1, -1, -1, -1, False, -1 # Return early, skipping further processing
 
     # Continue with full TrackMate processing - nr_spots is within limits
     if not trackmate.process():
         paint_logger.error('Routine paint_trackmate - process failed')
-        return -1, -1, -1, -1, -1, -1, -1, -1, -1
+        return -1, -1, -1, -1, -1, -1, -1, False, -1
 
     # Get nr_spots data, iterate through each track to calculate the mean square displacement
 
