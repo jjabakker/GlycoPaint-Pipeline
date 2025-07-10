@@ -339,8 +339,13 @@ class RecordingViewer:
         self.df_experiment = pd.read_csv(os.path.join(self.user_specified_directory, 'All Recordings.csv'),
                                          dtype={'Max Allowable Variability': float,
                                                 'Min Required Density Ratio': float})
+
         if self.df_experiment is None:
             self.show_error_and_exit("No 'All Recordings' file, Did you select an image directory?")
+
+        # Drop empty rows
+        self.df_experiment  = self.df_experiment.dropna(how='all')
+
         self.df_experiment.set_index('Ext Recording Name', drop=False, inplace=True)
         df_filtered = self.df_experiment[self.df_experiment['Process'].isin(['Yes', 'yes', 'Y', 'y'])]
 

@@ -67,6 +67,7 @@ def only_one_nr_of_squares_in_row(directory):
 
 def nr_recordings(directory):
     df_experiment = pd.read_csv(os.path.join(directory, 'All Recordings.csv'))
+    df_experiment = df_experiment.dropna(how='all')
     return len(df_experiment)
 
 
