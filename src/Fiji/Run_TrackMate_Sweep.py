@@ -1,10 +1,8 @@
-#-------------------------------------------------------
-#-------------------------------------------------------
+from __future__ import print_function
+
 import csv
 import os
-import json
 import sys
-import threading
 import time
 import shutil
 
@@ -26,7 +24,7 @@ from LoggerConfig import paint_logger
 from Run_TrackMate import run_trackmate
 
 # Set an appropriate name for the log file
-paint_logger_change_file_handler_name('Run TrackMate Batch.log')
+paint_logger_change_file_handler_name('Run TrackMate Sweep.log')
 
 # Redirect stdout and stderr to suppress output
 sys.stdout = open(os.devnull, 'w')
@@ -74,7 +72,7 @@ def run_trackmate_batch():
                 time_stamp_overall = time.time()
                 error = False
                 for row in csv_reader:
-                    print row
+                    print(row)
                     if 'y' in row['Process'].lower():
                         time_stamp = time.time()
                         if not os.path.exists(row['Project']):
@@ -93,7 +91,7 @@ def run_trackmate_batch():
                             continue
 
                         source = os.path.join(row['Project'], row['Experiment'])
-                        print source
+                        print (source)
                         if not os.path.exists(source):
                             paint_logger.error("Error: The Experiment '{}' does not exist.".format(source))
                             error = True
