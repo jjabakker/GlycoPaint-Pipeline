@@ -23,7 +23,7 @@ def get_images(self, initial=False):
             continue
         ext_recording_name = experiment_row['Ext Recording Name']
         recording_name = experiment_row['Recording Name']
-        experiment = str(experiment_row['Experiment Name'])
+        experiment = str(int(experiment_row['Experiment Name']))
 
         try:
             left_image_dir = os.path.join(
