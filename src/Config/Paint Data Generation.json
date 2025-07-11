@@ -1,0 +1,43 @@
+[
+  {
+    "flag": true,
+    "probe": "New Probes",
+    "project_name": "Paint New Probes - 20 Squares",
+    "nr_of_squares": 20,
+    "min_required_density_ratio": 2,
+    "min_required_r_squared": 0.1,
+    "min_tracks_for_tau": 20,
+    "max_allowable_variability": 10
+  },
+  {
+    "flag": true,
+    "probe": "Regular Probes",
+    "project_name": "Paint Regular Probes - 20 Squares",
+    "nr_of_squares": 20,
+    "min_required_density_ratio": 2,
+    "min_required_r_squared": 0.1,
+    "min_tracks_for_tau": 20,
+    "max_allowable_variability": 10
+  },
+  {
+    "flag": true,
+    "probe": "New Probes",
+    "project_name": "Paint New Probes - 30 Squares",
+    "nr_of_squares": 30,
+    "min_required_density_ratio": 2,
+    "min_required_r_squared": 0.1,
+    "min_tracks_for_tau": 20,
+    "max_allowable_variability": 10
+  },
+  {
+    "flag": true,
+    "probe": "Regular Probes",
+    "project_name": "Paint Regular Probes - 30 Squares",
+    "nr_of_squares": 30,
+    "min_required_density_ratio": 2,
+    "min_required_r_squared": 0.1,
+    "min_tracks_for_tau": 20,
+    "max_allowable_variability": 10
+  }
+]
+
