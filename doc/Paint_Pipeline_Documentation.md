@@ -647,8 +647,7 @@ If **ALLOW_GAP_CLOSING** is set to True, TrackMate will consider whether gaps in
 
 For example, if we expect that a lectin can release a glycan and immediately bind another, a low value of **MAX_FRAME_GA**P is required.
 
-The suggested values for **MAX_FRAME_GAP** and **GAP_CLOSING_MAX_DISTANCE** are 1 frame and 0.5 micrometre, respectively. This is because the expected radius of the spots is 0.5 micrometre.
-
+The suggested values for **MAX_FRAME_GAP** and **GAP_CLOSING_MAX_DISTANCE** are 3 frame and 0.5 micrometre, respectively. This is because the expected radius of the spots is 0.5 micrometre.
 
 
 ### Track Splitting
