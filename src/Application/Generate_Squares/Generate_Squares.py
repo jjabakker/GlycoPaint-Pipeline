@@ -174,7 +174,7 @@ def process_experiment(
     paint_logger.info(f"Processing {nr_of_recordings_to_process:2d} images in {experiment_path}")
     for index, recording_data in df_recordings_of_experiment.iterrows():
 
-        if recording_data['Process'] in {'No', 'n', 'N'} :
+        if recording_data['Process'] in {'No', 'n', 'N'} or recording_data['Nr Tracks'] == -1:
             continue
 
         recording_name = recording_data['Ext Recording Name']
