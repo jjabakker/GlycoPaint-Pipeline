@@ -10,6 +10,8 @@ import time
 from javax.swing import JFrame, JPanel, JButton, JTextField, JFileChooser, JOptionPane, BorderFactory
 from java.lang.System import getProperty
 
+VERSION = "Run Trackmate Batch - 1.0 (2025-07-25)"
+
 paint_dir = os.path.join(getProperty('fiji.dir'), "Scripts", "Glyco-PAINT")
 sys.path.append(paint_dir)
 
@@ -44,13 +46,15 @@ def run_trackmate_batch():
         JOptionPane.showMessageDialog(None, msg, "Warning", JOptionPane.WARNING_MESSAGE)
     else:
 
-        message = "Processing TrackMate batchfile: '{}'".format(batch_file_name)
+        message = "Processing TrackMate Batch: '{}'".format(batch_file_name)
         paint_logger.info("")
         paint_logger.info("")
         paint_logger.info("-" * len(message))
         paint_logger.info("-" * len(message))
         paint_logger.info("")
         paint_logger.info(message)
+        paint_logger.info("")
+        paint_logger.info(VERSION)
         paint_logger.info("")
         paint_logger.info("-" * len(message))
         paint_logger.info("-" * len(message))
