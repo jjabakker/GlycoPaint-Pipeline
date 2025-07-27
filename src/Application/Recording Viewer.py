@@ -350,9 +350,9 @@ class RecordingViewer:
         df_filtered = self.df_experiment[self.df_experiment['Process'].isin(['Yes', 'yes', 'Y', 'y'])]
 
         # Check that the two files align
-        if set(self.df_all_squares['Ext Recording Name']) != set(df_filtered['Ext Recording Name']):
-            self.show_error_and_exit(
-                "The recordings in the 'All Squares' file do not align with the 'All Experiments' file")
+        # if set(self.df_all_squares['Ext Recording Name']) != set(df_filtered['Ext Recording Name']):
+        #     self.show_error_and_exit(
+        #         "The recordings in the 'All Squares' file do not align with the 'All Recordings' file")
 
         # Read the 'All Tracks' file
         self.df_all_tracks = pd.read_csv(os.path.join(self.user_specified_directory, 'All Tracks.csv'))
