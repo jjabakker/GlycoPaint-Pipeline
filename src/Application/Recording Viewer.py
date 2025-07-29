@@ -48,7 +48,7 @@ from src.Fiji.LoggerConfig import (
 from src.Fiji.NewPaintConfig import (
     get_paint_attribute_with_default,
     update_paint_attribute)
-from src.Application.Support.Check_integrity import (
+from src.Application.Support.Check_integrity_Of_Files import (
     check_files_integrity_failed
 )
 
@@ -357,7 +357,7 @@ class RecordingViewer:
 
         # Check the integrity of the 'All Recorings and 'All Squares' file
 
-        if check_files_integrity_failed(self.df_experiment, self.df_all_squares):
+        if check_files_integrity_failed(self.df_experiment, None, self.df_all_squares):
             self.show_error_and_exit("Abort because of integrity error.")
 
         # Check that the two files align
