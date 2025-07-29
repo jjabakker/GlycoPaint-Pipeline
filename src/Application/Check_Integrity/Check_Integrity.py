@@ -1,7 +1,4 @@
-"""
-This function takes as input the directory under which the various experiments are held.
-It will create an Output directory with three files: All Squares, All Images, and Images Summary.
-"""
+
 import os
 import pandas as pd
 from tkinter import *
@@ -16,7 +13,6 @@ from src.Fiji.LoggerConfig import (
     paint_logger_change_file_handler_name,
     paint_logger_file_name_assigned)
 from src.Fiji.NewPaintConfig import (
-    update_paint_attribute,
     get_paint_attribute_with_default)
 
 if not paint_logger_file_name_assigned:
@@ -28,6 +24,7 @@ if not paint_logger_file_name_assigned:
 # The routine that does the work
 # -----------------------------------------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------------------
+
 def check_integrity_experiment(
         experiment_dir_path: str,
         verbose: bool = True):
@@ -128,7 +125,6 @@ def check_integrity_project(
         for experiment in experiments:
             paint_logger.info(f"Processed experiment: {experiment}")
 
-
         paint_logger.info(f"Processed {nr_processed} experiments, skipped {nr_skipped} experiments.")
 
 
@@ -179,6 +175,15 @@ class IntegrityDialog:
 
         # Determine if it indeed is a project directory
         dir_type, _ = classify_directory(self.project_directory)
+        if dir_type in ['Project', 'Experiment']:
+            paint_logger.info(f"Checking integrity for {dir_type}")
+            paint_logger.info(f"Checking for empty Adjuvant column")
+            paint_logger.info(f"Checking for non numerical Concentration")
+            paint_logger.info(f"Checking for non numerical Threshold")
+            paint_logger.info(f"Checking for Inconsistent Experiment Name and Experiment Date")
+
+
+
         if dir_type == 'Project':  # Project directory, so proceed
             check_integrity_project(project_dir=self.project_directory, verbose=True)
             self.root.destroy()
