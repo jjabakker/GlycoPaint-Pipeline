@@ -48,6 +48,9 @@ from src.Fiji.LoggerConfig import (
 from src.Fiji.NewPaintConfig import (
     get_paint_attribute_with_default,
     update_paint_attribute)
+from src.Application.Support.Check_integrity import (
+    check_files_integrity_failed
+)
 
 # Log to an appropriately named file
 paint_logger_change_file_handler_name('Recording Viewer.log')
@@ -348,9 +351,14 @@ class RecordingViewer:
 
         self.df_experiment.set_index('Ext Recording Name', drop=False, inplace=True)
 
-        # Select the recorrs that were processed
+        # Select the records that were processed
         df_filtered = self.df_experiment[self.df_experiment['Process'].isin(['Yes', 'yes', 'Y', 'y'])]
         df_filtered = df_filtered[df_filtered['Nr Tracks'] != -1]
+
+        # Check the integrity of the 'All Recorings and 'All Squares' file
+
+        if check_files_integrity_failed(self.df_experiment, self.df_all_squares):
+            self.show_error_and_exit("Abort because of integrity error.")
 
         # Check that the two files align
         if set(self.df_all_squares['Ext Recording Name']) != set(df_filtered['Ext Recording Name']):
