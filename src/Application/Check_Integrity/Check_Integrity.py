@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
-from src.Application.Support.Check_integrity_Of_Files import check_files_integrity_failed
+from src.Application.Support.Check_integrity_Of_Files import check_files_integrity
 
 from src.Application.Support.General_Support_Functions import (
     classify_directory,
@@ -52,7 +52,7 @@ def check_integrity_experiment(
     else:
         df_experiment_info = pd.read_csv(experiment_info_path)
 
-    if not check_files_integrity_failed(df_all_recordings, df_experiment_info, df_all_squares):
+    if check_files_integrity(df_all_recordings, df_experiment_info, df_all_squares):
         paint_logger.info(f"Experiment {experiment_dir_path} is ok")
 
 
@@ -115,7 +115,7 @@ def check_integrity_project(
             df_experiment_info = pd.read_csv(experiment_info_path)
 
         nr_processed += 1
-        if not check_files_integrity_failed(df_all_recordings, df_experiment_info, df_all_squares):
+        if check_files_integrity(df_all_recordings, df_experiment_info, df_all_squares):
             paint_logger.info(f"Experiment {experiment_name} is ok")
         else:
             nr_error += 1
