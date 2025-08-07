@@ -147,3 +147,20 @@ def curve_fit_and_plot(
     # Convert to milliseconds
     tau_per_sec *= 1000
     return tau_per_sec, r_squared
+
+
+
+if __name__ == "__main__":
+    # Example usage
+    data = {
+        "Track Duration": [ 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5],
+        "Frequency": [2000, 1200, 750, 500, 300, 200, 150, 100, 70, 50]
+    }
+    df = pd.DataFrame(data)
+    tau, r_squared = curve_fit_and_plot(df, plot_max_x=1, plot_title='Example Plot', plot_to_screen=True)
+    print(f'Tau: {tau}, R²: {r_squared}')
+
+
+    df_tracks = df_tracks_of_experiment = pd.read_csv('/Users/hans/Downloads/All Tracks.csv')
+    histdata = compile_duration(df_tracks)
+    i=1
