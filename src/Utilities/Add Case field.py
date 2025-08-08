@@ -3,7 +3,7 @@ import pandas as pd
 
 # Path to the root directory
 root_dir = '/Users/hans/Paint Sweep New/Cases'
-root_dir = '/Users/hans/Paint Sweep Multiple Experiments/Cases'
+root_dir = '/Users/hans/Paint/Paint Sweep Multiple Experiments/Cases'
 
 # Loop through all subdirectories
 for subdir in os.listdir(root_dir):
