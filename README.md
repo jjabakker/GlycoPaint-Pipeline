@@ -1,4 +1,4 @@
-## Introduction 
+## Introduction  
 
 Glyco-PAINT is a research method to study interactions of glycans on lectins on live cells. The Glyco-PAINT Application Processing Pipeline is a software solution to process and analyse experimental results.
 
